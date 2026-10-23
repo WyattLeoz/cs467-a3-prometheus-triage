@@ -1,0 +1,318 @@
+﻿2026-10-23T16:14:41.8627061Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-23T16:14:41.8627471Z with:
+2026-10-23T16:14:41.8628524Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'render_detection_log.cjs'));
+await main();
+
+2026-10-23T16:14:41.8632167Z   github-token: ***
+2026-10-23T16:14:41.8632393Z   debug: false
+2026-10-23T16:14:41.8632592Z   user-agent: actions/github-script
+2026-10-23T16:14:41.8632838Z   result-encoding: json
+2026-10-23T16:14:41.8633044Z   retries: 0
+2026-10-23T16:14:41.8633266Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-23T16:14:41.8633537Z env:
+2026-10-23T16:14:41.8633729Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-23T16:14:41.8633988Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-23T16:14:41.8634740Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=39984535086,github.run_id=39984535086,gh-aw.engine.id=copilot
+2026-10-23T16:14:41.8645637Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-23T16:14:41.8645942Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-23T16:14:41.8646233Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-23T16:14:41.8646468Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-23T16:14:41.8646745Z   GITHUB_AW_OTEL_TRACE_ID: 7e0cb36117d321dab78575ee194d8f2f
+2026-10-23T16:14:41.8647080Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 8bf27139cf394895
+2026-10-23T16:14:41.8647361Z   GITHUB_AW_OTEL_JOB_START_MS: 1792771975330
+2026-10-23T16:14:41.8647655Z   GH_AW_PROMPT: /tmp/gh-aw/aw-prompts/prompt.txt
+2026-10-23T16:14:41.8648052Z   AWF_TOKEN_USAGE_LOG: /tmp/gh-aw/sandbox/firewall/logs/api-proxy-logs/token-usage.jsonl
+2026-10-23T16:14:41.8648446Z   GH_AW_PRIMARY_MODEL: gpt-4.1-2025-04-14
+2026-10-23T16:14:41.8648695Z   GH_AW_AIC: 40.8534
+2026-10-23T16:14:41.8648910Z   GH_AW_AMBIENT_CONTEXT: 19391
+2026-10-23T16:14:41.8649136Z ##[endgroup]
+2026-10-23T16:14:41.9510048Z ##[group]Detection Log
+2026-10-23T16:14:41.9522592Z ::stop-commands::***
+2026-10-23T16:14:41.9533534Z [INFO] Auto-detected DNS servers from /run/systemd/resolve/resolv.conf: 168.63.129.16
+2026-10-23T16:14:41.9534973Z [INFO] Agent timeout set to 10 minutes
+2026-10-23T16:14:41.9536562Z [WARN] ⚠️  Using --env-all: All host environment variables will be passed to container
+2026-10-23T16:14:41.9540869Z [WARN]    This may expose sensitive credentials if logs or configs are shared
+2026-10-23T16:14:41.9549542Z [INFO] API proxy enabled: OpenAI=false, Anthropic=false, Copilot=true (github-token), Gemini=false, Vertex=false
+2026-10-23T16:14:41.9551509Z [INFO] Allowed domains: 
+2026-10-23T16:14:41.9559960Z [INFO] Network-isolation mode: enforcing egress via Docker network topology (no host iptables, no sudo).
+2026-10-23T16:14:41.9560662Z [INFO] Generating configuration files...
+2026-10-23T16:14:41.9561347Z [INFO] API proxy sidecar enabled - API keys will be held securely in sidecar container
+2026-10-23T16:14:41.9562064Z [INFO] API proxy will route through Squid to respect domain whitelisting
+2026-10-23T16:14:41.9562575Z [INFO] Starting containers...
+2026-10-23T16:14:41.9562957Z  Network awf-net  Creating
+2026-10-23T16:14:41.9563325Z  Network awf-net  Created
+2026-10-23T16:14:41.9563708Z  Network awf-zgad21_awf-ext  Creating
+2026-10-23T16:14:41.9564126Z  Network awf-zgad21_awf-ext  Created
+2026-10-23T16:14:41.9564548Z  Container awf-squid  Creating
+2026-10-23T16:14:41.9564945Z  Container awf-api-proxy  Creating
+2026-10-23T16:14:41.9565477Z  Container awf-api-proxy  Created
+2026-10-23T16:14:41.9565857Z  Container awf-squid  Created
+2026-10-23T16:14:41.9566235Z  Container awf-agent  Creating
+2026-10-23T16:14:41.9566608Z  Container awf-agent  Created
+2026-10-23T16:14:41.9566988Z  Container awf-api-proxy  Starting
+2026-10-23T16:14:41.9567387Z  Container awf-squid  Starting
+2026-10-23T16:14:41.9567765Z  Container awf-api-proxy  Started
+2026-10-23T16:14:41.9568603Z  Container awf-squid  Started
+2026-10-23T16:14:41.9568968Z  Container awf-squid  Waiting
+2026-10-23T16:14:41.9569351Z  Container awf-api-proxy  Waiting
+2026-10-23T16:14:41.9569737Z  Container awf-api-proxy  Healthy
+2026-10-23T16:14:41.9585677Z  Container awf-squid  Healthy
+2026-10-23T16:14:41.9605619Z  Container awf-agent  Starting
+2026-10-23T16:14:41.9615649Z  Container awf-agent  Started
+2026-10-23T16:14:41.9616914Z [SUCCESS] Containers started successfully
+2026-10-23T16:14:41.9617679Z [INFO] Executing agent command...
+2026-10-23T16:14:41.9618133Z [INFO] Agent timeout: 10 minutes
+2026-10-23T16:14:41.9618616Z [entrypoint] Agentic Workflow Firewall - Agent Container
+2026-10-23T16:14:41.9619113Z [entrypoint] ==================================
+2026-10-23T16:14:41.9619559Z [entrypoint] Configuring DNS...
+2026-10-23T16:14:41.9620092Z [entrypoint] DNS configured with Docker embedded DNS (127.0.0.11) only
+2026-10-23T16:14:41.9620785Z [entrypoint] iptables-init skipped (proxy-based egress): skipping init container wait
+2026-10-23T16:14:41.9621374Z [health-check] API Proxy Pre-flight Check
+2026-10-23T16:14:41.9621859Z [health-check] ==========================================
+2026-10-23T16:14:41.9622426Z [health-check] Checking GitHub Copilot API proxy configuration...
+2026-10-23T16:14:41.9623001Z [health-check] COPILOT_API_URL=http://172.30.0.30:10002
+2026-10-23T16:14:41.9623815Z [health-check] ✓ COPILOT_GITHUB_TOKEN is placeholder value (correct)
+2026-10-23T16:14:41.9624469Z [health-check] ✓ COPILOT_TOKEN is placeholder value (correct)
+2026-10-23T16:14:41.9625133Z [health-check] ✓ COPILOT_PROVIDER_API_KEY is placeholder value (correct)
+2026-10-23T16:14:41.9626000Z [health-check] COPILOT_PROVIDER_BASE_URL=http://172.30.0.30:10002 (offline+BYOK mode)
+2026-10-23T16:14:41.9626682Z [health-check] ✓ COPILOT_PROVIDER_BASE_URL matches COPILOT_API_URL
+2026-10-23T16:14:41.9627292Z [health-check] ✓ Copilot CLI offline+BYOK mode configured
+2026-10-23T16:14:41.9627979Z [health-check] Testing connectivity to GitHub Copilot API proxy at http://172.30.0.30:10002...
+2026-10-23T16:14:41.9628820Z [health-check] ✓ GitHub Copilot API proxy is reachable at http://172.30.0.30:10002
+2026-10-23T16:14:41.9629420Z [health-check] ==========================================
+2026-10-23T16:14:41.9629972Z [health-check] ✓ All API proxy health checks passed
+2026-10-23T16:14:41.9630497Z [health-check] ✓ Credential isolation verified
+2026-10-23T16:14:41.9631703Z [health-check] ✓ Connectivity established
+2026-10-23T16:14:41.9632193Z [health-check] ==========================================
+2026-10-23T16:14:41.9632819Z [entrypoint] Pre-seeding JVM build tool proxy configuration (squid-proxy:3128)...
+2026-10-23T16:14:41.9633575Z [entrypoint] ✓ Created Maven proxy config (/host/home/runner/.m2/settings.xml)
+2026-10-23T16:14:41.9634362Z [entrypoint] ✓ Created Gradle proxy config (/host/home/runner/.gradle/gradle.properties)
+2026-10-23T16:14:41.9635104Z [entrypoint] ✓ Set JAVA_TOOL_OPTIONS with proxy and nonProxyHosts flags
+2026-10-23T16:14:41.9635731Z [entrypoint] Proxy configuration:
+2026-10-23T16:14:41.9636194Z [entrypoint]   HTTP_PROXY=http://172.30.0.10:3128
+2026-10-23T16:14:41.9636689Z [entrypoint]   HTTPS_PROXY=http://172.30.0.10:3128
+2026-10-23T16:14:41.9637147Z [entrypoint] Network information:
+2026-10-23T16:14:41.9637568Z [entrypoint]   IP address: 172.30.0.20 
+2026-10-23T16:14:41.9637997Z [entrypoint]   Hostname: 500929391f50
+2026-10-23T16:14:41.9638436Z [entrypoint] ==================================
+2026-10-23T16:14:41.9639022Z [entrypoint] Chroot mode enabled - dropping CAP_SYS_CHROOT and CAP_SYS_ADMIN
+2026-10-23T16:14:41.9639619Z [entrypoint] Switching to awfuser (UID: 1001, GID: 1001)
+2026-10-23T16:14:41.9642527Z [entrypoint] Executing command: /bin/bash -c /bin/bash -c 'set +o histexpand; export PATH="${RUNNER_TEMP}/gh-aw/bin:$PATH" && : "${RUNNER_TOOL_CACHE:?RUNNER_TOOL_CACHE must be set}"; GH_AW_TOOL_CACHE="$RUNNER_TOOL_CACHE"; GH_AW_TOOL_BINS="$(find "$GH_AW_TOOL_CACHE" -maxdepth 5 -type d -name bin 2>/dev/null | tr "\n" ":")"; GH_AW_TOOL_BINS="${GH_AW_TOOL_BINS%:}"; export PATH="$PATH${GH_AW_TOOL_BINS:+:}$GH_AW_TOOL_BINS"; [ -n "$GOROOT" ] && export PATH="$GOROOT/bin:$PATH" || true; [ -n "$ERLANG_HOME" ] && export PATH="$ERLANG_HOME/bin:$PATH" || true && threat-detect --engine copilot --output /tmp/gh-aw/threat-detection/detection_result.json /tmp/gh-aw/threat-detection'
+2026-10-23T16:14:41.9644709Z 
+2026-10-23T16:14:41.9645056Z [entrypoint] Agent runtime start recorded for timeout steering
+2026-10-23T16:14:41.9645941Z [entrypoint] Chroot mode: running command inside host filesystem (/host)
+2026-10-23T16:14:41.9646610Z [entrypoint] Mounted procfs at /host/proc (nosuid,nodev,noexec,hidepid=2)
+2026-10-23T16:14:41.9647299Z [entrypoint] Bind-mounted container cgroup subtree at /host/sys/fs/cgroup (ro)
+2026-10-23T16:14:41.9648035Z [entrypoint] One-shot token library copied to chroot at /run/awf-lib/one-shot-token.so
+2026-10-23T16:14:41.9648860Z [entrypoint] Chromium/Playwright runtime libraries staged for chroot at /host/run/awf-lib/browser-libs
+2026-10-23T16:14:41.9649785Z AWF trust policy: removed distrusted CA key 8d417db2dd8bf5e3084d1e3f196d583849d81bdd4c00c70b9d39369e96b8c782
+2026-10-23T16:14:41.9650704Z [entrypoint] Filtered host CA trust staged at /run/awf-lib/trust/ca-certificates.crt (host store unchanged)
+2026-10-23T16:14:41.9651459Z [entrypoint] DNS configuration created in chroot (/host/etc/resolv.conf)
+2026-10-23T16:14:41.9652041Z [entrypoint] Running as host user: runner (UID: 1001)
+2026-10-23T16:14:41.9652804Z [entrypoint] Chroot working directory: /home/runner/work/cs467-a3-prometheus-triage/cs467-a3-prometheus-triage
+2026-10-23T16:14:41.9653477Z [entrypoint] Using host PATH for chroot
+2026-10-23T16:14:41.9654061Z [entrypoint] Adding JAVA_HOME/bin to PATH: /usr/lib/jvm/temurin-17-jdk-amd64/bin
+2026-10-23T16:14:41.9654669Z [entrypoint] DNS configuration will be removed on exit
+2026-10-23T16:14:41.9655299Z [entrypoint] Transferred /host/tmp/gh-aw ownership to chroot user (1001:1001)
+2026-10-23T16:14:41.9656449Z [entrypoint] Node.js available on PATH: /opt/hostedtoolcache/node/24.21.0/x64/bin/node
+2026-10-23T16:14:41.9657293Z [threat-detect] run start: version=v0.5.2 engine=copilot model=gpt-4.1 retries=0 max_turns=50 engine_timeout=5m0s
+2026-10-23T16:14:41.9658398Z [threat-detect] artifacts loaded: dir=/tmp/gh-aw/threat-detection prompt_bytes=2168 agent_output_bytes=1207 patch_files=0 all_primary_inputs_missing=false
+2026-10-23T16:14:41.9659228Z [threat-detect] artifact inventory (7 entries):
+2026-10-23T16:14:41.9659805Z [threat-detect]   agent_output.json bytes=1207 kind=file consumed=true
+2026-10-23T16:14:41.9660524Z [threat-detect]   aw-prompts/prompt-import-tree.json bytes=11624 kind=file consumed=true
+2026-10-23T16:14:41.9661282Z [threat-detect]   aw-prompts/prompt-template.txt bytes=9035 kind=file consumed=true
+2026-10-23T16:14:41.9661978Z [threat-detect]   aw-prompts/prompt.txt bytes=2168 kind=file consumed=true
+2026-10-23T16:14:41.9662609Z [threat-detect]   aw_info.json bytes=1653 kind=file consumed=true
+2026-10-23T16:14:41.9663221Z [threat-detect]   detection.log bytes=5608 kind=file consumed=false
+2026-10-23T16:14:41.9663833Z [threat-detect]   execution.json bytes=93 kind=file consumed=false
+2026-10-23T16:14:41.9664830Z [threat-detect] result destinations: output=/tmp/gh-aw/threat-detection/detection_result.json full_output=/tmp/gh-aw/threat-detection/detection_result_full.json
+2026-10-23T16:14:41.9667286Z Prompt context: workflow_name="Prometheus Issue Triage" (defaulted=false) workflow_description="First-response triage for newly opened issues: route to a component, ask for missing information, point usage questions and other-project reports to the right place, and flag likely duplicates. Comments and labels only." (defaulted=false) custom_prompt_applied=false custom_prompt_source=none custom_prompt_bytes=0
+2026-10-23T16:14:41.9669460Z [threat-detect] prompt built: prompt_bytes=42732 framework_scaffolding_detected=true framework_scaffolding_host_removed=true framework_scaffolding_markers=<safe-output-tools>
+2026-10-23T16:14:41.9670651Z [threat-detect] eligibility: prompt_injection=true secret_leak=true malicious_patch=false
+2026-10-23T16:14:41.9671255Z [threat-detect] detection attempt 1 of 1
+2026-10-23T16:14:41.9672051Z [threat-detect] engine invoke: engine=copilot model="gpt-4.1" command="node (/opt/hostedtoolcache/node/24.21.0/x64/bin/node)" args=13
+2026-10-23T16:14:41.9673911Z [threat-detect] engine argv: "/home/runner/work/_temp/gh-aw/actions/copilot_harness.cjs" "/usr/local/bin/copilot" "--add-dir" "." "--log-level" "all" "--disable-builtin-mcps" "--no-ask-user" "--allow-all-tools" "--add-dir" "/home/runner/work/cs467-a3-prometheus-triage/cs467-a3-prometheus-triage" "--prompt-file" "<prompt-file>"
+2026-10-23T16:14:41.9675945Z [engine] [copilot-harness] starting: command=/usr/local/bin/copilot maxRetries=0 initialDelayMs=5000 backoffMultiplier=2 maxDelayMs=60000 nodeVersion=v24.21.0 platform=linux
+2026-10-23T16:14:41.9677057Z [engine] [copilot-harness] pre-flight: command is accessible and executable: /usr/local/bin/copilot
+2026-10-23T16:14:41.9678022Z [engine] [copilot-harness] resolved --prompt-file: path=/tmp/threat-detect-prompt-4146669745.txt size=42732B
+2026-10-23T16:14:41.9678911Z [engine] [copilot-harness] awf-reflect: fetching http://api-proxy:10000/reflect (timeout=60000ms)
+2026-10-23T16:14:41.9679738Z [engine] [copilot-harness] awf-reflect: fetched 40 model(s) from http://api-proxy:10002/models
+2026-10-23T16:14:41.9680525Z [engine] [copilot-harness] awf-reflect: saved 22008B to /tmp/gh-aw/agent/awf-reflect.json
+2026-10-23T16:14:41.9681511Z [engine] [copilot-harness] model resolution: engine=copilot role=main configured=gpt-4.1 resolved=gpt-4.1 provider=(unscoped) status=exact
+2026-10-23T16:14:41.9682458Z [engine] [copilot-harness] COPILOT_PROVIDER_WIRE_API unset — source=CLI default
+2026-10-23T16:14:41.9683311Z [engine] [copilot-harness] inference routing: mode=cli configuredModel="gpt-4.1" endpoint=managed-by-copilot-cli
+2026-10-23T16:14:41.9684864Z [engine] [copilot-harness] attempt 1: spawning: /usr/local/bin/copilot --add-dir /tmp --log-level all --disable-builtin-mcps --no-ask-user --allow-all-tools --add-dir /home/runner/work/cs467-a3-prometheus-triage/cs467-a3-prometheus-triage -p <redacted>
+2026-10-23T16:14:41.9686170Z [engine] [copilot-harness] attempt 1: process started (pid=1877)
+2026-10-23T16:14:41.9686803Z [entrypoint] Unsetting sensitive tokens from parent shell environment...
+2026-10-23T16:14:41.9687431Z [entrypoint] Unset COPILOT_GITHUB_TOKEN from /proc/1/environ
+2026-10-23T16:14:41.9688017Z [entrypoint] Unset COPILOT_PROVIDER_API_KEY from /proc/1/environ
+2026-10-23T16:14:41.9688687Z [engine] ● Get the path for the threat detection reasons file (shell)
+2026-10-23T16:14:41.9689277Z [engine]   │ echo "$THREAT_DETECTION_REASONS_FILE"
+2026-10-23T16:14:41.9689757Z [engine]   └ 1 line…
+2026-10-23T16:14:41.9690093Z [engine] 
+2026-10-23T16:14:41.9690490Z [engine] ● Read agent_output.json
+2026-10-23T16:14:41.9691032Z [engine]   │ /tmp/gh-aw/threat-detection/agent_output.json
+2026-10-23T16:14:41.9691520Z [engine]   └ 1 line read
+2026-10-23T16:14:41.9691859Z [engine] 
+2026-10-23T16:14:41.9692514Z [engine] ● List all files in the threat detection directory to confirm available artifacts (shell)
+2026-10-23T16:14:41.9693194Z [engine]   │ ls -lh /tmp/gh-aw/threat-detection/
+2026-10-23T16:14:41.9693642Z [engine]   └ 6 lines…
+2026-10-23T16:14:41.9693970Z [engine] 
+2026-10-23T16:14:41.9694326Z [engine] ● Read prompt.txt
+2026-10-23T16:14:41.9694857Z [engine]   │ /tmp/gh-aw/threat-detection/aw-prompts/prompt.txt
+2026-10-23T16:14:41.9695498Z [engine]   └ 70 lines read
+2026-10-23T16:14:41.9695837Z [engine] 
+2026-10-23T16:14:41.9696415Z [engine] ● Review agent output for any suspicious content or unsafe actions (shell)
+2026-10-23T16:14:41.9697105Z [engine]   │ cat /tmp/gh-aw/threat-detection/agent_output.json
+2026-10-23T16:14:41.9697578Z [engine]   └ 1 line…
+2026-10-23T16:14:41.9697902Z [engine] 
+2026-10-23T16:14:41.9698476Z [engine] ● Review activation context for any suspicious or untrusted values (shell)
+2026-10-23T16:14:41.9699264Z [engine]   │ cat /tmp/gh-aw/threat-detection/aw_info.json
+2026-10-23T16:14:41.9699729Z [engine]   └ 52 lines…
+2026-10-23T16:14:41.9700054Z [engine] 
+2026-10-23T16:14:41.9700626Z [engine] ● Check detection log for any flagged issues or suspicious activity (shell)
+2026-10-23T16:14:41.9701338Z [engine]   │ cat /tmp/gh-aw/threat-detection/detection.log | head -40
+2026-10-23T16:14:41.9701835Z [engine]   └ 40 lines…
+2026-10-23T16:14:41.9702158Z [engine] 
+2026-10-23T16:14:41.9702836Z [engine] ● Check the end of the prompt for any suspicious or injected content (shell)
+2026-10-23T16:14:41.9703570Z [engine]   │ cat /tmp/gh-aw/threat-detection/aw-prompts/prompt.txt | tail -40
+2026-10-23T16:14:41.9704086Z [engine]   └ 38 lines…
+2026-10-23T16:14:41.9704408Z [engine] 
+2026-10-23T16:14:41.9704986Z [engine] ● Check the start of the prompt for any suspicious or injected content (shell)
+2026-10-23T16:14:41.9705852Z [engine]   │ cat /tmp/gh-aw/threat-detection/aw-prompts/prompt.txt | head -40
+2026-10-23T16:14:41.9706525Z [engine]   └ 39 lines…
+2026-10-23T16:14:41.9706892Z [engine] 
+2026-10-23T16:14:41.9707458Z [engine] ● Pretty-print agent output for easier review of comment content (shell)
+2026-10-23T16:14:41.9708151Z [engine]   │ cat /tmp/gh-aw/threat-detection/agent_output.json | jq .
+2026-10-23T16:14:41.9708641Z [engine]   └ 10 lines…
+2026-10-23T16:14:41.9709007Z [engine] 
+2026-10-23T16:14:41.9709540Z [engine] ✗ Scan agent output for possible secrets or encoded values (shell)
+2026-10-23T16:14:41.9710193Z [engine]   │ cat /tmp/gh-aw/threat-detection/agent_output.json | grep -i -E
+2026-10-23T16:14:41.9710932Z [engine]   │ 'secret|key|token|password|AKIA|ghp_|eyJ[a-zA-Z0-9_-]{10,}|[A-Za-z0-9+/=]{32,}'
+2026-10-23T16:14:41.9711459Z [engine]   └
+2026-10-23T16:14:41.9711821Z [engine]     Failed with exit code 1
+2026-10-23T16:14:41.9712181Z [engine] 
+2026-10-23T16:14:41.9712680Z [engine] ✗ Scan prompt for possible secrets or encoded values (shell)
+2026-10-23T16:14:41.9713448Z [engine]   │ cat /tmp/gh-aw/threat-detection/aw-prompts/prompt.txt | grep -i -E
+2026-10-23T16:14:41.9714466Z [engine]   │ 'secret|key|token|password|AKIA|ghp_|eyJ[a-zA-Z0-9_-]{10,}|[A-Za-z0-9+/=]{32,}'
+2026-10-23T16:14:41.9714976Z [engine]   └
+2026-10-23T16:14:41.9715491Z [engine]     Failed with exit code 1
+2026-10-23T16:14:41.9722317Z [engine] 
+2026-10-23T16:14:41.9723185Z [engine] ✗ Scan prompt for invisible Unicode format characters (shell)
+2026-10-23T16:14:41.9724134Z [engine]   │ cat /tmp/gh-aw/threat-detection/aw-prompts/prompt.txt | grep -P '\p{Cf}'
+2026-10-23T16:14:41.9724975Z [engine]   └
+2026-10-23T16:14:41.9725299Z [engine]     Failed with exit code 1
+2026-10-23T16:14:41.9725970Z [engine] 
+2026-10-23T16:14:41.9726466Z [engine] ✗ Scan agent output for invisible Unicode format characters (shell)
+2026-10-23T16:14:41.9728723Z [engine]   │ cat /tmp/gh-aw/threat-detection/agent_output.json | grep -P '\p{Cf}'
+2026-10-23T16:14:41.9729255Z [engine]   └
+2026-10-23T16:14:41.9729604Z [engine]     Failed with exit code 1
+2026-10-23T16:14:41.9729978Z [engine] 
+2026-10-23T16:14:41.9730498Z [engine] ✗ Scan prompt for non-printable ASCII control characters (shell)
+2026-10-23T16:14:41.9731318Z [engine]   │ cat /tmp/gh-aw/threat-detection/aw-prompts/prompt.txt | grep -P '[ --]'
+2026-10-23T16:14:41.9731956Z [engine]   └ <error: nul byte found in provided data>
+2026-10-23T16:14:41.9732395Z [engine]     Failed with exit code 1
+2026-10-23T16:14:41.9732750Z [engine] 
+2026-10-23T16:14:41.9733291Z [engine] ✗ Scan agent output for non-printable ASCII control characters (shell)
+2026-10-23T16:14:41.9734011Z [engine]   │ cat /tmp/gh-aw/threat-detection/agent_output.json | grep -P '[ -]'
+2026-10-23T16:14:41.9734624Z [engine]   └ <error: nul byte found in provided data>
+2026-10-23T16:14:41.9735067Z [engine]     Failed with exit code 1
+2026-10-23T16:14:41.9735525Z [engine] 
+2026-10-23T16:14:41.9736087Z [engine] ✗ Scan prompt for non-printable ASCII control characters (alternate) (shell)
+2026-10-23T16:14:41.9736833Z [engine]   │ cat /tmp/gh-aw/threat-detection/aw-prompts/prompt.txt | grep -P '[ -]'
+2026-10-23T16:14:41.9737614Z [engine]   └ <error: nul byte found in provided data>
+2026-10-23T16:14:41.9744010Z [engine]     Failed with exit code 1
+2026-10-23T16:14:41.9744373Z [engine] 
+2026-10-23T16:14:41.9745000Z [engine] ✗ Scan agent output for non-printable ASCII control characters (alternate) (shell)
+2026-10-23T16:14:41.9745925Z [engine]   │ cat /tmp/gh-aw/threat-detection/agent_output.json | grep -P '[ -]'
+2026-10-23T16:14:41.9746535Z [engine]   └ <error: nul byte found in provided data>
+2026-10-23T16:14:41.9747128Z [engine]     Failed with exit code 1
+2026-10-23T16:14:41.9747481Z [engine] 
+2026-10-23T16:14:41.9747926Z [engine] ✗ Hexdump prompt for control characters (shell)
+2026-10-23T16:14:41.9748710Z [engine]   │ cat /tmp/gh-aw/threat-detection/aw-prompts/prompt.txt | grep -P '[ -]' | hexdump -C | head -20
+2026-10-23T16:14:41.9749402Z [engine]   └ <error: nul byte found in provided data>
+2026-10-23T16:14:41.9749844Z [engine]     Failed with exit code 1
+2026-10-23T16:14:41.9750198Z [engine] 
+2026-10-23T16:14:41.9750666Z [engine] ● Hexdump agent output for control characters (shell)
+2026-10-23T16:14:41.9751351Z [engine]   │ cat /tmp/gh-aw/threat-detection/agent_output.json | hexdump -C | head -40
+2026-10-23T16:14:41.9752029Z [engine]   └ 40 lines…
+2026-10-23T16:14:41.9752691Z [engine] 
+2026-10-23T16:14:41.9769281Z [engine] ● Hexdump prompt for control characters or suspicious bytes (shell)
+2026-10-23T16:14:41.9770185Z [engine]   │ cat /tmp/gh-aw/threat-detection/aw-prompts/prompt.txt | hexdump -C | head -40
+2026-10-23T16:14:41.9770802Z [engine]   └ 40 lines…
+2026-10-23T16:14:41.9771132Z [engine] 
+2026-10-23T16:14:41.9771723Z [engine] ● Scan prompt for suspicious script or execution instructions (shell)
+2026-10-23T16:14:41.9772512Z [engine]   │ cat /tmp/gh-aw/threat-detection/aw-prompts/prompt.txt | grep -i -E
+2026-10-23T16:14:41.9773239Z [engine]   │ 'script|exec|run|python|bash|sh|powershell|cmd|system|os\.|subprocess'
+2026-10-23T16:14:41.9773765Z [engine]   └ 8 lines…
+2026-10-23T16:14:41.9774095Z [engine] 
+2026-10-23T16:14:41.9774649Z [engine] ● Scan agent output for suspicious script or execution instructions (shell)
+2026-10-23T16:14:41.9775548Z [engine]   │ cat /tmp/gh-aw/threat-detection/agent_output.json | grep -i -E
+2026-10-23T16:14:41.9776245Z [engine]   │ 'script|exec|run|python|bash|sh|powershell|cmd|system|os\.|subprocess'
+2026-10-23T16:14:41.9776756Z [engine]   └ 1 line…
+2026-10-23T16:14:41.9777068Z [engine] 
+2026-10-23T16:14:41.9777547Z [engine] ● Scan prompt for framework scaffolding markers (shell)
+2026-10-23T16:14:41.9778220Z [engine]   │ cat /tmp/gh-aw/threat-detection/aw-prompts/prompt.txt | grep -i -E
+2026-10-23T16:14:41.9779055Z [engine]   │ '<system>|</system>|safe-output|safeoutputs|noop|max:|report_incomplete|add_comment|add_labels'
+2026-10-23T16:14:41.9779782Z [engine]   └ 1 line…
+2026-10-23T16:14:41.9780152Z [engine] 
+2026-10-23T16:14:41.9780755Z [engine] ● Scan agent output for framework scaffolding markers (shell)
+2026-10-23T16:14:41.9781578Z [engine]   │ cat /tmp/gh-aw/threat-detection/agent_output.json | grep -i -E
+2026-10-23T16:14:41.9782510Z [engine]   │ '<system>|</system>|safe-output|safeoutputs|noop|max:|report_incomplete|add_comment|add_labels'
+2026-10-23T16:14:41.9783164Z [engine]   └ 1 line…
+2026-10-23T16:14:41.9783413Z [engine] 
+2026-10-23T16:14:41.9783783Z [engine] ● Scan prompt for triage and decision keywords (shell)
+2026-10-23T16:14:41.9784348Z [engine]   │ cat /tmp/gh-aw/threat-detection/aw-prompts/prompt.txt | grep -i -E
+2026-10-23T16:14:41.9785132Z [engine]   │ 'label|duplicate|canonical|triage|decision|precheck|template|vulnerability|priority|kind/bug'
+2026-10-23T16:14:41.9785798Z [engine]   └ 9 lines…
+2026-10-23T16:14:41.9786005Z [engine] 
+2026-10-23T16:14:41.9786387Z [engine] ● Scan agent output for triage and decision keywords (shell)
+2026-10-23T16:14:41.9786937Z [engine]   │ cat /tmp/gh-aw/threat-detection/agent_output.json | grep -i -E
+2026-10-23T16:14:41.9787642Z [engine]   │ 'label|duplicate|canonical|triage|decision|precheck|template|vulnerability|priority|kind/bug'
+2026-10-23T16:14:41.9788292Z [engine]   └ 1 line…
+2026-10-23T16:14:41.9788490Z [engine] 
+2026-10-23T16:14:41.9788808Z [engine] ● Create threat-detection-reasons.json +1
+2026-10-23T16:14:41.9789090Z [engine]   └ /tmp/threat-detection-reasons.json
+2026-10-23T16:14:41.9789266Z [engine] 
+2026-10-23T16:14:41.9789451Z [engine] ● Report no threats detected (shell)
+2026-10-23T16:14:41.9789850Z [engine]   │ threat_detection_result --prompt-injection false --secret-leak false --malicious-patch false
+2026-10-23T16:14:41.9790253Z [engine]   └ 1 line…
+2026-10-23T16:14:41.9790382Z [engine] 
+2026-10-23T16:14:41.9790537Z [threat-detect] attempt 1 outcome=recorded
+2026-10-23T16:14:41.9790939Z [threat-detect] full result written: path=/tmp/gh-aw/threat-detection/detection_result_full.json reasons=0 warnings=0
+2026-10-23T16:14:41.9791317Z THREAT_DETECTION_STATUS: reason=result_recorded exit=0
+2026-10-23T16:14:41.9791637Z [entrypoint] Relaxed /host/tmp/gh-aw group permissions for host-side post-processing
+2026-10-23T16:14:41.9791912Z [INFO] Stopping containers...
+2026-10-23T16:14:41.9792089Z  Container awf-agent  Stopping
+2026-10-23T16:14:41.9792249Z  Container awf-agent  Stopped
+2026-10-23T16:14:41.9792410Z  Container awf-agent  Removing
+2026-10-23T16:14:41.9792565Z  Container awf-agent  Removed
+2026-10-23T16:14:41.9792726Z  Container awf-squid  Stopping
+2026-10-23T16:14:41.9792896Z  Container awf-api-proxy  Stopping
+2026-10-23T16:14:41.9793075Z  Container awf-api-proxy  Stopped
+2026-10-23T16:14:41.9793254Z  Container awf-api-proxy  Removing
+2026-10-23T16:14:41.9793426Z  Container awf-api-proxy  Removed
+2026-10-23T16:14:41.9793584Z  Container awf-squid  Stopped
+2026-10-23T16:14:41.9793743Z  Container awf-squid  Removing
+2026-10-23T16:14:41.9793895Z  Container awf-squid  Removed
+2026-10-23T16:14:41.9794044Z  Network awf-net  Removing
+2026-10-23T16:14:41.9794211Z  Network awf-zgad21_awf-ext  Removing
+2026-10-23T16:14:41.9794378Z  Network awf-net  Removed
+2026-10-23T16:14:41.9794542Z  Network awf-zgad21_awf-ext  Removed
+2026-10-23T16:14:41.9794735Z [SUCCESS] Containers stopped successfully
+2026-10-23T16:14:41.9794980Z [INFO] Agent logs preserved at: /tmp/awf-agent-logs-zgAD21
+2026-10-23T16:14:41.9795296Z [INFO] Agent session state available at: /tmp/gh-aw/sandbox/agent/session-state
+2026-10-23T16:14:41.9795995Z [INFO] API proxy logs available at: /tmp/gh-aw/sandbox/firewall/logs/api-proxy-logs
+2026-10-23T16:14:41.9796668Z [INFO] Token usage log available at: /tmp/gh-aw/sandbox/firewall/logs/api-proxy-logs/token-usage.jsonl
+2026-10-23T16:14:41.9797296Z [INFO] CLI proxy logs available at: /tmp/gh-aw/sandbox/firewall/logs/cli-proxy-logs
+2026-10-23T16:14:41.9797826Z [INFO] Squid logs available at: /tmp/gh-aw/sandbox/firewall/logs
+2026-10-23T16:14:41.9798326Z [INFO] Audit artifacts available at: /tmp/gh-aw/sandbox/firewall/audit
+2026-10-23T16:14:41.9798724Z [SUCCESS] Command completed successfully
+2026-10-23T16:14:41.9799012Z Process exiting with code: 0
+2026-10-23T16:14:41.9799648Z ::***::
+2026-10-23T16:14:41.9800030Z ##[endgroup]
+2026-10-23T16:14:41.9800382Z Log rendered (17481 bytes): /tmp/gh-aw/threat-detection/detection.log
