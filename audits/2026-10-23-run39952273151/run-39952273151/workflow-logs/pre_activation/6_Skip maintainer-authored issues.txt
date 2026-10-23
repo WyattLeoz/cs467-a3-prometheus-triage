@@ -1,0 +1,26 @@
+﻿2026-10-23T12:18:09.3624015Z ##[group]Run assoc=$(jq -r '.issue.author_association' "$GITHUB_EVENT_PATH")
+2026-10-23T12:18:09.3625257Z [36;1massoc=$(jq -r '.issue.author_association' "$GITHUB_EVENT_PATH")[0m
+2026-10-23T12:18:09.3626082Z [36;1mif [ "$assoc" = "OWNER" ]; then[0m
+2026-10-23T12:18:09.3627358Z [36;1m  meta=$(jq -r '.issue.body // ""' "$GITHUB_EVENT_PATH" | grep -oP '(?<=<!-- triage-replay: )\{.*?\}(?= -->)' | head -n1 || true)[0m
+2026-10-23T12:18:09.3628685Z [36;1m  if [ -n "$meta" ]; then assoc=$(printf '%s' "$meta" | jq -r '.author_association // "OWNER"'); fi[0m
+2026-10-23T12:18:09.3629543Z [36;1mfi[0m
+2026-10-23T12:18:09.3630079Z [36;1mecho "effective author_association: $assoc"[0m
+2026-10-23T12:18:09.3631078Z [36;1mcase "$assoc" in[0m
+2026-10-23T12:18:09.3632731Z [36;1m  OWNER|MEMBER|COLLABORATOR) echo "::notice::maintainer-authored issue, triage skipped"; exit 1 ;;[0m
+2026-10-23T12:18:09.3633776Z [36;1mesac[0m
+2026-10-23T12:18:09.3643373Z shell: /usr/bin/bash -e {0}
+2026-10-23T12:18:09.3643973Z env:
+2026-10-23T12:18:09.3644488Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-23T12:18:09.3645468Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-23T12:18:09.3647124Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=39952273151,github.run_id=39952273151,gh-aw.engine.id=copilot
+2026-10-23T12:18:09.3648765Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-23T12:18:09.3649361Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-23T12:18:09.3650005Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-23T12:18:09.3651209Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-23T12:18:09.3651898Z   GITHUB_AW_OTEL_TRACE_ID: d3c90bc9e0f7a2a21c08272b72dccf3f
+2026-10-23T12:18:09.3652660Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: a70275741fc1fb2c
+2026-10-23T12:18:09.3653321Z   GITHUB_AW_OTEL_JOB_START_MS: 1792757888106
+2026-10-23T12:18:09.3653904Z ##[endgroup]
+2026-10-23T12:18:09.3904446Z effective author_association: MEMBER
+2026-10-23T12:18:09.3928718Z ##[notice]maintainer-authored issue, triage skipped
+2026-10-23T12:18:09.3951584Z ##[error]Process completed with exit code 1.
