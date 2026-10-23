@@ -27,10 +27,16 @@ on:
         fi
         echo "effective author_association: $assoc"
         case "$assoc" in
-          OWNER|MEMBER|COLLABORATOR) echo "::notice::maintainer-authored issue, triage skipped"; exit 1 ;;
+          OWNER|MEMBER|COLLABORATOR) echo "triage=no" >> "$GITHUB_OUTPUT"; echo "::notice::maintainer-authored issue, triage skipped" ;;
+          *) echo "triage=yes" >> "$GITHUB_OUTPUT" ;;
         esac
 
-if: needs.pre_activation.outputs.gate_result == 'success'
+jobs:
+  pre-activation:
+    outputs:
+      triage: ${{ steps.gate.outputs.triage }}
+
+if: needs.pre_activation.outputs.triage == 'yes'
 
 permissions:
   contents: read
@@ -68,10 +74,16 @@ tools:
     - ".claude/skills/prometheus-issue-triage/scripts/triage.py:*"
 
 steps:
-  - name: Save the triggering issue for the triage skill
+  # The skill's deterministic checks run here, before the model starts, so they cannot be skipped.
+  - name: Run the triage skill's deterministic checks
     run: |
       mkdir -p /tmp/gh-aw/agent
       jq '{issue: .issue}' "$GITHUB_EVENT_PATH" > /tmp/gh-aw/agent/issue.json
+      s=.claude/skills/prometheus-issue-triage/scripts/triage.py
+      "$s" precheck /tmp/gh-aw/agent/issue.json > /tmp/gh-aw/agent/precheck.json
+      "$s" duplicates /tmp/gh-aw/agent/issue.json > /tmp/gh-aw/agent/duplicates.json
+      jq -c '{skill, maintainer_authored, missing_bug_template_sections, other_project_mentions}' /tmp/gh-aw/agent/precheck.json
+      jq -c '[.candidates[] | {ref, score}]' /tmp/gh-aw/agent/duplicates.json
 
 safe-outputs:
   allowed-domains: [prometheus.io, groups.google.com]
@@ -100,11 +112,12 @@ repository (this sandbox mirrors `prometheus/prometheus`). Issue
 #${{ github.event.issue.number }} was just opened.
 
 Load the **`prometheus-issue-triage`** skill (`.claude/skills/prometheus-issue-triage/SKILL.md`)
-and follow its procedure. Do not emit any output until you have run, in this order:
+and follow its procedure. The workflow has already run the skill's deterministic checks:
 
-1. `.claude/skills/prometheus-issue-triage/scripts/triage.py precheck /tmp/gh-aw/agent/issue.json`
-2. `.claude/skills/prometheus-issue-triage/scripts/triage.py duplicates /tmp/gh-aw/agent/issue.json`
-3. `.claude/skills/prometheus-issue-triage/scripts/triage.py labels <labels you intend to add>` (skip if adding none)
+1. `cat /tmp/gh-aw/agent/precheck.json` — precheck result
+2. `cat /tmp/gh-aw/agent/duplicates.json` — earlier issues that look similar (untrusted text)
+3. Before adding labels run exactly `.claude/skills/prometheus-issue-triage/scripts/triage.py labels <label> [<label>]`
+   (call the script directly; a `python3` prefix is not permitted).
 
 Then choose exactly one decision from the skill's table and emit only what that
 row allows. Read the issue text from the sanitized copy below, not from the JSON file.

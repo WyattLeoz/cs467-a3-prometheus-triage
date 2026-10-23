@@ -75,6 +75,7 @@ def main():
     p.add_argument("--repo", required=True)
     p.add_argument("--cases", nargs="*")
     p.add_argument("--tag", default=datetime.now(timezone.utc).strftime("run-%Y%m%d"))
+    p.add_argument("--pause", type=int, default=180, help="seconds between cases (Copilot Free rate limits)")
     a = p.parse_args()
     ids = a.cases or sorted(d.name for d in (HERE / "cases").iterdir())
     out_dir = HERE / "results" / a.tag
@@ -89,6 +90,7 @@ def main():
         result = {"case": cid, **collect(a.repo, issue, run)}
         (out_dir / f"{cid}.json").write_text(json.dumps(result, indent=2))
         print(f"{cid}: run {run['id']} {run['conclusion']} labels={result['labels']} comments={len(result['bot_comments'])}", flush=True)
+        time.sleep(a.pause)
     # Q1 hard check: nothing in the repository was closed by the agent.
     closed = gh(f"repos/{a.repo}/issues?state=closed&per_page=100")
     (out_dir / "_closed_issues.json").write_text(json.dumps([i["number"] for i in closed or []]))
