@@ -39,7 +39,7 @@ permissions:
 
 engine:
   id: copilot
-  model: claude-sonnet-4.5
+  model: gpt-5-mini
 
 timeout-minutes: 10
 max-turns: 20
