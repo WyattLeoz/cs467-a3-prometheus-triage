@@ -30,7 +30,7 @@ def expectations():
 
 def skill_evidence(run_id):
     """Did the agent load the skill and run its precheck? Read from the audit-log branch (None = no audit)."""
-    git = lambda *a: subprocess.run(["git", *a], capture_output=True, text=True, cwd=HERE).stdout
+    git = lambda *a: subprocess.run(["git", *a], capture_output=True, text=True, cwd=HERE.parents[1]).stdout
     dirs = [d for d in git("ls-tree", "-d", "--name-only", "origin/audit-log", "audits/").split() if d.endswith(f"run{run_id}")]
     if not dirs:
         return None
