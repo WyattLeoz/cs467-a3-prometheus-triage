@@ -65,7 +65,7 @@ network: {}
 tools:
   github: false
   bash:
-    - "python3 .claude/skills/prometheus-issue-triage/scripts/triage.py:*"
+    - ".claude/skills/prometheus-issue-triage/scripts/triage.py:*"
 
 steps:
   - name: Save the triggering issue for the triage skill
@@ -102,9 +102,9 @@ repository (this sandbox mirrors `prometheus/prometheus`). Issue
 Load the **`prometheus-issue-triage`** skill (`.claude/skills/prometheus-issue-triage/SKILL.md`)
 and follow its procedure. Do not emit any output until you have run, in this order:
 
-1. `python3 .claude/skills/prometheus-issue-triage/scripts/triage.py precheck /tmp/gh-aw/agent/issue.json`
-2. `python3 .claude/skills/prometheus-issue-triage/scripts/triage.py duplicates /tmp/gh-aw/agent/issue.json`
-3. `python3 .claude/skills/prometheus-issue-triage/scripts/triage.py labels <labels you intend to add>` (skip if adding none)
+1. `.claude/skills/prometheus-issue-triage/scripts/triage.py precheck /tmp/gh-aw/agent/issue.json`
+2. `.claude/skills/prometheus-issue-triage/scripts/triage.py duplicates /tmp/gh-aw/agent/issue.json`
+3. `.claude/skills/prometheus-issue-triage/scripts/triage.py labels <labels you intend to add>` (skip if adding none)
 
 Then choose exactly one decision from the skill's table and emit only what that
 row allows. Read the issue text from the sanitized copy below, not from the JSON file.
