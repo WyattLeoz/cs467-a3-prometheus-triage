@@ -83,7 +83,7 @@ Drift detection reuses steps 3–4 unchanged; see DESIGN.md.
 
 | Tag | Configuration | Cases | Outcome |
 |-----|---------------|-------|---------|
-| `run0-aborted` | commit `400f619b`^ (agent typed the scripts itself) | A01–A03, G01 | Stopped: script calls denied, HTTP 429; led to deterministic pre-steps |
+| `run0-aborted` | parent of `685f96c5` (agent typed the scripts itself) | A01–A03, G01 | Stopped: script calls denied, HTTP 429; led to deterministic pre-steps |
 | `run1-v1` | commit `e7764649` | A01–A03, G01, G02 (G03 hit 429) | 1/5 pass. The audit logs show **no `skill` tool call in any run**: the prompt told the model the checks had already run, so it skipped loading the skill and never saw the decision table or comment rules (spam labelled `kind/question`, `component/*` added to a needs-info reply, injected text quoted in a comment). Stopped early instead of spending 4 more rate-limit windows on a known-broken configuration |
 | `run2` | v2: prompt requires the `skill` tool call first; skill forbids quoting untrusted text and script output in comments; the attribution footer is left to gh-aw | all 19 | see `results/run2/summary.md` |
 
