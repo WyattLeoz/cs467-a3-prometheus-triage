@@ -35,6 +35,7 @@ if: needs.pre_activation.outputs.gate_result == 'success'
 permissions:
   contents: read
   issues: read
+  copilot-requests: write  # keyless Copilot inference with the per-run Actions token (no PAT)
 
 engine:
   id: copilot
