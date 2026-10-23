@@ -1,0 +1,57 @@
+# Audit trail for the triage agent (deterministic, no model).
+# After every "Prometheus Issue Triage" run, store the `gh aw audit` report
+# (trigger, model, tool calls, firewall decisions, safe outputs, token cost) on the
+# `audit-log` branch, so the record outlives the 90-day Actions log retention and
+# every change to it is a git commit.
+name: Triage audit archive
+
+on:
+  workflow_run:
+    workflows: ["Prometheus Issue Triage"]
+    types: [completed]
+
+permissions:
+  actions: read    # download the triage run's logs and artifacts
+  contents: write  # push to the audit-log branch only
+
+concurrency:
+  group: triage-audit-archive
+  cancel-in-progress: false
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out audit-log branch (create if missing)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 1
+      - name: Archive gh aw audit report
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_EVENT: ${{ github.event.workflow_run.event }}
+          RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin audit-log >/dev/null; then
+            git fetch --depth 1 origin audit-log && git checkout audit-log
+          else
+            git checkout --orphan audit-log && git rm -rq --cached . && git clean -fdq
+            echo "# Triage agent audit log (written by triage-audit-archive.yml)" > README.md
+          fi
+          gh extension install github/gh-aw --pin v0.93.1
+          dir="audits/$(date -u +%Y-%m-%d)-run$RUN_ID"
+          mkdir -p "$dir" /tmp/audit
+          gh aw audit "$RUN_ID" --repo "$GITHUB_REPOSITORY" --parse --no-baseline -o /tmp/audit > "$dir/report.md" 2>&1 || echo "audit exited $?" >> "$dir/report.md"
+          gh aw audit "$RUN_ID" --repo "$GITHUB_REPOSITORY" --no-baseline -o /tmp/audit --json > "$dir/report.json" 2>/dev/null || true
+          # Keep the human-readable parsed logs and small JSON/Markdown evidence; skip large raw dumps.
+          find /tmp/audit -type f \( -name '*.md' -o -name '*.json' -o -name '*.jsonl' -o -name '*.txt' \) -size -2M \
+            -exec sh -c 'for f; do rel="${f#/tmp/audit/}"; mkdir -p "$0/$(dirname "$rel")"; cp "$f" "$0/$rel"; done' "$dir" {} +
+          printf 'run_id: %s\nevent: %s\nconclusion: %s\narchived_at: %s\n' "$RUN_ID" "$RUN_EVENT" "$RUN_CONCLUSION" "$(date -u +%FT%TZ)" > "$dir/meta.txt"
+          git add -A
+          git commit -qm "audit: triage run $RUN_ID ($RUN_CONCLUSION)"
+          git push origin HEAD:audit-log
