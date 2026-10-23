@@ -17,6 +17,7 @@ jobs:
         env:
           T: ${{ secrets.COPILOT_GITHUB_TOKEN }}
         run: |
+          exec > >(tee /tmp/diag.txt) 2>&1
           h=(-sS -H "Authorization: Bearer $T" -H "Accept: application/json")
           echo "== token owner"; curl "${h[@]}" https://api.github.com/user | jq '{login, type}'
           echo "== Copilot seat (copilot_internal/user)"
@@ -30,3 +31,8 @@ jobs:
               https://api.githubcopilot.com/chat/completions -d "{\"model\":\"$m\",\"max_tokens\":1,\"messages\":[{\"role\":\"user\",\"content\":\"hi\"}]}")
             echo "$m -> HTTP $code $(jq -c '.error // empty' /tmp/r.json 2>/dev/null | head -c 200)"
           done
+      - name: Publish findings as annotations (readable via the check-runs API)
+        if: always()
+        run: |
+          split -l 40 /tmp/diag.txt /tmp/part_
+          for f in /tmp/part_*; do echo "::notice title=diag $(basename $f)::$(sed 's/%/%25/g' "$f" | awk '{printf "%s%%0A", $0}')"; done
