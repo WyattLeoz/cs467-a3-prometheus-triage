@@ -1,0 +1,37 @@
+﻿2026-10-23T21:32:22.7446245Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-23T21:32:22.7447069Z with:
+2026-10-23T21:32:22.7451682Z   github-token: ***
+2026-10-23T21:32:22.7453738Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'restore_aic_scan_cache.cjs'));
+await main();
+
+2026-10-23T21:32:22.7456149Z   debug: false
+2026-10-23T21:32:22.7456594Z   user-agent: actions/github-script
+2026-10-23T21:32:22.7457126Z   result-encoding: json
+2026-10-23T21:32:22.7457576Z   retries: 0
+2026-10-23T21:32:22.7458038Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-23T21:32:22.7458619Z env:
+2026-10-23T21:32:22.7459042Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-23T21:32:22.7459556Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-23T21:32:22.7461608Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40027444395,github.run_id=40027444395,gh-aw.engine.id=copilot
+2026-10-23T21:32:22.7463564Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-23T21:32:22.7464116Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-23T21:32:22.7464704Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-23T21:32:22.7465432Z   GH_AW_MAX_DAILY_AI_CREDITS: 2000
+2026-10-23T21:32:22.7467542Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-23T21:32:22.7468124Z   GITHUB_AW_OTEL_TRACE_ID: 7652df10b264994153112dcb470033ee
+2026-10-23T21:32:22.7468794Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 7ff3869133919870
+2026-10-23T21:32:22.7469395Z   GITHUB_AW_OTEL_JOB_START_MS: 1792791142490
+2026-10-23T21:32:22.7469962Z   GH_AW_HAS_SLASH_COMMAND: false
+2026-10-23T21:32:22.7470470Z   GH_AW_HAS_LABEL_COMMAND: false
+2026-10-23T21:32:22.7470966Z ##[endgroup]
+2026-10-23T21:32:23.3121759Z [daily-aic-cache] Querying workflow-specific run history: {"workflowId":393698481}
+2026-10-23T21:32:23.8298009Z [daily-aic-cache] Workflow-specific run history returned candidates: {"workflowId":393698481,"runs":10}
+2026-10-23T21:32:23.8304748Z [daily-aic-cache] Evaluated snapshot producer: {"producerRunId":40027081084,"isCurrentRun":false,"trusted":true,"workflowMatches":true,"pathMatches":true,"repositoryMatches":true,"defaultBranchMatches":true,"headRepositoryMatches":true}
+2026-10-23T21:32:24.0090557Z [daily-aic-cache] Skipped snapshot producer: {"producerRunId":40027081084,"reason":"no_unexpired_scan_artifact"}
+2026-10-23T21:32:24.0092932Z [daily-aic-cache] Evaluated snapshot producer: {"producerRunId":40026233992,"isCurrentRun":false,"trusted":true,"workflowMatches":true,"pathMatches":true,"repositoryMatches":true,"defaultBranchMatches":true,"headRepositoryMatches":true}
+2026-10-23T21:32:24.7109508Z [daily-aic-cache] Restored verified scan observations: {"producerRunId":40026233992,"artifactId":12532468191,"entries":27}
+2026-10-23T21:32:24.7117273Z [daily-aic-cache] GitHub API rate limit level: {"requests":5,"remaining":4907,"limit":5000,"used":93,"reset":"2026-10-23T22:07:12.000Z"}
