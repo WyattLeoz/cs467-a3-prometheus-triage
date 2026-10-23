@@ -70,6 +70,22 @@ def collect(repo, issue, run):
     }
 
 
+def rate_limited(run_id, wait=600):
+    """True if the agent or detection model got HTTP 429 (read from the audit-log branch)."""
+    git = lambda *a: subprocess.run(["git", *a], capture_output=True, text=True, cwd=HERE.parents[1]).stdout
+    deadline = time.time() + wait
+    while time.time() < deadline:
+        git("fetch", "-q", "origin", "+audit-log:refs/remotes/origin/audit-log")
+        dirs = [d for d in git("ls-tree", "-d", "--name-only", "origin/audit-log:audits").split() if d.endswith(f"run{run_id}")]
+        if dirs:
+            base = f"origin/audit-log:audits/{dirs[0]}/run-{run_id}"
+            agent = git("show", f"{base}/agent-errors.jsonl")
+            detection = git("show", f"{base}/detection/sandbox/firewall/logs/api-proxy-logs/otel.jsonl")
+            return "429" in agent or '"http.response.status_code":429' in detection
+        time.sleep(30)
+    return False
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--repo", required=True)
@@ -81,6 +97,8 @@ def main():
     out_dir = HERE / "results" / a.tag
     out_dir.mkdir(parents=True, exist_ok=True)
     for cid in ids:
+        if (out_dir / f"{cid}.json").exists():
+            continue  # resume: already recorded in an earlier rate-limit window
         case = json.loads((HERE / "cases" / cid / "input.json").read_text())
         since = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         issue = open_issue(a.repo, case)
@@ -88,6 +106,11 @@ def main():
         run = wait_for_run(a.repo, since)
         time.sleep(10)  # let the safe-output job's writes settle
         result = {"case": cid, **collect(a.repo, issue, run)}
+        if run["conclusion"] != "success" and rate_limited(run["id"]):
+            # Infrastructure failure, not an agent decision: keep the evidence, replay the case later.
+            (out_dir / f"{cid}.ratelimited-run{run['id']}.json").write_text(json.dumps(result, indent=2))
+            print(f"{cid}: HTTP 429 from Copilot (run {run['id']}); stopping until the rate-limit window resets", flush=True)
+            return 75
         (out_dir / f"{cid}.json").write_text(json.dumps(result, indent=2))
         print(f"{cid}: run {run['id']} {run['conclusion']} labels={result['labels']} comments={len(result['bot_comments'])}", flush=True)
         time.sleep(a.pause)
