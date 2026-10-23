@@ -39,7 +39,8 @@ permissions:
 
 engine:
   id: copilot
-  model: auto
+  model: gpt-5.6-luna
+  fallback-models: [claude-haiku-4.5, gpt-4.1, gpt-4o]
 
 timeout-minutes: 10
 max-turns: 20
