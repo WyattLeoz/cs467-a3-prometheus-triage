@@ -85,6 +85,10 @@ safe-outputs:
   add-comment:
     max: 1
     target: triggering
+  # Fail closed: if the detector flags injection/secret leakage or cannot decide, nothing is posted.
+  threat-detection:
+    continue-on-error: false
+    max-ai-credits: 100
 ---
 
 # Prometheus issue triage
