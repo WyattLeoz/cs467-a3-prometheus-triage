@@ -35,11 +35,11 @@ if: needs.pre_activation.outputs.gate_result == 'success'
 permissions:
   contents: read
   issues: read
-  copilot-requests: write  # keyless Copilot inference with the per-run Actions token (no PAT)
+  copilot-requests: none  # keyless org-billed inference is unavailable for a personal-account repo (tested: runs 39931152982, 39931953463)
 
 engine:
   id: copilot
-  model: gpt-5-mini
+  model: claude-sonnet-4.5
 
 timeout-minutes: 10
 max-turns: 20
