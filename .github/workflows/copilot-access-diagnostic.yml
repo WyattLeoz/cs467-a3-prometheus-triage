@@ -1,0 +1,32 @@
+# Temporary diagnostic (no model call, no writes): what can COPILOT_GITHUB_TOKEN do?
+# Prints the token owner's Copilot plan/org info and the model catalog with each model's
+# policy state for the agentic-workflows integration. Never prints the token.
+name: Copilot access diagnostic
+on:
+  workflow_dispatch:
+  issues:
+    types: [opened]
+permissions: {}
+jobs:
+  diagnose:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.issue.title, '[diag]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Inspect token, plan and model catalog
+        env:
+          T: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+        run: |
+          h=(-sS -H "Authorization: Bearer $T" -H "Accept: application/json")
+          echo "== token owner"; curl "${h[@]}" https://api.github.com/user | jq '{login, type}'
+          echo "== Copilot seat (copilot_internal/user)"
+          curl "${h[@]}" https://api.github.com/copilot_internal/user | jq 'del(.analytics_tracking_id, .endpoints?) | {copilot_plan, access_type_sku, chat_enabled, is_mcp_enabled, organization_login_list, organization_list: [.organization_list[]?.login], restricted_telemetry, can_signup_for_limited, quota_snapshots: (.quota_snapshots // {} | with_entries(.value |= {entitlement, remaining, unlimited, overage_permitted}))}' || true
+          echo "== models visible to integration agentic-workflows"
+          curl "${h[@]}" -H "Copilot-Integration-Id: agentic-workflows" -H "Editor-Version: gh-aw/0.93.1" https://api.githubcopilot.com/models \
+            | jq -r '.data[] | [.id, (.policy.state // "-"), (.model_picker_enabled|tostring), ((.supported_endpoints // []) | join("+")), (.billing.is_premium|tostring), (.billing.multiplier|tostring)] | @tsv' | sort | column -t || true
+          echo "== one-token chat probe per candidate model (status code only)"
+          for m in claude-haiku-4.5 gpt-4.1 gpt-5.6-luna claude-sonnet-5.5; do
+            code=$(curl -s -o /tmp/r.json -w '%{http_code}' -H "Authorization: Bearer $T" -H "Copilot-Integration-Id: agentic-workflows" -H "Content-Type: application/json" \
+              https://api.githubcopilot.com/chat/completions -d "{\"model\":\"$m\",\"max_tokens\":1,\"messages\":[{\"role\":\"user\",\"content\":\"hi\"}]}")
+            echo "$m -> HTTP $code $(jq -c '.error // empty' /tmp/r.json 2>/dev/null | head -c 200)"
+          done
