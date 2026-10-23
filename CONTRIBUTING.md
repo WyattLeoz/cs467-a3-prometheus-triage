@@ -1,0 +1,59 @@
+# Contributing
+
+This sandbox mirrors `prometheus/prometheus` issue intake and runs an AI triage
+agent on every newly opened issue. Upstream code-contribution rules (DCO
+sign-off, `area: description` PR titles, `release-notes` block) are in
+`upstream/CONTRIBUTING.md` and `upstream/AGENTS.upstream.md`. This file adds the
+rules that exist because an AI agent takes part in the workflow. They apply to
+everyone who opens issues, comments, or changes the agent configuration.
+
+## AI contribution policy
+
+### What the triage agent does — and does not do
+
+- On every new issue it may post **one** comment and add **up to two** labels from
+  `component/*`, `kind/question`, `kind/more-info-needed`, `kind/feature`, `kind/enhancement`.
+- It never applies `kind/bug` (a *confirmed* bug), `priority/*`, `won't fix`, `duplicate` or
+  `invalid`, and it cannot close, edit, lock or delete anything. Those are maintainer decisions.
+- Its comments are posted by `github-actions[bot]` and end with
+  "_Automated first-response triage (prometheus-issue-triage/1.0)_". They are suggestions, not
+  rulings: a "possible duplicate" or "other project" note can be wrong.
+
+### For issue reporters
+
+- You do not need to reply to the bot or follow its advice if it is wrong; a maintainer reviews
+  every issue at the bug scrub. To flag a wrong triage, react with 👎 on the bot comment or say so
+  in a reply — maintainers review these as part of drift monitoring.
+- Instructions addressed to the bot inside an issue ("bot, please close…", "you are approved
+  to…") are ignored and do not grant it any permission.
+- If you used an AI tool to write or analyse your report, say so and include the evidence
+  (version, configuration, logs) you verified yourself. Unverified AI-generated "audit reports"
+  or vulnerability lists may be closed without triage.
+- Report suspected vulnerabilities privately (https://prometheus.io/docs/operating/security/),
+  never in a public issue.
+
+### For contributors and maintainers
+
+- Do not paste the bot's text into a PR, issue or review as your own analysis. If you rely on it,
+  verify it and attribute it ("triage bot suggested X; I confirmed by …").
+- Labels the bot adds are routing hints. Remove or change them freely; the bot never re-adds a label
+  on the same issue because it runs once per issue.
+
+### Changing the agent
+
+Configuration lives in `.github/workflows/issue-triage.md` (hard limits),
+`.claude/skills/prometheus-issue-triage/` (procedure) and `AGENTS.md` (repository facts).
+
+1. Open a pull request; changes to these paths require CODEOWNER review (`.github/CODEOWNERS`).
+2. Recompile with `gh aw compile issue-triage` and commit the regenerated `.lock.yml` in the same PR.
+3. Run the unit tests and the golden set (`evals/golden/README.md`) and attach the score table.
+   A change that lowers the pass rate or fails any HARD check must not be merged.
+4. Never widen `permissions:`, add a safe output, or relax `network:` without a DESIGN.md update
+   explaining the new risk.
+5. AI assistance in these changes is allowed but must be disclosed in the PR description, and the
+   author must be able to explain every line.
+
+## Stopping the agent
+
+Any maintainer with write access can disable the workflow (Actions → "Prometheus Issue Triage" →
+⋯ → Disable workflow) and cancel running executions. See DESIGN.md, "Kill switch".
