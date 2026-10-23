@@ -1,0 +1,24 @@
+﻿2026-10-23T12:02:16.2779676Z ##[group]Run assoc=$(jq -r '.issue.author_association' "$GITHUB_EVENT_PATH")
+2026-10-23T12:02:16.2780764Z [36;1massoc=$(jq -r '.issue.author_association' "$GITHUB_EVENT_PATH")[0m
+2026-10-23T12:02:16.2781533Z [36;1mif [ "$assoc" = "OWNER" ]; then[0m
+2026-10-23T12:02:16.2784660Z [36;1m  meta=$(jq -r '.issue.body // ""' "$GITHUB_EVENT_PATH" | grep -oP '(?<=<!-- triage-replay: )\{.*?\}(?= -->)' | head -n1 || true)[0m
+2026-10-23T12:02:16.2785963Z [36;1m  if [ -n "$meta" ]; then assoc=$(printf '%s' "$meta" | jq -r '.author_association // "OWNER"'); fi[0m
+2026-10-23T12:02:16.2786799Z [36;1mfi[0m
+2026-10-23T12:02:16.2787321Z [36;1mecho "effective author_association: $assoc"[0m
+2026-10-23T12:02:16.2788529Z [36;1mcase "$assoc" in[0m
+2026-10-23T12:02:16.2790723Z [36;1m  OWNER|MEMBER|COLLABORATOR) echo "::notice::maintainer-authored issue, triage skipped"; exit 1 ;;[0m
+2026-10-23T12:02:16.2792415Z [36;1mesac[0m
+2026-10-23T12:02:16.2803926Z shell: /usr/bin/bash -e {0}
+2026-10-23T12:02:16.2804478Z env:
+2026-10-23T12:02:16.2804949Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-23T12:02:16.2805496Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-23T12:02:16.2809968Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=39950320056,github.run_id=39950320056,gh-aw.engine.id=copilot
+2026-10-23T12:02:16.2811546Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-23T12:02:16.2812106Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-23T12:02:16.2812740Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-23T12:02:16.2813252Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-23T12:02:16.2813842Z   GITHUB_AW_OTEL_TRACE_ID: ecaaeb575f9ee42dc24b2ab70d1cdcbd
+2026-10-23T12:02:16.2817542Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: cfe8b443d3758b02
+2026-10-23T12:02:16.2818489Z   GITHUB_AW_OTEL_JOB_START_MS: 1792756934987
+2026-10-23T12:02:16.2819050Z ##[endgroup]
+2026-10-23T12:02:16.3162240Z effective author_association: NONE
