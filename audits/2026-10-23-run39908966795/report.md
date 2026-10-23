@@ -1,14 +1,14 @@
 ✓ Downloaded artifacts for run 39908966795
-❌ Prometheus Issue Triage | failure | 1.0m | https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/39908966795
+❌ Prometheus Issue Triage | failure | 54.0s | https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/39908966795
   run=39908966795 branch=main event=issues engine=copilot/claude-sonnet-4.5/v1.0.101
   fingerprint: directed/narrow/read_only/lean/standalone
-  metrics: errors=1 warnings=0 action_min=2
-  session: wall=1.0m
+  metrics: errors=1 warnings=0 action_min=1
+  session: wall=54.0s
   github_api: calls=6 quota=3/5.00k
   jobs:
-    ✓ pre_activation (12.0s) success
+    ✓ pre_activation (10.0s) success
     ✗ activation (15.0s) failure
-    ✓ conclusion (22.0s) success
+    ✓ conclusion (16.0s) success
     ○ agent () skipped
     ○ safe_outputs () skipped
     ○ detection () skipped
