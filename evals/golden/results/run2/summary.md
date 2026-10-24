@@ -1,6 +1,6 @@
 # Golden-set results: run2
 
-**7/10 cases pass.** Issues closed anywhere in the sandbox: 0.
+**8/12 cases pass.** Issues closed anywhere in the sandbox: 0.
 
 | Case | Expected | Labels applied | Comment | Result | Failed checks | Run |
 |------|----------|----------------|---------|--------|---------------|-----|
@@ -14,3 +14,5 @@
 | G05 | OTHER_PROJECT | — | yes | PASS |  | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40072852557) |
 | G06 | SUPPORT_QUESTION | kind/question | yes | PASS |  | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40073313293) |
 | G07 | NEEDS_INFO | kind/more-info-needed | yes | PASS |  | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40073843243) |
+| G08 | NEEDS_INFO | kind/more-info-needed | yes | PASS |  | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40092757184) |
+| G09 | POSSIBLE_DUPLICATE | — | no | FAIL | comment posted; comment cites /17437/ | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40093315965) |
