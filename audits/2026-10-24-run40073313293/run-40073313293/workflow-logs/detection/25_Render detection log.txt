@@ -1,0 +1,227 @@
+﻿2026-10-24T07:18:33.6232954Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-24T07:18:33.6233515Z with:
+2026-10-24T07:18:33.6234965Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'render_detection_log.cjs'));
+await main();
+
+2026-10-24T07:18:33.6239617Z   github-token: ***
+2026-10-24T07:18:33.6239946Z   debug: false
+2026-10-24T07:18:33.6240249Z   user-agent: actions/github-script
+2026-10-24T07:18:33.6240626Z   result-encoding: json
+2026-10-24T07:18:33.6240951Z   retries: 0
+2026-10-24T07:18:33.6241278Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-24T07:18:33.6241682Z env:
+2026-10-24T07:18:33.6244355Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-24T07:18:33.6244755Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-24T07:18:33.6262684Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40073313293,github.run_id=40073313293,gh-aw.engine.id=copilot
+2026-10-24T07:18:33.6263878Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-24T07:18:33.6264277Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-24T07:18:33.6265003Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-24T07:18:33.6265350Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-24T07:18:33.6265769Z   GITHUB_AW_OTEL_TRACE_ID: 591962e594eae9d4f6b0988408ee601b
+2026-10-24T07:18:33.6266269Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: f0dcc20c28a5f891
+2026-10-24T07:18:33.6266718Z   GITHUB_AW_OTEL_JOB_START_MS: 1792826229042
+2026-10-24T07:18:33.6267167Z   GH_AW_PROMPT: /tmp/gh-aw/aw-prompts/prompt.txt
+2026-10-24T07:18:33.6267795Z   AWF_TOKEN_USAGE_LOG: /tmp/gh-aw/sandbox/firewall/logs/api-proxy-logs/token-usage.jsonl
+2026-10-24T07:18:33.6268395Z   GH_AW_PRIMARY_MODEL: gpt-4.1-2025-04-14
+2026-10-24T07:18:33.6268803Z   GH_AW_AIC: 16.6878
+2026-10-24T07:18:33.6269130Z   GH_AW_AMBIENT_CONTEXT: 19573
+2026-10-24T07:18:33.6269466Z ##[endgroup]
+2026-10-24T07:18:33.7252875Z ##[group]Detection Log
+2026-10-24T07:18:33.7259509Z ::stop-commands::***
+2026-10-24T07:18:33.7269502Z [INFO] Auto-detected DNS servers from /run/systemd/resolve/resolv.conf: 168.63.129.16
+2026-10-24T07:18:33.7272598Z [INFO] Agent timeout set to 10 minutes
+2026-10-24T07:18:33.7276701Z [WARN] ⚠️  Using --env-all: All host environment variables will be passed to container
+2026-10-24T07:18:33.7293320Z [WARN]    This may expose sensitive credentials if logs or configs are shared
+2026-10-24T07:18:33.7322742Z [INFO] API proxy enabled: OpenAI=false, Anthropic=false, Copilot=true (github-token), Gemini=false, Vertex=false
+2026-10-24T07:18:33.7323470Z [INFO] Allowed domains: 
+2026-10-24T07:18:33.7324143Z [INFO] Network-isolation mode: enforcing egress via Docker network topology (no host iptables, no sudo).
+2026-10-24T07:18:33.7324692Z [INFO] Generating configuration files...
+2026-10-24T07:18:33.7325138Z [INFO] API proxy sidecar enabled - API keys will be held securely in sidecar container
+2026-10-24T07:18:33.7325771Z [INFO] API proxy will route through Squid to respect domain whitelisting
+2026-10-24T07:18:33.7326208Z [INFO] Starting containers...
+2026-10-24T07:18:33.7326452Z  Network awf-net  Creating
+2026-10-24T07:18:33.7326698Z  Network awf-net  Created
+2026-10-24T07:18:33.7327024Z  Network awf-yeqwgm_awf-ext  Creating
+2026-10-24T07:18:33.7327308Z  Network awf-yeqwgm_awf-ext  Created
+2026-10-24T07:18:33.7327609Z  Container awf-squid  Creating
+2026-10-24T07:18:33.7327916Z  Container awf-api-proxy  Creating
+2026-10-24T07:18:33.7328185Z  Container awf-api-proxy  Created
+2026-10-24T07:18:33.7328500Z  Container awf-squid  Created
+2026-10-24T07:18:33.7328877Z  Container awf-agent  Creating
+2026-10-24T07:18:33.7329250Z  Container awf-agent  Created
+2026-10-24T07:18:33.7329639Z  Container awf-squid  Starting
+2026-10-24T07:18:33.7330033Z  Container awf-api-proxy  Starting
+2026-10-24T07:18:33.7330453Z  Container awf-api-proxy  Started
+2026-10-24T07:18:33.7331243Z  Container awf-squid  Started
+2026-10-24T07:18:33.7331640Z  Container awf-api-proxy  Waiting
+2026-10-24T07:18:33.7332186Z  Container awf-squid  Waiting
+2026-10-24T07:18:33.7332600Z  Container awf-api-proxy  Healthy
+2026-10-24T07:18:33.7332995Z  Container awf-squid  Healthy
+2026-10-24T07:18:33.7333393Z  Container awf-agent  Starting
+2026-10-24T07:18:33.7333781Z  Container awf-agent  Started
+2026-10-24T07:18:33.7334245Z [SUCCESS] Containers started successfully
+2026-10-24T07:18:33.7334726Z [INFO] Executing agent command...
+2026-10-24T07:18:33.7335162Z [INFO] Agent timeout: 10 minutes
+2026-10-24T07:18:33.7335695Z [entrypoint] Agentic Workflow Firewall - Agent Container
+2026-10-24T07:18:33.7336279Z [entrypoint] ==================================
+2026-10-24T07:18:33.7336762Z [entrypoint] Configuring DNS...
+2026-10-24T07:18:33.7337414Z [entrypoint] DNS configured with Docker embedded DNS (127.0.0.11) only
+2026-10-24T07:18:33.7338295Z [entrypoint] iptables-init skipped (proxy-based egress): skipping init container wait
+2026-10-24T07:18:33.7339018Z [health-check] API Proxy Pre-flight Check
+2026-10-24T07:18:33.7339577Z [health-check] ==========================================
+2026-10-24T07:18:33.7340254Z [health-check] Checking GitHub Copilot API proxy configuration...
+2026-10-24T07:18:33.7341166Z [health-check] COPILOT_API_URL=http://172.30.0.30:10002
+2026-10-24T07:18:33.7343852Z [health-check] ✓ COPILOT_GITHUB_TOKEN is placeholder value (correct)
+2026-10-24T07:18:33.7344841Z [health-check] ✓ COPILOT_TOKEN is placeholder value (correct)
+2026-10-24T07:18:33.7345593Z [health-check] ✓ COPILOT_PROVIDER_API_KEY is placeholder value (correct)
+2026-10-24T07:18:33.7346383Z [health-check] COPILOT_PROVIDER_BASE_URL=http://172.30.0.30:10002 (offline+BYOK mode)
+2026-10-24T07:18:33.7347189Z [health-check] ✓ COPILOT_PROVIDER_BASE_URL matches COPILOT_API_URL
+2026-10-24T07:18:33.7347861Z [health-check] ✓ Copilot CLI offline+BYOK mode configured
+2026-10-24T07:18:33.7348624Z [health-check] Testing connectivity to GitHub Copilot API proxy at http://172.30.0.30:10002...
+2026-10-24T07:18:33.7349584Z [health-check] ✓ GitHub Copilot API proxy is reachable at http://172.30.0.30:10002
+2026-10-24T07:18:33.7350231Z [health-check] ==========================================
+2026-10-24T07:18:33.7350817Z [health-check] ✓ All API proxy health checks passed
+2026-10-24T07:18:33.7351367Z [health-check] ✓ Credential isolation verified
+2026-10-24T07:18:33.7352086Z [health-check] ✓ Connectivity established
+2026-10-24T07:18:33.7352663Z [health-check] ==========================================
+2026-10-24T07:18:33.7353449Z [entrypoint] Pre-seeding JVM build tool proxy configuration (squid-proxy:3128)...
+2026-10-24T07:18:33.7354432Z [entrypoint] ✓ Created Maven proxy config (/host/home/runner/.m2/settings.xml)
+2026-10-24T07:18:33.7355432Z [entrypoint] ✓ Created Gradle proxy config (/host/home/runner/.gradle/gradle.properties)
+2026-10-24T07:18:33.7356366Z [entrypoint] ✓ Set JAVA_TOOL_OPTIONS with proxy and nonProxyHosts flags
+2026-10-24T07:18:33.7356990Z [entrypoint] Proxy configuration:
+2026-10-24T07:18:33.7357506Z [entrypoint]   HTTP_PROXY=http://172.30.0.10:3128
+2026-10-24T07:18:33.7358062Z [entrypoint]   HTTPS_PROXY=http://172.30.0.10:3128
+2026-10-24T07:18:33.7358573Z [entrypoint] Network information:
+2026-10-24T07:18:33.7359042Z [entrypoint]   IP address: 172.30.0.20 
+2026-10-24T07:18:33.7359505Z [entrypoint]   Hostname: 47290be3fc80
+2026-10-24T07:18:33.7359982Z [entrypoint] ==================================
+2026-10-24T07:18:33.7360673Z [entrypoint] Chroot mode enabled - dropping CAP_SYS_CHROOT and CAP_SYS_ADMIN
+2026-10-24T07:18:33.7361391Z [entrypoint] Switching to awfuser (UID: 1001, GID: 1001)
+2026-10-24T07:18:33.7365172Z [entrypoint] Executing command: /bin/bash -c /bin/bash -c 'set +o histexpand; export PATH="${RUNNER_TEMP}/gh-aw/bin:$PATH" && : "${RUNNER_TOOL_CACHE:?RUNNER_TOOL_CACHE must be set}"; GH_AW_TOOL_CACHE="$RUNNER_TOOL_CACHE"; GH_AW_TOOL_BINS="$(find "$GH_AW_TOOL_CACHE" -maxdepth 5 -type d -name bin 2>/dev/null | tr "\n" ":")"; GH_AW_TOOL_BINS="${GH_AW_TOOL_BINS%:}"; export PATH="$PATH${GH_AW_TOOL_BINS:+:}$GH_AW_TOOL_BINS"; [ -n "$GOROOT" ] && export PATH="$GOROOT/bin:$PATH" || true; [ -n "$ERLANG_HOME" ] && export PATH="$ERLANG_HOME/bin:$PATH" || true && threat-detect --engine copilot --output /tmp/gh-aw/threat-detection/detection_result.json /tmp/gh-aw/threat-detection'
+2026-10-24T07:18:33.7367960Z 
+2026-10-24T07:18:33.7368290Z [entrypoint] Agent runtime start recorded for timeout steering
+2026-10-24T07:18:33.7369045Z [entrypoint] Chroot mode: running command inside host filesystem (/host)
+2026-10-24T07:18:33.7369760Z [entrypoint] Mounted procfs at /host/proc (nosuid,nodev,noexec,hidepid=2)
+2026-10-24T07:18:33.7370613Z [entrypoint] Bind-mounted container cgroup subtree at /host/sys/fs/cgroup (ro)
+2026-10-24T07:18:33.7371417Z [entrypoint] One-shot token library copied to chroot at /run/awf-lib/one-shot-token.so
+2026-10-24T07:18:33.7372493Z [entrypoint] Chromium/Playwright runtime libraries staged for chroot at /host/run/awf-lib/browser-libs
+2026-10-24T07:18:33.7373669Z AWF trust policy: removed distrusted CA key 8d417db2dd8bf5e3084d1e3f196d583849d81bdd4c00c70b9d39369e96b8c782
+2026-10-24T07:18:33.7383348Z [entrypoint] Filtered host CA trust staged at /run/awf-lib/trust/ca-certificates.crt (host store unchanged)
+2026-10-24T07:18:33.7384533Z [entrypoint] DNS configuration created in chroot (/host/etc/resolv.conf)
+2026-10-24T07:18:33.7385229Z [entrypoint] Running as host user: runner (UID: 1001)
+2026-10-24T07:18:33.7386185Z [entrypoint] Chroot working directory: /home/runner/work/cs467-a3-prometheus-triage/cs467-a3-prometheus-triage
+2026-10-24T07:18:33.7386999Z [entrypoint] Using host PATH for chroot
+2026-10-24T07:18:33.7387698Z [entrypoint] Adding JAVA_HOME/bin to PATH: /usr/lib/jvm/temurin-17-jdk-amd64/bin
+2026-10-24T07:18:33.7388413Z [entrypoint] DNS configuration will be removed on exit
+2026-10-24T07:18:33.7389166Z [entrypoint] Transferred /host/tmp/gh-aw ownership to chroot user (1001:1001)
+2026-10-24T07:18:33.7390063Z [entrypoint] Node.js available on PATH: /opt/hostedtoolcache/node/24.21.0/x64/bin/node
+2026-10-24T07:18:33.7390915Z [entrypoint] Unsetting sensitive tokens from parent shell environment...
+2026-10-24T07:18:33.7391640Z [entrypoint] Unset COPILOT_GITHUB_TOKEN from /proc/1/environ
+2026-10-24T07:18:33.7403360Z [entrypoint] Unset COPILOT_PROVIDER_API_KEY from /proc/1/environ
+2026-10-24T07:18:33.7404365Z [threat-detect] run start: version=v0.5.2 engine=copilot model=gpt-4.1 retries=0 max_turns=50 engine_timeout=5m0s
+2026-10-24T07:18:33.7405816Z [threat-detect] artifacts loaded: dir=/tmp/gh-aw/threat-detection prompt_bytes=2865 agent_output_bytes=868 patch_files=0 all_primary_inputs_missing=false
+2026-10-24T07:18:33.7406848Z [threat-detect] artifact inventory (7 entries):
+2026-10-24T07:18:33.7407514Z [threat-detect]   agent_output.json bytes=868 kind=file consumed=true
+2026-10-24T07:18:33.7408381Z [threat-detect]   aw-prompts/prompt-import-tree.json bytes=12360 kind=file consumed=true
+2026-10-24T07:18:33.7409329Z [threat-detect]   aw-prompts/prompt-template.txt bytes=9035 kind=file consumed=true
+2026-10-24T07:18:33.7410166Z [threat-detect]   aw-prompts/prompt.txt bytes=2865 kind=file consumed=true
+2026-10-24T07:18:33.7410914Z [threat-detect]   aw_info.json bytes=1653 kind=file consumed=true
+2026-10-24T07:18:33.7411637Z [threat-detect]   detection.log bytes=5807 kind=file consumed=false
+2026-10-24T07:18:33.7412495Z [threat-detect]   execution.json bytes=93 kind=file consumed=false
+2026-10-24T07:18:33.7413796Z [threat-detect] result destinations: output=/tmp/gh-aw/threat-detection/detection_result.json full_output=/tmp/gh-aw/threat-detection/detection_result_full.json
+2026-10-24T07:18:33.7416966Z Prompt context: workflow_name="Prometheus Issue Triage" (defaulted=false) workflow_description="First-response triage for newly opened issues: route to a component, ask for missing information, point usage questions and other-project reports to the right place, and flag likely duplicates. Comments and labels only." (defaulted=false) custom_prompt_applied=false custom_prompt_source=none custom_prompt_bytes=0
+2026-10-24T07:18:33.7420046Z [threat-detect] prompt built: prompt_bytes=43468 framework_scaffolding_detected=true framework_scaffolding_host_removed=true framework_scaffolding_markers=<safe-output-tools>
+2026-10-24T07:18:33.7421406Z [threat-detect] eligibility: prompt_injection=true secret_leak=true malicious_patch=false
+2026-10-24T07:18:33.7428148Z [threat-detect] detection attempt 1 of 1
+2026-10-24T07:18:33.7429123Z [threat-detect] engine invoke: engine=copilot model="gpt-4.1" command="node (/opt/hostedtoolcache/node/24.21.0/x64/bin/node)" args=13
+2026-10-24T07:18:33.7431624Z [threat-detect] engine argv: "/home/runner/work/_temp/gh-aw/actions/copilot_harness.cjs" "/usr/local/bin/copilot" "--add-dir" "." "--log-level" "all" "--disable-builtin-mcps" "--no-ask-user" "--allow-all-tools" "--add-dir" "/home/runner/work/cs467-a3-prometheus-triage/cs467-a3-prometheus-triage" "--prompt-file" "<prompt-file>"
+2026-10-24T07:18:33.7434324Z [engine] [copilot-harness] starting: command=/usr/local/bin/copilot maxRetries=0 initialDelayMs=5000 backoffMultiplier=2 maxDelayMs=60000 nodeVersion=v24.21.0 platform=linux
+2026-10-24T07:18:33.7435721Z [engine] [copilot-harness] pre-flight: command is accessible and executable: /usr/local/bin/copilot
+2026-10-24T07:18:33.7437014Z [engine] [copilot-harness] resolved --prompt-file: path=/tmp/threat-detect-prompt-3211512132.txt size=43468B
+2026-10-24T07:18:33.7438125Z [engine] [copilot-harness] awf-reflect: fetching http://api-proxy:10000/reflect (timeout=60000ms)
+2026-10-24T07:18:33.7439149Z [engine] [copilot-harness] awf-reflect: fetched 40 model(s) from http://api-proxy:10002/models
+2026-10-24T07:18:33.7440100Z [engine] [copilot-harness] awf-reflect: saved 22008B to /tmp/gh-aw/agent/awf-reflect.json
+2026-10-24T07:18:33.7441325Z [engine] [copilot-harness] model resolution: engine=copilot role=main configured=gpt-4.1 resolved=gpt-4.1 provider=(unscoped) status=exact
+2026-10-24T07:18:33.7443032Z [engine] [copilot-harness] COPILOT_PROVIDER_WIRE_API unset — source=CLI default
+2026-10-24T07:18:33.7444096Z [engine] [copilot-harness] inference routing: mode=cli configuredModel="gpt-4.1" endpoint=managed-by-copilot-cli
+2026-10-24T07:18:33.7446123Z [engine] [copilot-harness] attempt 1: spawning: /usr/local/bin/copilot --add-dir /tmp --log-level all --disable-builtin-mcps --no-ask-user --allow-all-tools --add-dir /home/runner/work/cs467-a3-prometheus-triage/cs467-a3-prometheus-triage -p <redacted>
+2026-10-24T07:18:33.7447661Z [engine] [copilot-harness] attempt 1: process started (pid=1900)
+2026-10-24T07:18:33.7448398Z [engine] ● Read agent output for threat analysis (shell)
+2026-10-24T07:18:33.7449118Z [engine]   │ cat /tmp/gh-aw/threat-detection/agent_output.json
+2026-10-24T07:18:33.7449666Z [engine]   └ 1 line…
+2026-10-24T07:18:33.7449992Z [engine] 
+2026-10-24T07:18:33.7450463Z [engine] ● Get the path for the reasons file (shell)
+2026-10-24T07:18:33.7451063Z [engine]   │ echo $THREAT_DETECTION_REASONS_FILE
+2026-10-24T07:18:33.7451543Z [engine]   └ 1 line…
+2026-10-24T07:18:33.7451994Z [engine] 
+2026-10-24T07:18:33.7452557Z [engine] ● Verify agent output file exists for reference (shell)
+2026-10-24T07:18:33.7453297Z [engine]   │ ls -l /tmp/gh-aw/threat-detection/agent_output.json
+2026-10-24T07:18:33.7453838Z [engine]   └ 1 line…
+2026-10-24T07:18:33.7454142Z [engine] 
+2026-10-24T07:18:33.7454699Z [engine] ● Verify workflow prompt file exists for reference (shell)
+2026-10-24T07:18:33.7455466Z [engine]   │ ls -l /tmp/gh-aw/threat-detection/aw-prompts/prompt.txt
+2026-10-24T07:18:33.7456009Z [engine]   └ 1 line…
+2026-10-24T07:18:33.7456306Z [engine] 
+2026-10-24T07:18:33.7457146Z [engine] ✗ Check for referenced precheck/duplicates files (for completeness, not for threat evidence) (shell)
+2026-10-24T07:18:33.7458206Z [engine]   │ ls -l /tmp/gh-aw/agent/precheck.json /tmp/gh-aw/agent/duplicates.json
+2026-10-24T07:18:33.7459156Z [engine]   └ ls: cannot access '/tmp/gh-aw/agent/precheck.json': No such file or directory
+2026-10-24T07:18:33.7460215Z [engine]     ls: cannot access '/tmp/gh-aw/agent/duplicates.json': No such file or directory
+2026-10-24T07:18:33.7460859Z [engine]     Failed with exit code 2
+2026-10-24T07:18:33.7461229Z [engine] 
+2026-10-24T07:18:33.7462439Z [engine] ● List all files in threat-detection directory for completeness (shell)
+2026-10-24T07:18:33.7463199Z [engine]   │ ls -l /tmp/gh-aw/threat-detection/
+2026-10-24T07:18:33.7463683Z [engine]   └ 6 lines…
+2026-10-24T07:18:33.7463995Z [engine] 
+2026-10-24T07:18:33.7464532Z [engine] ● List files in aw-prompts for completeness (shell)
+2026-10-24T07:18:33.7465232Z [engine]   │ ls -l /tmp/gh-aw/threat-detection/aw-prompts/
+2026-10-24T07:18:33.7465743Z [engine]   └ 4 lines…
+2026-10-24T07:18:33.7466041Z [engine] 
+2026-10-24T07:18:33.7466587Z [engine] ● List files in agent directory for completeness (shell)
+2026-10-24T07:18:33.7467197Z [engine]   │ ls -l /tmp/gh-aw/agent/
+2026-10-24T07:18:33.7467617Z [engine]   └ 3 lines…
+2026-10-24T07:18:33.7467919Z [engine] 
+2026-10-24T07:18:33.7468395Z [engine] ● Create threat-detection-reasons.json +1
+2026-10-24T07:18:33.7469010Z [engine]   └ /tmp/threat-detection-reasons.json
+2026-10-24T07:18:33.7469425Z [engine] 
+2026-10-24T07:18:33.7470130Z [engine] ● Report no threats detected; reasons file not needed for all-false verdict (shell)
+2026-10-24T07:18:33.7471498Z [engine]   │ threat_detection_result --prompt-injection false --secret-leak false --malicious-patch false
+2026-10-24T07:18:33.7472433Z [engine]   └ 1 line…
+2026-10-24T07:18:33.7472750Z [engine] 
+2026-10-24T07:18:33.7473143Z [threat-detect] attempt 1 outcome=recorded
+2026-10-24T07:18:33.7474088Z [threat-detect] full result written: path=/tmp/gh-aw/threat-detection/detection_result_full.json reasons=0 warnings=0
+2026-10-24T07:18:33.7475008Z THREAT_DETECTION_STATUS: reason=result_recorded exit=0
+2026-10-24T07:18:33.7475792Z [entrypoint] Relaxed /host/tmp/gh-aw group permissions for host-side post-processing
+2026-10-24T07:18:33.7476437Z [INFO] Stopping containers...
+2026-10-24T07:18:33.7476866Z  Container awf-agent  Stopping
+2026-10-24T07:18:33.7477245Z  Container awf-agent  Stopped
+2026-10-24T07:18:33.7477625Z  Container awf-agent  Removing
+2026-10-24T07:18:33.7477998Z  Container awf-agent  Removed
+2026-10-24T07:18:33.7478404Z  Container awf-api-proxy  Stopping
+2026-10-24T07:18:33.7478831Z  Container awf-squid  Stopping
+2026-10-24T07:18:33.7479228Z  Container awf-api-proxy  Stopped
+2026-10-24T07:18:33.7479649Z  Container awf-api-proxy  Removing
+2026-10-24T07:18:33.7480074Z  Container awf-api-proxy  Removed
+2026-10-24T07:18:33.7480456Z  Container awf-squid  Stopped
+2026-10-24T07:18:33.7480870Z  Container awf-squid  Removing
+2026-10-24T07:18:33.7481237Z  Container awf-squid  Removed
+2026-10-24T07:18:33.7481599Z  Network awf-net  Removing
+2026-10-24T07:18:33.7482419Z  Network awf-yeqwgm_awf-ext  Removing
+2026-10-24T07:18:33.7482828Z  Network awf-net  Removed
+2026-10-24T07:18:33.7483216Z  Network awf-yeqwgm_awf-ext  Removed
+2026-10-24T07:18:33.7483686Z [SUCCESS] Containers stopped successfully
+2026-10-24T07:18:33.7484280Z [INFO] Agent logs preserved at: /tmp/awf-agent-logs-YeQwgm
+2026-10-24T07:18:33.7485020Z [INFO] Agent session state available at: /tmp/gh-aw/sandbox/agent/session-state
+2026-10-24T07:18:33.7485843Z [INFO] API proxy logs available at: /tmp/gh-aw/sandbox/firewall/logs/api-proxy-logs
+2026-10-24T07:18:33.7486781Z [INFO] Token usage log available at: /tmp/gh-aw/sandbox/firewall/logs/api-proxy-logs/token-usage.jsonl
+2026-10-24T07:18:33.7487695Z [INFO] CLI proxy logs available at: /tmp/gh-aw/sandbox/firewall/logs/cli-proxy-logs
+2026-10-24T07:18:33.7488456Z [INFO] Squid logs available at: /tmp/gh-aw/sandbox/firewall/logs
+2026-10-24T07:18:33.7489172Z [INFO] Audit artifacts available at: /tmp/gh-aw/sandbox/firewall/audit
+2026-10-24T07:18:33.7489769Z [SUCCESS] Command completed successfully
+2026-10-24T07:18:33.7490381Z Process exiting with code: 0
+2026-10-24T07:18:33.7491250Z ::***::
+2026-10-24T07:18:33.7492010Z ##[endgroup]
+2026-10-24T07:18:33.7492608Z Log rendered (12698 bytes): /tmp/gh-aw/threat-detection/detection.log
