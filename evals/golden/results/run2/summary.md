@@ -1,6 +1,6 @@
 # Golden-set results: run2
 
-**10/15 cases pass.** Issues closed anywhere in the sandbox: 0.
+**10/17 cases pass.** Issues closed anywhere in the sandbox: 0.
 
 | Case | Expected | Labels applied | Comment | Result | Failed checks | Run |
 |------|----------|----------------|---------|--------|---------------|-----|
@@ -19,3 +19,5 @@
 | G10 | POSSIBLE_DUPLICATE | component/api | yes | PASS |  | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40114590367) |
 | G11 | ROUTE | component/mixin | no | PASS |  | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40115335252) |
 | G12 | ROUTE | — | no | FAIL | required labels present | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40137333324) |
+| G13 | ROUTE | — | no | FAIL | required labels present | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40138003590) |
+| G14 | ROUTE | kind/feature | no | FAIL | required labels present | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40138851031) |
