@@ -1,0 +1,185 @@
+﻿2026-10-24T07:30:19.3703587Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-24T07:30:19.3704053Z with:
+2026-10-24T07:30:19.3705566Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'generate_safe_outputs_tools.cjs'));
+await main();
+
+2026-10-24T07:30:19.3710879Z   github-token: ***
+2026-10-24T07:30:19.3711189Z   debug: false
+2026-10-24T07:30:19.3711467Z   user-agent: actions/github-script
+2026-10-24T07:30:19.3711808Z   result-encoding: json
+2026-10-24T07:30:19.3712090Z   retries: 0
+2026-10-24T07:30:19.3712380Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-24T07:30:19.3712744Z env:
+2026-10-24T07:30:19.3712992Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-24T07:30:19.3713333Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-24T07:30:19.3714420Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40074282890,github.run_id=40074282890,gh-aw.engine.id=copilot
+2026-10-24T07:30:19.3715557Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-24T07:30:19.3715907Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-24T07:30:19.3716532Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-24T07:30:19.3716848Z   DEFAULT_BRANCH: main
+2026-10-24T07:30:19.3717139Z   GH_AW_ASSETS_ALLOWED_EXTS: 
+2026-10-24T07:30:19.3717465Z   GH_AW_ASSETS_BRANCH: 
+2026-10-24T07:30:19.3717752Z   GH_AW_ASSETS_MAX_SIZE_KB: 0
+2026-10-24T07:30:19.3718109Z   GH_AW_MCP_LOG_DIR: /tmp/gh-aw/mcp-logs/safeoutputs
+2026-10-24T07:30:19.3718504Z   GH_AW_PR_HEAD_BASE_BRANCH: 
+2026-10-24T07:30:19.3718778Z   GH_AW_PR_HEAD_BASE_PR_NUMBER: 
+2026-10-24T07:30:19.3719077Z   GH_AW_PR_HEAD_BASE_REF: 
+2026-10-24T07:30:19.3719371Z   GH_AW_PR_HEAD_BASE_REPO: 
+2026-10-24T07:30:19.3719678Z   GH_AW_PR_HEAD_BASE_SHA: 
+2026-10-24T07:30:19.3719966Z   GH_AW_PR_HEAD_REPO: 
+2026-10-24T07:30:19.3720257Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-24T07:30:19.3720562Z   GH_AW_TARGET_REPO_SLUG: 
+2026-10-24T07:30:19.3720888Z   GH_AW_WORKFLOW_ID_SANITIZED: issuetriage
+2026-10-24T07:30:19.3721319Z   GITHUB_AW_OTEL_TRACE_ID: 2c83b69abab9825bea428cb5586fc725
+2026-10-24T07:30:19.3721795Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: a85937dd8fd00fea
+2026-10-24T07:30:19.3722199Z   GITHUB_AW_OTEL_JOB_START_MS: 1792826974825
+2026-10-24T07:30:19.3724396Z   GH_AW_TOOLS_META_JSON: {
+  "description_suffixes": {
+    "add_comment": " CONSTRAINTS: Maximum 1 comment(s) can be added. Target: triggering. Supports reply_to_id for discussion threading.",
+    "add_labels": " CONSTRAINTS: Maximum 2 add_labels call(s) allowed. Maximum 10 label(s) per call. Only these labels are allowed: [\"component/*\" \"kind/question\" \"kind/more-info-needed\" \"kind/enhancement\" \"kind/feature\"]. Target: triggering."
+  },
+  "repo_params": {},
+  "dynamic_tools": []
+}
+
+2026-10-24T07:30:19.3735086Z   GH_AW_VALIDATION_JSON: {
+  "add_comment": {
+    "defaultMax": 1,
+    "fields": {
+      "body": {
+        "required": true,
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 65000
+      },
+      "comment_id": {
+        "optionalPositiveInteger": true
+      },
+      "item_number": {
+        "issueOrPRNumber": true
+      },
+      "pr": {
+        "issueOrPRNumber": true
+      },
+      "pr_number": {
+        "issueOrPRNumber": true
+      },
+      "reply_to_id": {
+        "type": "string",
+        "maxLength": 256
+      },
+      "repo": {
+        "type": "string",
+        "maxLength": 256
+      },
+      "target": {
+        "type": "string",
+        "enum": [
+          "status"
+        ]
+      },
+      "temporary_id": {
+        "type": "string",
+        "pattern": "^#?aw_[A-Za-z0-9_]{3,12}$"
+      }
+    }
+  },
+  "add_labels": {
+    "defaultMax": 5,
+    "fields": {
+      "item_number": {
+        "issueNumberOrTemporaryId": true
+      },
+      "labels": {
+        "required": true,
+        "type": "array"
+      },
+      "repo": {
+        "type": "string",
+        "maxLength": 256
+      }
+    }
+  },
+  "mentions": {
+    "enabled": false
+  },
+  "noop": {
+    "defaultMax": 2,
+    "fields": {
+      "message": {
+        "required": true,
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 65000
+      }
+    }
+  },
+  "report_incomplete": {
+    "defaultMax": 5,
+    "fields": {
+      "details": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 65000
+      },
+      "reason": {
+        "required": true,
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 1024
+      }
+    }
+  },
+  "report_missing_data": {
+    "defaultMax": 20,
+    "fields": {
+      "alternatives": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 256
+      },
+      "context": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 256
+      },
+      "data_type": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 128
+      },
+      "reason": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 256
+      }
+    }
+  },
+  "report_missing_tool": {
+    "defaultMax": 20,
+    "fields": {
+      "alternatives": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 512
+      },
+      "reason": {
+        "required": true,
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 256
+      },
+      "tool": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 128
+      }
+    }
+  }
+}
+
+2026-10-24T07:30:19.3743969Z ##[endgroup]
