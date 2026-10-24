@@ -1,0 +1,38 @@
+﻿2026-10-24T07:06:58.2578723Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-24T07:06:58.2579618Z with:
+2026-10-24T07:06:58.2584561Z   github-token: ***
+2026-10-24T07:06:58.2587541Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'check_rate_limit.cjs'));
+await main();
+
+2026-10-24T07:06:58.2590487Z   debug: false
+2026-10-24T07:06:58.2591025Z   user-agent: actions/github-script
+2026-10-24T07:06:58.2591633Z   result-encoding: json
+2026-10-24T07:06:58.2592200Z   retries: 0
+2026-10-24T07:06:58.2593020Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-24T07:06:58.2593780Z env:
+2026-10-24T07:06:58.2594266Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-24T07:06:58.2595712Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-24T07:06:58.2597479Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40072852557,github.run_id=40072852557,gh-aw.engine.id=copilot
+2026-10-24T07:06:58.2599192Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-24T07:06:58.2599870Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-24T07:06:58.2600709Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-24T07:06:58.2601316Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-24T07:06:58.2602016Z   GITHUB_AW_OTEL_TRACE_ID: fec5fdb39a23e3addc26c448949cf733
+2026-10-24T07:06:58.2603077Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 63c40dd5a72ab198
+2026-10-24T07:06:58.2603863Z   GITHUB_AW_OTEL_JOB_START_MS: 1792825618219
+2026-10-24T07:06:58.2604521Z   GH_AW_RATE_LIMIT_MAX: 3
+2026-10-24T07:06:58.2606710Z   GH_AW_RATE_LIMIT_WINDOW: 60
+2026-10-24T07:06:58.2607356Z   GH_AW_RATE_LIMIT_EVENTS: issues
+2026-10-24T07:06:58.2608045Z   GH_AW_RATE_LIMIT_IGNORED_ROLES: admin,maintain,write
+2026-10-24T07:06:58.2608756Z ##[endgroup]
+2026-10-24T07:06:58.8177698Z    Using workflow file: issue-triage.lock.yml (from GITHUB_WORKFLOW_REF)
+2026-10-24T07:06:58.8198141Z 🔍 Checking rate limit for user 'WyattLeoz' on workflow 'issue-triage.lock.yml'
+2026-10-24T07:06:58.8199279Z    Configuration: max=3 runs per 60 minutes
+2026-10-24T07:06:58.8199942Z    Current event: issues
+2026-10-24T07:06:58.8200548Z    Ignored roles: admin, maintain, write
+2026-10-24T07:06:59.0170395Z    User 'WyattLeoz' has permission level: admin
+2026-10-24T07:06:59.0240356Z ✅ User 'WyattLeoz' has ignored role 'admin'; skipping rate limit check
