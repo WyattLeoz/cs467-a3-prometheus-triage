@@ -71,7 +71,11 @@ def collect(repo, issue, run):
 
 
 def rate_limited(run_id, wait=600):
-    """True if the agent or detection model got HTTP 429 (read from the audit-log branch)."""
+    """True if Copilot itself rate-limited the agent or detection model (read from the audit-log branch).
+
+    A 429 that gh-aw's own API proxy returns when the run exhausts its invocation budget
+    (`max-turns`, category invocation_cap_exceeded) carries no x-ratelimit header and is an
+    agent outcome, not an infrastructure failure, so it is recorded like any other result."""
     git = lambda *a: subprocess.run(["git", *a], capture_output=True, text=True, cwd=HERE.parents[1]).stdout
     deadline = time.time() + wait
     while time.time() < deadline:
@@ -79,9 +83,9 @@ def rate_limited(run_id, wait=600):
         dirs = [d for d in git("ls-tree", "-d", "--name-only", "origin/audit-log:audits").split() if d.endswith(f"run{run_id}")]
         if dirs:
             base = f"origin/audit-log:audits/{dirs[0]}/run-{run_id}"
-            agent = git("show", f"{base}/agent-errors.jsonl")
-            detection = git("show", f"{base}/detection/sandbox/firewall/logs/api-proxy-logs/otel.jsonl")
-            return "429" in agent or '"http.response.status_code":429' in detection
+            logs = "".join(git("show", f"{base}/{pre}sandbox/firewall/logs/api-proxy-logs/{f}")
+                           for pre in ("", "detection/") for f in ("otel.jsonl", "upstream-errors.jsonl"))
+            return "x-ratelimit-exceeded" in logs
         time.sleep(30)
     return False
 
