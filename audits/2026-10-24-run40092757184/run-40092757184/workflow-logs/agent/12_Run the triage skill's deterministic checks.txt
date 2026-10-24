@@ -1,0 +1,36 @@
+﻿2026-10-24T12:10:49.2889472Z ##[group]Run mkdir -p /tmp/gh-aw/agent
+2026-10-24T12:10:49.2889777Z [36;1mmkdir -p /tmp/gh-aw/agent[0m
+2026-10-24T12:10:49.2890091Z [36;1mjq '{issue: .issue}' "$GITHUB_EVENT_PATH" > /tmp/gh-aw/agent/issue.json[0m
+2026-10-24T12:10:49.2890479Z [36;1ms=.claude/skills/prometheus-issue-triage/scripts/triage.py[0m
+2026-10-24T12:10:49.2890883Z [36;1m"$s" precheck /tmp/gh-aw/agent/issue.json > /tmp/gh-aw/agent/precheck.json[0m
+2026-10-24T12:10:49.2891321Z [36;1m"$s" duplicates /tmp/gh-aw/agent/issue.json > /tmp/gh-aw/agent/duplicates.json[0m
+2026-10-24T12:10:49.2891862Z [36;1mjq -c '{skill, maintainer_authored, missing_bug_template_sections, other_project_mentions}' /tmp/gh-aw/agent/precheck.json[0m
+2026-10-24T12:10:49.2892397Z [36;1mjq -c '[.candidates[] | {ref, score}]' /tmp/gh-aw/agent/duplicates.json[0m
+2026-10-24T12:10:49.2948474Z shell: /usr/bin/bash -e {0}
+2026-10-24T12:10:49.2948695Z env:
+2026-10-24T12:10:49.2948879Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-24T12:10:49.2949120Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-24T12:10:49.2949851Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40092757184,github.run_id=40092757184,gh-aw.engine.id=copilot
+2026-10-24T12:10:49.2950530Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-24T12:10:49.2950768Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-24T12:10:49.2951201Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-24T12:10:49.2951404Z   DEFAULT_BRANCH: main
+2026-10-24T12:10:49.2951596Z   GH_AW_ASSETS_ALLOWED_EXTS: 
+2026-10-24T12:10:49.2951801Z   GH_AW_ASSETS_BRANCH: 
+2026-10-24T12:10:49.2951991Z   GH_AW_ASSETS_MAX_SIZE_KB: 0
+2026-10-24T12:10:49.2952224Z   GH_AW_MCP_LOG_DIR: /tmp/gh-aw/mcp-logs/safeoutputs
+2026-10-24T12:10:49.2952470Z   GH_AW_PR_HEAD_BASE_BRANCH: 
+2026-10-24T12:10:49.2952662Z   GH_AW_PR_HEAD_BASE_PR_NUMBER: 
+2026-10-24T12:10:49.2952877Z   GH_AW_PR_HEAD_BASE_REF: 
+2026-10-24T12:10:49.2953080Z   GH_AW_PR_HEAD_BASE_REPO: 
+2026-10-24T12:10:49.2953280Z   GH_AW_PR_HEAD_BASE_SHA: 
+2026-10-24T12:10:49.2953472Z   GH_AW_PR_HEAD_REPO: 
+2026-10-24T12:10:49.2953666Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-24T12:10:49.2953856Z   GH_AW_TARGET_REPO_SLUG: 
+2026-10-24T12:10:49.2954064Z   GH_AW_WORKFLOW_ID_SANITIZED: issuetriage
+2026-10-24T12:10:49.2954342Z   GITHUB_AW_OTEL_TRACE_ID: 897be56e496169aa3da920015ad6585d
+2026-10-24T12:10:49.2954639Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 7d4dc69f8548bf38
+2026-10-24T12:10:49.2955129Z   GITHUB_AW_OTEL_JOB_START_MS: 1792843846444
+2026-10-24T12:10:49.2955383Z ##[endgroup]
+2026-10-24T12:10:49.4120212Z {"skill":"prometheus-issue-triage/1.0","maintainer_authored":false,"missing_bug_template_sections":["What did you expect to see?","System information","Prometheus version","Prometheus configuration file"],"other_project_mentions":[{"project":"kube-prometheus-stack Helm chart","where":"https://github.com/prometheus-community/helm-charts"},{"project":"vendor-managed Prometheus","where":"the vendor's support channel"}]}
+2026-10-24T12:10:49.4156797Z [{"ref":"prometheus/prometheus#17656","score":0.162},{"ref":"prometheus/prometheus#17375","score":0.155}]

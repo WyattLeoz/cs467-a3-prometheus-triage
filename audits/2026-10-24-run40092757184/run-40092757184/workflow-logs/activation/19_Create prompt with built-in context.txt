@@ -1,0 +1,157 @@
+﻿2026-10-24T12:10:20.7809225Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-24T12:10:20.7809692Z with:
+2026-10-24T12:10:20.7810558Z   script: const { setupGlobals } = require(process.env.GH_AW_ACTIONS_DIR + '/setup_globals.cjs');
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(process.env.GH_AW_ACTIONS_DIR + '/create_prompt.cjs');
+await main(core);
+
+2026-10-24T12:10:20.7814033Z   github-token: ***
+2026-10-24T12:10:20.7814268Z   debug: false
+2026-10-24T12:10:20.7814540Z   user-agent: actions/github-script
+2026-10-24T12:10:20.7814833Z   result-encoding: json
+2026-10-24T12:10:20.7815068Z   retries: 0
+2026-10-24T12:10:20.7815328Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-24T12:10:20.7815638Z env:
+2026-10-24T12:10:20.7815858Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-24T12:10:20.7816142Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-24T12:10:20.7816981Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40092757184,github.run_id=40092757184,gh-aw.engine.id=copilot
+2026-10-24T12:10:20.7817863Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-24T12:10:20.7818165Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-24T12:10:20.7818495Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-24T12:10:20.7818960Z   GH_AW_MAX_DAILY_AI_CREDITS: 2000
+2026-10-24T12:10:20.7819237Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-24T12:10:20.7819546Z   GITHUB_AW_OTEL_TRACE_ID: 897be56e496169aa3da920015ad6585d
+2026-10-24T12:10:20.7819932Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: bd2ddac7854f8dde
+2026-10-24T12:10:20.7820257Z   GITHUB_AW_OTEL_JOB_START_MS: 1792843808071
+2026-10-24T12:10:20.7820596Z   GH_AW_ACTIONS_DIR: /home/runner/work/_temp/gh-aw/actions
+2026-10-24T12:10:20.7821011Z   GH_AW_PROMPT: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-24T12:10:20.7821481Z   GH_AW_SAFE_OUTPUTS: /home/runner/work/_temp/gh-aw/safeoutputs/outputs.jsonl
+2026-10-24T12:10:20.7823092Z   GH_AW_PROMPT_CONFIG: {"items":[{"content_env":"GH_AW_PROMPT_CONTENT_0000"},{"file":"xpia.md"},{"file":"temp_folder_prompt.md"},{"file":"markdown.md"},{"file":"safe_outputs_mcp_transport_prompt.md"},{"file":"safe_outputs_prompt.md"},{"content_env":"GH_AW_PROMPT_CONTENT_0001"},{"content_env":"GH_AW_PROMPT_CONTENT_0002"},{"file":"mcp_cli_tools_with_safeoutputs_prompt.md"},{"content_env":"GH_AW_PROMPT_CONTENT_0003"},{"content_env":"GH_AW_PROMPT_CONTENT_0004"}],"system_item_count":10}
+2026-10-24T12:10:20.7824636Z   GH_AW_GITHUB_EVENT_ISSUE_NUMBER: 43
+2026-10-24T12:10:20.7832580Z   GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT: Prom-remote-write not working properly
+
+### What did you do?
+
+Hi ,
+
+I am using the prom-remotewrite-20251030.1 version, and I’ve noticed that it is not functioning correctly when sending data to Azure Monitor for Prometheus. Initially, some data is transmitted, but afterward it fails to send records for new pods and events.
+When I check the Prometheus UI locally, I can see the required data, but it does not appear in Azure Monitor.
+Below is the Jinja configuration I am using:
+
+`
+
+    server:
+      global:
+        external_labels:
+          dataplane_id: {{cluster_name}}
+          region:  {{region}}
+          mcsp_tenant_id: {{prometheus_tenant_id}}
+          dataplane_tenant_id: {{azure_tenant_id}}    
+      remoteWrite:
+        - url: (localhost/redacted)
+
+      podLabels:
+        azure.workload.identity/use: "true"
+      persistentVolume:
+        enabled: false
+
+      retention: "7d"
+      retentionSize: "3.5GB"   
+      sidecarContainers:
+        prom-remote-writer:
+          image: {{registry_namespace}}/azure-prom-remotewrite:{{ image_tags.azure_prom_remotewrite }}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: LISTENING_PORT
+              value: "8089"
+            - name: INGESTION_URL
+              value: {{prometheus_azure_monitor}}
+            - name: IDENTITY_TYPE
+              value: workloadIdentity
+            - name: AZURE_CLIENT_ID
+              value: {{prometheus_client_id}}
+            - name: AZURE_TENANT_ID
+              value: {{prometheus_tenant_id}}
+            - name: AZURE_FEDERATED_TOKEN_FILE
+              value: /var/run/secrets/azure/tokens/azure-identity-token
+      
+          ports:
+            - containerPort: 8089         
+
+      extraVolumeMounts:
+        - name: azure-identity-token
+          mountPath: /var/run/secrets/azure/tokens
+          readOnly: true    
+                
+      extraVolumes:
+        - name: azure-identity-token
+          projected:
+            defaultMode: 420
+            sources:
+              - serviceAccountToken:
+                  audience: (azureadtokenexchange/redacted)
+                  expirationSeconds: 3600
+                  path: azure-identity-token
+`
+
+Prometheus helm charts version used was :- 27.47.0 and 27.20.0
+
+### What did you expect to see?
+
+_No response_
+
+### What did you see instead? Under which circumstances?
+
+.
+
+### System information
+
+_No response_
+
+### Prometheus version
+
+```text
+
+```
+
+### Prometheus configuration file
+
+```yaml
+
+```
+
+### Alertmanager version
+
+```text
+
+```
+
+### Alertmanager configuration file
+
+```yaml
+
+```
+
+### Logs
+
+```text
+
+```
+
+
+
+---
+_Generated by [Claude Code]((claude.ai/redacted)
+2026-10-24T12:10:20.7842500Z   GH_AW_PROMPT_CONTENT_0000: <system>
+
+2026-10-24T12:10:20.7843111Z   GH_AW_PROMPT_CONTENT_0001: <safe-output-tools>
+Tools: add_comment, add_labels(max:2), report_missing_tool, report_missing_data, noop(max:2)
+
+2026-10-24T12:10:20.7843731Z   GH_AW_PROMPT_CONTENT_0002: </safe-output-tools>
+
+2026-10-24T12:10:20.7844075Z   GH_AW_PROMPT_CONTENT_0003: </system>
+
+2026-10-24T12:10:20.7844476Z   GH_AW_PROMPT_CONTENT_0004: {{#runtime-import .github/workflows/issue-triage.md}}
+
+2026-10-24T12:10:20.7844876Z ##[endgroup]
+2026-10-24T12:10:20.9506233Z Created prompt at /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt (9035 bytes)
