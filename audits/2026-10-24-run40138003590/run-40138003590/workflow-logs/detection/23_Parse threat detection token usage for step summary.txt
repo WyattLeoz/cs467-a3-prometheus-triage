@@ -1,0 +1,54 @@
+﻿2026-10-24T22:27:06.2003802Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-24T22:27:06.2004537Z with:
+2026-10-24T22:27:06.2006645Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'parse_token_usage.cjs'));
+await main();
+
+2026-10-24T22:27:06.2032975Z   github-token: ***
+2026-10-24T22:27:06.2033473Z   debug: false
+2026-10-24T22:27:06.2033904Z   user-agent: actions/github-script
+2026-10-24T22:27:06.2034736Z   result-encoding: json
+2026-10-24T22:27:06.2035171Z   retries: 0
+2026-10-24T22:27:06.2035618Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-24T22:27:06.2036184Z env:
+2026-10-24T22:27:06.2036560Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-24T22:27:06.2037090Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-24T22:27:06.2038729Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40138003590,github.run_id=40138003590,gh-aw.engine.id=copilot
+2026-10-24T22:27:06.2040796Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-24T22:27:06.2041303Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-24T22:27:06.2041901Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-24T22:27:06.2042388Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-24T22:27:06.2042953Z   GITHUB_AW_OTEL_TRACE_ID: 8889ea748c9d8613dfe92728fdd64c07
+2026-10-24T22:27:06.2043646Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 1c8d3a514ed6b3c1
+2026-10-24T22:27:06.2044266Z   GITHUB_AW_OTEL_JOB_START_MS: 1792880481257
+2026-10-24T22:27:06.2044876Z   GH_AW_PROMPT: /tmp/gh-aw/aw-prompts/prompt.txt
+2026-10-24T22:27:06.2045766Z   AWF_TOKEN_USAGE_LOG: /tmp/gh-aw/sandbox/firewall/logs/api-proxy-logs/token-usage.jsonl
+2026-10-24T22:27:06.2046754Z   GH_AW_TOKEN_USAGE_SUMMARY_TITLE: Threat Detection Token Usage
+2026-10-24T22:27:06.2047428Z   GH_AW_PHASE: detection
+2026-10-24T22:27:06.2048117Z   GH_AW_AGENT_USAGE_PATH: /tmp/gh-aw/threat-detection/detection_usage.json
+2026-10-24T22:27:06.2055640Z   GH_AW_AGENT_USAGE_JSONL_PATH: /tmp/gh-aw/threat-detection/detection_usage.jsonl
+2026-10-24T22:27:06.2056637Z   GH_AW_WRITE_EMPTY_USAGE: true
+2026-10-24T22:27:06.2057147Z ##[endgroup]
+2026-10-24T22:27:06.3607100Z Parsing token usage from 1 file(s): /tmp/gh-aw/sandbox/firewall/logs/api-proxy-logs/token-usage.jsonl (5033 bytes)
+2026-10-24T22:27:06.3762786Z Threat Detection Token Usage
+2026-10-24T22:27:06.3763446Z 
+2026-10-24T22:27:06.3764873Z # | Alias | Input | Output | Cache Read | Cache Write | ΔAI Credits | AI Credits | Duration 
+2026-10-24T22:27:06.3766005Z 
+2026-10-24T22:27:06.3766610Z  1 | gpt41 | 21,444 | 36 | 0 | 0 | 4.3176 | 4.3176 | 3.8s 
+2026-10-24T22:27:06.3767701Z  2 | gpt41 | 256 | 33 | 21,376 | 0 | 1.1464 | 5.464 | 7.6s 
+2026-10-24T22:27:06.3769068Z  3 | gpt41 | 190 | 39 | 21,504 | 0 | 1.1444 | 6.6084 | 7.9s 
+2026-10-24T22:27:06.3770141Z  4 | gpt41 | 154 | 39 | 21,632 | 0 | 1.1436 | 7.752 | 4.8s 
+2026-10-24T22:27:06.3771160Z  5 | gpt41 | 214 | 38 | 21,760 | 0 | 1.1612 | 8.9132 | 3.8s 
+2026-10-24T22:27:06.3772132Z  6 | gpt41 | 2,670 | 60 | 21,888 | 0 | 1.6764 | 10.5896 | 4.3s 
+2026-10-24T22:27:06.3773095Z  7 | gpt41 | 716 | 54 | 24,448 | 0 | 1.4088 | 11.9984 | 3.2s 
+2026-10-24T22:27:06.3774018Z  8 | gpt41 | 442 | 53 | 25,088 | 0 | 1.3852 | 13.3836 | 2.0s 
+2026-10-24T22:27:06.3774943Z  Total |  | 26,086 | 352 | 157,696 | 0 |  | 13.3836 | 37.4s 
+2026-10-24T22:27:06.3775569Z 
+2026-10-24T22:27:06.3777512Z Legend: `Alias` shows the model shorthand used in the table. `ΔAI Credits` is the per-request cost, and `AI Credits` is the running total mirrored from AWF fields for reporting.
+2026-10-24T22:27:06.3779801Z Token usage summary appended to step summary
+2026-10-24T22:27:06.3789458Z Primary model: gpt-4.1-2025-04-14
+2026-10-24T22:27:06.3790601Z AI Credits: 13.3836
+2026-10-24T22:27:06.3792735Z Ambient context: 21444
