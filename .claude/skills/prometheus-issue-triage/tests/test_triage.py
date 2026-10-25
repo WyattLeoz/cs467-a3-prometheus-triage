@@ -104,7 +104,9 @@ class Labels(unittest.TestCase):
         policy = json.loads((triage.REFS / "label-policy.json").read_text())
         for pattern in policy["allowed"]:
             self.assertIn(f'"{pattern}"', wf)
-        self.assertIn("max: 2", wf)
+        # gh-aw: `max` counts add_labels calls, `max-labels` counts labels per call.
+        self.assertIn("max: 1 ", wf)
+        self.assertIn("max-labels: 2", wf)
 
 
 if __name__ == "__main__":

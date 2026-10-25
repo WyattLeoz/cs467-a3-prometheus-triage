@@ -92,7 +92,8 @@ safe-outputs:
   add-labels:
     allowed: ["component/*", "kind/question", "kind/more-info-needed", "kind/enhancement", "kind/feature"]
     blocked: ["kind/bug", "kind/breaking", "kind/cleanup", "kind/change", "priority/*", "won't fix", "invalid", "duplicate", "stale"]
-    max: 2
+    max: 1          # add_labels calls per run (gh-aw default 5)
+    max-labels: 2   # labels per call (gh-aw default 10); together: at most 2 labels per issue
     target: triggering
   add-comment:
     max: 1
