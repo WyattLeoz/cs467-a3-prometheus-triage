@@ -39,6 +39,9 @@ Upstream Prometheus (useful when judging reports; not built here):
 
 ```
 .github/workflows/issue-triage.md   agent workflow (source)   -> issue-triage.lock.yml (compiled, do not edit)
+.github/workflows/triage-audit-archive.yml  audit archive to the audit-log branch + model/CLI drift alert
+.github/workflows/safe-output-limits-test.md manual negative test of the label limits (workflow_dispatch)
+.github/agent-baseline.json         reviewed model snapshot and Copilot CLI version (drift baseline)
 .github/ISSUE_TEMPLATE/             upstream issue forms (bug_report.yml, feature_request.yml)
 .claude/skills/prometheus-issue-triage/
     SKILL.md                        triage procedure

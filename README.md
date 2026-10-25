@@ -17,6 +17,9 @@ agent bill of materials, test findings and the five assignment questions.
 | Skill + scripts + tests | [`.claude/skills/prometheus-issue-triage/`](.claude/skills/prometheus-issue-triage/SKILL.md) |
 | AI-contribution policy | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 | Human approval on config | [`.github/CODEOWNERS`](.github/CODEOWNERS) |
+| Audit trail + drift alert | [`triage-audit-archive.yml`](.github/workflows/triage-audit-archive.yml) → `audit-log` branch; baseline [`.github/agent-baseline.json`](.github/agent-baseline.json) |
+| Negative test of label limits | [`safe-output-limits-test.md`](.github/workflows/safe-output-limits-test.md) |
+| Independent review | [`evals/notes/chatgpt-review.md`](evals/notes/chatgpt-review.md) |
 | Golden set, expected vs actual, logs | [`evals/golden/`](evals/golden/README.md) |
 | Upstream subset used as context | [`upstream/`](upstream/), [`data/upstream-issues.jsonl`](data/upstream-issues.jsonl) |
 
