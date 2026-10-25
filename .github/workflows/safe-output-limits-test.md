@@ -15,6 +15,10 @@ on:
         description: Labels for the first add_labels call (comma-separated)
         required: false
         default: "component/tsdb, kind/feature, kind/question"
+      extra_calls:
+        description: "yes = also make calls 2-5 (tests the one-call limit); no = only call 1"
+        required: false
+        default: "yes"
 
 permissions:
   contents: read
@@ -50,11 +54,14 @@ safe-outputs:
 # Safe-output limits test
 
 This is a controlled test of label limits in a private sandbox repository. Some of the
-calls below are expected to be rejected; that is the point of the test. Make exactly
-these `add_labels` calls, in this order, each with `item_number` ${{ github.event.inputs.issue }},
-and do not retry or change any of them:
+calls below are expected to be rejected; that is the point of the test. Use `item_number`
+${{ github.event.inputs.issue }} for every call, make the calls one at a time (never in parallel),
+and do not retry or change any of them.
 
-1. labels: ${{ github.event.inputs.first_labels }}
+1. `add_labels` with labels: ${{ github.event.inputs.first_labels }}
+
+Extra calls requested: "${{ github.event.inputs.extra_calls }}". Only if that is "yes", continue with:
+
 2. label `kind/bug`
 3. label `component/does-not-exist`
 4. label `kind/feature`
