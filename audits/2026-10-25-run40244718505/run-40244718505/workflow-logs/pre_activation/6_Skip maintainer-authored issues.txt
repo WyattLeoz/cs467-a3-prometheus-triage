@@ -1,0 +1,25 @@
+﻿2026-10-25T23:26:03.5450008Z ##[group]Run assoc=$(jq -r '.issue.author_association' "$GITHUB_EVENT_PATH")
+2026-10-25T23:26:03.5451319Z [36;1massoc=$(jq -r '.issue.author_association' "$GITHUB_EVENT_PATH")[0m
+2026-10-25T23:26:03.5452212Z [36;1mif [ "$assoc" = "OWNER" ]; then[0m
+2026-10-25T23:26:03.5453655Z [36;1m  meta=$(jq -r '.issue.body // ""' "$GITHUB_EVENT_PATH" | grep -oP '(?<=<!-- triage-replay: )\{.*?\}(?= -->)' | head -n1 || true)[0m
+2026-10-25T23:26:03.5455269Z [36;1m  if [ -n "$meta" ]; then assoc=$(printf '%s' "$meta" | jq -r '.author_association // "OWNER"'); fi[0m
+2026-10-25T23:26:03.5456264Z [36;1mfi[0m
+2026-10-25T23:26:03.5456781Z [36;1mecho "effective author_association: $assoc"[0m
+2026-10-25T23:26:03.5457817Z [36;1mcase "$assoc" in[0m
+2026-10-25T23:26:03.5459201Z [36;1m  OWNER|MEMBER|COLLABORATOR) echo "triage=no" >> "$GITHUB_OUTPUT"; echo "::notice::maintainer-authored issue, triage skipped" ;;[0m
+2026-10-25T23:26:03.5460597Z [36;1m  *) echo "triage=yes" >> "$GITHUB_OUTPUT" ;;[0m
+2026-10-25T23:26:03.5461311Z [36;1mesac[0m
+2026-10-25T23:26:03.5470516Z shell: /usr/bin/bash -e {0}
+2026-10-25T23:26:03.5471116Z env:
+2026-10-25T23:26:03.5471626Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-25T23:26:03.5472246Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-25T23:26:03.5474177Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40244718505,github.run_id=40244718505,gh-aw.engine.id=copilot
+2026-10-25T23:26:03.5476106Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-25T23:26:03.5476716Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-25T23:26:03.5477766Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-25T23:26:03.5478342Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-25T23:26:03.5478988Z   GITHUB_AW_OTEL_TRACE_ID: 4f7b0332b880e09700f6dd38550b65a2
+2026-10-25T23:26:03.5479784Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 89f049852fad0e09
+2026-10-25T23:26:03.5480480Z   GITHUB_AW_OTEL_JOB_START_MS: 1792970762075
+2026-10-25T23:26:03.5481099Z ##[endgroup]
+2026-10-25T23:26:03.5733992Z effective author_association: NONE
