@@ -84,6 +84,19 @@ class Labels(unittest.TestCase):
         self.assertEqual(run(["labels", "component/tsdb", "component/promql"])[0], 1)
         self.assertEqual(run(["labels", "component/does-not-exist"])[0], 1)
 
+    def test_unquoted_label_with_space(self):
+        """Golden run2 G12/G14: the model passed `component/service discovery` unquoted and looped."""
+        code, out = run(["labels", "component/service", "discovery", "kind/feature"])
+        self.assertEqual(code, 0)
+        self.assertEqual(out["labels"], ["component/service discovery", "kind/feature"])
+
+    def test_suggests_real_label(self):
+        """Golden run2 A02: the model guessed `component/remote-write`, got no hint, and fell back to tsdb."""
+        code, out = run(["labels", "component/remote-write"])
+        self.assertEqual(code, 1)
+        self.assertEqual(out["suggestions"]["component/remote-write"][0], "component/remote storage")
+        self.assertNotIn("kind/bug", sum(run(["labels", "kind/bugs"])[1]["suggestions"].values(), []))
+
     def test_policy_matches_workflow(self):
         """The skill's policy file must mirror the enforced safe-outputs allowlist."""
         root = Path(triage.REPO_ROOT)

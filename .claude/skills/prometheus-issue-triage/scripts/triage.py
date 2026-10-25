@@ -10,6 +10,7 @@ Every subcommand prints JSON. Text copied from issues is untrusted data and is
 wrapped in an "untrusted" field so the agent never mistakes it for instructions.
 """
 import argparse
+import difflib
 import json
 import math
 import re
@@ -182,13 +183,27 @@ def cmd_duplicates(args):
     }, indent=2))
 
 
+def rejoin(words, known):
+    """Rejoin labels the shell split on spaces (`component/service discovery` passed unquoted)."""
+    out, i = [], 0
+    while i < len(words):
+        j = next((j for j in range(len(words), i, -1) if " ".join(words[i:j]) in known), i + 1)
+        out.append(" ".join(words[i:j]))
+        i = j
+    return out
+
+
 def cmd_labels(args):
     policy = json.loads((REFS / "label-policy.json").read_text(encoding="utf-8"))
     known = set(json.loads((REFS / "labels.json").read_text(encoding="utf-8")))
-    errors = []
+    usable = sorted(k for k in known if any(fnmatch(k, p) for p in policy["allowed"])
+                    and not any(fnmatch(k, p) for p in policy["blocked"]))
+    args.labels = rejoin(args.labels, known)
+    errors, suggestions = [], {}
     for label in args.labels:
         if label not in known:
             errors.append(f"{label!r} does not exist in the upstream label set")
+            suggestions[label] = difflib.get_close_matches(label, usable, n=3, cutoff=0.5)
         if any(fnmatch(label, p) for p in policy["blocked"]):
             errors.append(f"{label!r} is reserved for maintainers")
         elif not any(fnmatch(label, p) for p in policy["allowed"]):
@@ -198,7 +213,8 @@ def cmd_labels(args):
     for prefix in ("component/", "kind/"):
         if sum(lab.startswith(prefix) for lab in args.labels) > 1:
             errors.append(f"at most one {prefix}* label")
-    print(json.dumps({"skill": SKILL_VERSION, "labels": args.labels, "valid": not errors, "errors": errors}, indent=2))
+    print(json.dumps({"skill": SKILL_VERSION, "labels": args.labels, "valid": not errors, "errors": errors,
+                      "suggestions": suggestions}, indent=2))
     return 0 if not errors else 1
 
 

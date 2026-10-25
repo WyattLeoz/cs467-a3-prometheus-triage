@@ -30,7 +30,9 @@ Run the steps in order. Steps 1–3 are deterministic; do not skip them.
 3. **Choose one decision** using the table below (first matching row wins).
 4. **Validate labels** before emitting them:
    `.claude/skills/prometheus-issue-triage/scripts/triage.py labels <label> [<label>]`
-   If `valid` is false, drop or fix the labels. Never emit a label the validator rejects.
+   Some labels contain spaces (`component/remote storage`, `component/service discovery`); quote them.
+   If `valid` is false, use a label from `suggestions` that fits or drop it. Never emit a label the
+   validator rejects, and stop after two rejected attempts (a run has a fixed turn budget).
 5. **Emit outputs.** At most one `add_comment` and one `add_labels` call (≤ 2 labels), or a single `noop`
    with a one-sentence reason.
 
