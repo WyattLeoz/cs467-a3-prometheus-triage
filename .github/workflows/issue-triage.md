@@ -46,6 +46,11 @@ permissions:
 engine:
   id: copilot
   model: gpt-4.1
+  # One agent job at a time across the repository; later issues wait in order instead of
+  # running in parallel against the same Copilot quota (v0.93.1 does not add this by default).
+  concurrency:
+    group: gh-aw-copilot-triage
+    queue: max
 
 timeout-minutes: 10
 max-turns: 20

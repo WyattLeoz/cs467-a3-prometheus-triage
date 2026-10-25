@@ -7,12 +7,13 @@ name: Triage audit archive
 
 on:
   workflow_run:
-    workflows: ["Prometheus Issue Triage"]
+    workflows: ["Prometheus Issue Triage", "Safe-output limits test"]
     types: [completed]
 
 permissions:
   actions: read    # download the triage run's logs and artifacts
   contents: write  # push to the audit-log branch only
+  issues: write    # open a [drift] alert issue (GITHUB_TOKEN issues do not trigger the agent)
 
 concurrency:
   group: triage-audit-archive
@@ -55,3 +56,27 @@ jobs:
           git add -A
           git commit -qm "audit: triage run $RUN_ID ($RUN_CONCLUSION)"
           git push origin HEAD:audit-log
+      # Drift detection: compare the served model snapshot and Copilot CLI version recorded in this
+      # run's audit with the reviewed baseline on main; open one alert issue per distinct change.
+      - name: Alert on model or CLI drift
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          set -euo pipefail
+          report=$(ls -d audits/*-run"$RUN_ID")/report.json
+          served=$(jq -r '[(.firewall_token_usage.by_model // {}) | keys[] | select(test("-[0-9]{4}-[0-9]{2}-[0-9]{2}$"))] | first // empty' "$report")
+          cli=$(jq -r '.engine_config.version // empty' "$report")
+          if [ -z "$served" ] && [ -z "$cli" ]; then echo "no model call in this run"; exit 0; fi
+          base=$(gh api "repos/$GITHUB_REPOSITORY/contents/.github/agent-baseline.json" -H "Accept: application/vnd.github.raw")
+          want_model=$(jq -r .served_model <<<"$base"); want_cli=$(jq -r .copilot_cli <<<"$base")
+          change=""
+          if [ -n "$served" ] && [ "$served" != "$want_model" ]; then change="model $want_model -> $served"; fi
+          if [ -n "$cli" ] && [ "$cli" != "$want_cli" ]; then change="${change:+$change, }Copilot CLI $want_cli -> $cli"; fi
+          if [ -z "$change" ]; then echo "no drift (model $served, CLI $cli)"; exit 0; fi
+          title="[drift] triage agent: $change"
+          if gh issue list --repo "$GITHUB_REPOSITORY" --state open --limit 100 --json title --jq '.[].title' | grep -qxF "$title"; then
+            echo "alert already open: $title"; exit 0
+          fi
+          gh issue create --repo "$GITHUB_REPOSITORY" --title "$title" --body "Run $RUN_ID (audit: \`audits/$(basename "$(dirname "$report")")\` on the \`audit-log\` branch) ran on $change. Rerun the golden set (\`evals/golden/README.md\`), compare \`summary.md\` with the last run, then update \`.github/agent-baseline.json\` or disable the workflow."
+
