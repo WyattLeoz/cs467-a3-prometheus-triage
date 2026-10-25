@@ -40,12 +40,12 @@ similar earlier issue the *same* symptom; is a report with empty template fields
 | Identity | Implemented, tested | Writes come from the `safe_outputs` job as `github-actions[bot]`; the PAT only authenticates inference |
 | Least privilege | Implemented, tested | Agent job read-only, no GitHub tools, no network; writes only in gh-aw's `safe_outputs` job |
 | Safe outputs | Implemented, tested | 1 comment, ≤ 2 allow-listed labels, `noop`; every observed run passed the HARD checks (§5) |
-| Human approval | Partly | No per-output approval (reversible first responses); CODEOWNERS names the owner, but review is enforced only once branch protection is on (**proposed**) |
+| Human approval | Partly | No per-output approval (reversible first responses); CODEOWNERS names the owner, but GitHub enforces code-owner review and branch protection on a private repo only on a paid plan (Settings → Branches) — **proposed** |
 | Budgets | Implemented, tested | 10 min agent step, 20 turns (stopped G12), 200 AIC/run (≈ 5 used), 2000 AIC/day, 3 runs/h per reporter, 1 job at a time, `stop-after` |
 | Audit trail | Implemented, tested | `triage-audit-archive.yml` commits `gh aw audit` (model, CLI, tool calls, firewall, outputs, AIC) for every run, incl. failed ones, to `audit-log` |
 | Kill switch | Implemented, tested | Disable workflow (API-tested); cancel runs (39952339286: nothing posted); `stop-after` deadline |
 | Drift detection | Partly | Model name pinned, snapshot logged; missing model fails loudly; golden rerun is manual (required per config PR by CONTRIBUTING, not enforced); scheduled rerun **proposed** |
-| Accountability | Implemented | @WyattLeoz owns the config (CODEOWNERS) and answers for the agent's actions |
+| Accountability | Implemented | @WyattLeoz owns the config and the baseline (CODEOWNERS, advisory here), can disable it, and answers for the agent's actions |
 
 **Untrusted inputs:** issue title/body (sanitized into the prompt; raw JSON only to scripts),
 earlier-issue excerpts returned by the duplicate search, the frozen upstream corpus.
@@ -135,7 +135,7 @@ run 39952339286); one already publishing finishes its ≤ 1 comment + 2 labels.
   reply is sent either. Options: a stronger detection model (paid) or deterministic detection steps.
 - gh-aw pins its own version and the model name, not the Copilot CLI (1.0.95 → 1.0.101 during the
   evaluation) or the served snapshot; drift is visible in the audit, not prevented.
-- Branch protection with required code-owner review is proposed but not enabled.
+- Branch protection and code-owner review need a paid plan (or a public repo); proposed, not enabled.
 - One run per case: no variance estimate; the v3 label fix and the label limit were re-tested on 5
   cases (`run3-v3`, 3/5) and in the compiled config, not with a full 19-case rerun.
 
