@@ -1,0 +1,45 @@
+﻿2026-10-25T18:17:55.3930339Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-25T18:17:55.3931280Z with:
+2026-10-25T18:17:55.3937823Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+
+const substitutePlaceholders = require(path.join(actionsDir, 'substitute_placeholders.cjs'));
+
+// Call the substitution function
+return await substitutePlaceholders({
+  file: process.env.GH_AW_PROMPT,
+  substitutions: {
+    GH_AW_GITHUB_EVENT_INPUTS_EXTRA_CALLS: process.env.GH_AW_GITHUB_EVENT_INPUTS_EXTRA_CALLS,
+    GH_AW_GITHUB_EVENT_INPUTS_FIRST_LABELS: process.env.GH_AW_GITHUB_EVENT_INPUTS_FIRST_LABELS,
+    GH_AW_GITHUB_EVENT_INPUTS_ISSUE: process.env.GH_AW_GITHUB_EVENT_INPUTS_ISSUE,
+    GH_AW_MCP_CLI_SERVERS_LIST: process.env.GH_AW_MCP_CLI_SERVERS_LIST
+  }
+});
+
+2026-10-25T18:17:55.3948522Z   github-token: ***
+2026-10-25T18:17:55.3949055Z   debug: false
+2026-10-25T18:17:55.3949527Z   user-agent: actions/github-script
+2026-10-25T18:17:55.3950117Z   result-encoding: json
+2026-10-25T18:17:55.3950598Z   retries: 0
+2026-10-25T18:17:55.3951111Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-25T18:17:55.3951775Z env:
+2026-10-25T18:17:55.3952217Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-25T18:17:55.3953071Z   OTEL_SERVICE_NAME: gh-aw.safe-output-limits-test
+2026-10-25T18:17:55.3955040Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Safe-output%20limits%20test,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40220552601,github.run_id=40220552601,gh-aw.engine.id=copilot
+2026-10-25T18:17:55.3956952Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-25T18:17:55.3957596Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-25T18:17:55.3958285Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-25T18:17:55.3958855Z   GH_AW_MAX_DAILY_AI_CREDITS: 5000
+2026-10-25T18:17:55.3959434Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-25T18:17:55.3960102Z   GITHUB_AW_OTEL_TRACE_ID: 5aa4b4a210939f0801457ed61020c39c
+2026-10-25T18:17:55.3960932Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: c0724f028504a503
+2026-10-25T18:17:55.3961649Z   GITHUB_AW_OTEL_JOB_START_MS: 1792952271439
+2026-10-25T18:17:55.3962649Z   GH_AW_PROMPT: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-25T18:17:55.3963515Z   GH_AW_GITHUB_EVENT_INPUTS_EXTRA_CALLS: no
+2026-10-25T18:17:55.3964451Z   GH_AW_GITHUB_EVENT_INPUTS_FIRST_LABELS: kind/bug, component/also-does-not-exist
+2026-10-25T18:17:55.3965389Z   GH_AW_GITHUB_EVENT_INPUTS_ISSUE: 70
+2026-10-25T18:17:55.3966395Z   GH_AW_MCP_CLI_SERVERS_LIST: - `safeoutputs` — run `safeoutputs --help` to see available tools
+2026-10-25T18:17:55.3967401Z ##[endgroup]
+2026-10-25T18:17:55.5233126Z [substitutePlaceholders] /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt (4 substitution(s))
