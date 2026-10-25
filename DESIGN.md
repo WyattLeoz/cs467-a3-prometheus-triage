@@ -24,7 +24,7 @@ similar earlier issue the *same* symptom; is a report with empty template fields
 |------|--------------------|
 | Cannot close, edit, delete, lock, merge, push | agent job `contents/issues: read`; no such safe outputs (`issue-triage.md`) |
 | ≤ 1 comment, ≤ 2 labels, triggering issue only | `add-comment.max: 1`; `add-labels.max: 1` (calls) + `max-labels: 2`; `target: triggering` |
-| No `kind/bug` (= *confirmed*), `priority/*`, `duplicate`, `won't fix` | `add-labels.allowed`/`blocked`; gh-aw rejects non-existent labels; `triage.py labels` is only a pre-check |
+| Only existing, allowed labels; never `kind/bug` (= *confirmed*), `priority/*`, `won't fix` | `add-labels.allowed` lists the 23 existing labels (no globs) + `blocked`; `triage.py labels` is only a pre-check |
 | No pings, foreign links, upstream timeline noise | `mentions: false`, `allowed-domains`, `allowed-github-references` |
 | No network or GitHub API from the agent | `network: {}` (AWF firewall), `tools.github: false`, shell allowlist |
 | Deterministic checks always run (the model may still ignore them) | `steps:` run `triage.py precheck/duplicates` first |
@@ -39,12 +39,12 @@ similar earlier issue the *same* symptom; is a report with empty template fields
 |---------|--------|----------------|
 | Identity | Implemented, tested | Writes come from the `safe_outputs` job as `github-actions[bot]`; the PAT only authenticates inference |
 | Least privilege | Implemented, tested | Agent job read-only, no GitHub tools, no network; writes only in gh-aw's `safe_outputs` job |
-| Safe outputs | Implemented, tested | 1 comment, ≤ 2 allow-listed labels, `noop`; every observed run passed the HARD checks (§5) |
+| Safe outputs | Implemented, tested | 1 comment, ≤ 2 labels from an explicit list, `noop`; negative test rejected 3 labels, a 2nd call, `kind/bug` and an invented label (`evals/golden/safe-output-limits-test.md`) |
 | Human approval | Partly | No per-output approval (reversible first responses); CODEOWNERS names the owner, but GitHub enforces code-owner review and branch protection on a private repo only on a paid plan (Settings → Branches) — **proposed** |
-| Budgets | Implemented, tested | 10 min agent step, 20 turns (stopped G12), 200 AIC/run (≈ 5 used), 2000 AIC/day, 3 runs/h per reporter, 1 job at a time, `stop-after` |
+| Budgets | Implemented, tested | 10 min agent step, 20 turns (stopped G12), 200 AIC/run (≈ 5 used), 2000 AIC/day, 3 runs/h per reporter, 1 agent job at a time (`engine.concurrency` queue), `stop-after` |
 | Audit trail | Implemented, tested | `triage-audit-archive.yml` commits `gh aw audit` (model, CLI, tool calls, firewall, outputs, AIC) for every run, incl. failed ones, to `audit-log` |
 | Kill switch | Implemented, tested | Disable workflow (API-tested); cancel runs (39952339286: nothing posted); `stop-after` deadline |
-| Drift detection | Partly | Model name pinned, snapshot logged; missing model fails loudly; golden rerun is manual (required per config PR by CONTRIBUTING, not enforced); scheduled rerun **proposed** |
+| Drift detection | Partly | Version drift: implemented, tested — the archive job compares each audit's model snapshot and CLI version with `.github/agent-baseline.json` and opened #72 (CLI 1.0.95 → 1.0.101). Behaviour drift: manual golden rerun; scheduled replay **proposed** |
 | Accountability | Implemented | @WyattLeoz owns the config and the baseline (CODEOWNERS, advisory here), can disable it, and answers for the agent's actions |
 
 **Untrusted inputs:** issue title/body (sanitized into the prompt; raw JSON only to scripts),
@@ -70,7 +70,8 @@ passed the HARD checks: no blocked label, nothing closed, ≤ 1 comment and ≤ 
   `skill` call: told the checks had already run, gpt-4.1 skipped the skill, labelled spam
   `kind/question` and quoted injected text. v2 requires the `skill` call first (18/18 runs in run2).
 - **Fail-closed costs availability:** threat detection gave no verdict in 4 of 18 runs (G03, G09,
-  G13, G15), so nothing was published; three of the withheld drafts were correct.
+  G13, G15), so nothing was published; three of the withheld drafts were correct. Its logs show it
+  searching for files the triage prompt mentions; a focused detection `prompt:` was added in run4.
 - **My own bug:** labels containing spaces (`component/service discovery`) were split by the shell
   and rejected without a hint; the model looped until `max-turns` stopped it (G12) or dropped or
   guessed the label (G14, A02). v3 rejoins and suggests labels (`run3-v3`): A02, G12, G13 now pass;
@@ -78,9 +79,9 @@ passed the HARD checks: no blocked label, nothing closed, ≤ 1 comment and ≤ 
 - **gpt-4.1 judgement:** asked for information instead of redirecting to postgres_exporter (G04),
   rejected a true duplicate (G09, which also lost its detection verdict), and treated publicly listed
   scanner CVEs as an undisclosed vulnerability (SECURITY) instead of citing the duplicate (G16).
-- **Independent review (ChatGPT)** found that `add-labels.max: 2` limits *calls*, not labels (gh-aw
-  allows 10 per call). No run applied more than 2, but the limit was not enforced; now `max: 1` +
-  `max-labels: 2`, checked in the compiled lock file and a unit test, not yet in a live run.
+- **Independent review (ChatGPT)** found that `add-labels.max: 2` limits *calls*, not labels. Fixed
+  (`max: 1`, `max-labels: 2`); a negative test then confirmed the limits and found that GitHub
+  creates unknown labels, so the `component/*` glob admitted an invented one: now an exact list.
 
 ## 6. Five questions
 
@@ -88,12 +89,12 @@ passed the HARD checks: no blocked label, nothing closed, ≤ 1 comment and ≤ 
 and the only write tools are `add_comment`, `add_labels`, `noop`, so closing is impossible whatever the
 model decides. In run2 it called `noop` ("only instructs the bot"); no issue was closed.
 
-**Q2 — Provider updates the model, a golden task fails.** The model name is pinned (`gpt-4.1`) and
-every audit records the served snapshot (`gpt-4.1-2025-04-14`) and CLI version. A removed model fails
-the run and gh-aw opens an `[aw]` failure issue (observed, sandbox #5). A silent change is caught only
-when the owner reruns the golden set (`run_eval.py`, `score.py`) and compares `summary.md` with the
-last run, so detection is manual with no guaranteed delay. A weekly scheduled replay is proposed; it
-needs a PAT, because issues opened with `GITHUB_TOKEN` do not trigger workflows.
+**Q2 — Provider updates the model, a golden task fails.** A removed model fails the run and gh-aw
+opens an `[aw]` failure issue (sandbox #5). A new snapshot or CLI version opens a `[drift]` issue
+after the first run that uses it (tested: #72). The owner then reruns the golden set (`run_eval.py`,
+`score.py`), compares `summary.md` with the last run and only then updates the baseline. A behaviour
+change with the same snapshot is caught only by that manual rerun; a weekly replay is proposed (it
+needs a PAT, because issues opened with `GITHUB_TOKEN` do not trigger workflows).
 
 **Q3 — 300 issues in one week (~43/day).** Each issue starts one run; gh-aw queues them (one Copilot
 job at a time). Each run can post ≤ 1 comment + 2 labels; one reporter gets 3 runs/hour. The binding
@@ -116,11 +117,11 @@ run 39952339286); one already publishing finishes its ≤ 1 comment + 2 labels.
 
 | Item | Value |
 |------|-------|
-| Engine / model | gh-aw v0.93.1; Copilot CLI installed at run time (minimum 1.0.35, not pinned; 1.0.95 → 1.0.101 seen); `gpt-4.1` pinned by name (snapshot `gpt-4.1-2025-04-14` logged); same for detection |
+| Engine / model | gh-aw v0.93.1; Copilot CLI range 1.0.35–1.0.101 set by the compiler, version taken from the runner (1.0.95, 1.0.101 seen; baseline in `.github/agent-baseline.json`); `gpt-4.1` pinned by name (snapshot `gpt-4.1-2025-04-14`); same for detection |
 | Why this model | Copilot Free token: every other model returns `model_not_supported` (`evals/notes/copilot-access-diagnostic.md`) |
 | Instructions | prompt in `issue-triage.md`; `SKILL.md`; `AGENTS.md`; gh-aw system prompt |
 | Tools / MCP | `safeoutputs` MCP; Copilot `skill`/`view`; shell `triage.py` + read-only defaults (`cat`, `ls`, …); no GitHub MCP, no web |
-| Permissions | agent `contents/issues: read`; `safe_outputs` `issues`+`pull-requests: write`; archive `actions: read`, `contents: write` |
+| Permissions | agent `contents/issues: read`; `safe_outputs` `issues`+`pull-requests: write`; archive `actions: read`, `contents: write`, `issues: write` (drift alert) |
 | Data | triggering issue; `data/upstream-issues.jsonl` (494 upstream issues + 1 adversarial fixture); skill references |
 | Secrets | `COPILOT_GITHUB_TOKEN` (fine-grained PAT, Copilot Requests: Read; never in the agent's environment) |
 | Logs | Actions logs (90 days); `audit-log` branch (per run); `[aw]` failure issues |
@@ -133,8 +134,7 @@ run 39952339286); one already publishing finishes its ≤ 1 comment + 2 labels.
   10/19 is not good enough to drop "suggestion only". A stronger model needs a paid plan.
 - Threat detection with gpt-4.1 fails in about 1 run in 4; nothing wrong is published, but no
   reply is sent either. Options: a stronger detection model (paid) or deterministic detection steps.
-- gh-aw pins its own version and the model name, not the Copilot CLI (1.0.95 → 1.0.101 during the
-  evaluation) or the served snapshot; drift is visible in the audit, not prevented.
+- The served snapshot and exact CLI version are not pinned; drift is detected (#72), not prevented.
 - Branch protection and code-owner review need a paid plan (or a public repo); proposed, not enabled.
 - One run per case: no variance estimate; the v3 label fix and the label limit were re-tested on 5
   cases (`run3-v3`, 3/5) and in the compiled config, not with a full 19-case rerun.
