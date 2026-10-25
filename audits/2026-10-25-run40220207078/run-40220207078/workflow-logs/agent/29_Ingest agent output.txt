@@ -1,0 +1,69 @@
+﻿2026-10-25T18:15:26.4661443Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-25T18:15:26.4662164Z with:
+2026-10-25T18:15:26.4664337Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'collect_ndjson_output.cjs'));
+await main();
+
+2026-10-25T18:15:26.4671452Z   github-token: ***
+2026-10-25T18:15:26.4671865Z   debug: false
+2026-10-25T18:15:26.4672263Z   user-agent: actions/github-script
+2026-10-25T18:15:26.4672755Z   result-encoding: json
+2026-10-25T18:15:26.4673146Z   retries: 0
+2026-10-25T18:15:26.4673723Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-25T18:15:26.4674250Z env:
+2026-10-25T18:15:26.4674604Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-25T18:15:26.4675132Z   OTEL_SERVICE_NAME: gh-aw.safe-output-limits-test
+2026-10-25T18:15:26.4676650Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Safe-output%20limits%20test,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40220207078,github.run_id=40220207078,gh-aw.engine.id=copilot
+2026-10-25T18:15:26.4678150Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-25T18:15:26.4678641Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-25T18:15:26.4679166Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-25T18:15:26.4679593Z   DEFAULT_BRANCH: main
+2026-10-25T18:15:26.4679993Z   GH_AW_ASSETS_ALLOWED_EXTS: 
+2026-10-25T18:15:26.4680453Z   GH_AW_ASSETS_BRANCH: 
+2026-10-25T18:15:26.4680825Z   GH_AW_ASSETS_MAX_SIZE_KB: 0
+2026-10-25T18:15:26.4681291Z   GH_AW_MCP_LOG_DIR: /tmp/gh-aw/mcp-logs/safeoutputs
+2026-10-25T18:15:26.4681823Z   GH_AW_PR_HEAD_BASE_BRANCH: 
+2026-10-25T18:15:26.4682230Z   GH_AW_PR_HEAD_BASE_PR_NUMBER: 
+2026-10-25T18:15:26.4682658Z   GH_AW_PR_HEAD_BASE_REF: 
+2026-10-25T18:15:26.4683055Z   GH_AW_PR_HEAD_BASE_REPO: 
+2026-10-25T18:15:26.4683682Z   GH_AW_PR_HEAD_BASE_SHA: 
+2026-10-25T18:15:26.4684095Z   GH_AW_PR_HEAD_REPO: 
+2026-10-25T18:15:26.4684469Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-25T18:15:26.4684872Z   GH_AW_TARGET_REPO_SLUG: 
+2026-10-25T18:15:26.4685349Z   GH_AW_WORKFLOW_ID_SANITIZED: safeoutputlimitstest
+2026-10-25T18:15:26.4685986Z   GITHUB_AW_OTEL_TRACE_ID: 7ccabf9f30e3e0591ed62f0f2023e1e8
+2026-10-25T18:15:26.4686614Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 6af1341d64cb9c4c
+2026-10-25T18:15:26.4687167Z   GITHUB_AW_OTEL_JOB_START_MS: 1792952045023
+2026-10-25T18:15:26.4688028Z   GH_AW_COPILOT_SDK_MCP_CONFIG_SHA256: 17aa78c999cbd3b6e8e49986f7c2c60b7f8f458b69890e883e302c83064484d9
+2026-10-25T18:15:26.4689152Z   AWF_TOKEN_USAGE_LOG: /tmp/gh-aw/sandbox/firewall/logs/api-proxy-logs/token-usage.jsonl
+2026-10-25T18:15:26.4690087Z   GH_AW_SAFE_OUTPUTS: /home/runner/work/_temp/gh-aw/safeoutputs/outputs.jsonl
+2026-10-25T18:15:26.4690813Z   GITHUB_SERVER_URL: https://github.com
+2026-10-25T18:15:26.4691340Z   GITHUB_API_URL: https://api.github.com
+2026-10-25T18:15:26.4691826Z ##[endgroup]
+2026-10-25T18:15:26.6112436Z Loaded validation config from /home/runner/work/_temp/gh-aw/safeoutputs/validation.json
+2026-10-25T18:15:26.6123533Z [INGESTION] Reading config from: /home/runner/work/_temp/gh-aw/safeoutputs/config.json
+2026-10-25T18:15:26.6126887Z [INGESTION] Raw config content: {"add_labels":{"allowed":["component/*","kind/question","kind/more-info-needed","kind/enhancement","kind/feature"],"blocked":["kind/bug","kind/breaking","kind/cleanup","kind/change","priority/*","won't fix","invalid","duplicate","stale"],"max":1,"max_labels":2,"target":"*"},"create_report_incomplete_issue":{},"noop":{"max":2,"report-as-issue":"false"},"report_incomplete":{},"report_missing_data":{},"report_missing_tool":{}}
+2026-10-25T18:15:26.6130452Z [INGESTION] Parsed config keys: ["add_labels","create_report_incomplete_issue","noop","report_incomplete","report_missing_data","report_missing_tool"]
+2026-10-25T18:15:26.6132042Z [INGESTION] Output file path: /home/runner/work/_temp/gh-aw/safeoutputs/outputs.jsonl
+2026-10-25T18:15:26.6134696Z Raw output content length: 139
+2026-10-25T18:15:26.6136295Z [INGESTION] First 500 chars of output: {"item_number":70,"labels":["kind/bug","component/does-not-exist"],"type":"add_labels"}
+2026-10-25T18:15:26.6137513Z {"message":"limits test calls made","type":"noop"}
+2026-10-25T18:15:26.6138099Z 
+2026-10-25T18:15:26.6138597Z [INGESTION] Normalizing config keys (dash -> underscore)
+2026-10-25T18:15:26.6140100Z [INGESTION] Expected output types after normalization: ["add_labels","create_report_incomplete_issue","noop","report_incomplete","report_missing_data","report_missing_tool"]
+2026-10-25T18:15:26.6143922Z [INGESTION] Expected output types full config: {"add_labels":{"allowed":["component/*","kind/question","kind/more-info-needed","kind/enhancement","kind/feature"],"blocked":["kind/bug","kind/breaking","kind/cleanup","kind/change","priority/*","won't fix","invalid","duplicate","stale"],"max":1,"max_labels":2,"target":"*"},"create_report_incomplete_issue":{},"noop":{"max":2,"report-as-issue":"false"},"report_incomplete":{},"report_missing_data":{},"report_missing_tool":{}}
+2026-10-25T18:15:26.6147354Z [INGESTION] Processing line 1: {"item_number":70,"labels":["kind/bug","component/does-not-exist"],"type":"add_labels"}...
+2026-10-25T18:15:26.6148690Z [INGESTION] Line 1: Original type='add_labels', Normalized type='add_labels'
+2026-10-25T18:15:26.6150415Z Line 1: type 'add_labels'
+2026-10-25T18:15:26.6171482Z Line 1: Valid add_labels item
+2026-10-25T18:15:26.6172461Z [INGESTION] Processing line 2: {"message":"limits test calls made","type":"noop"}...
+2026-10-25T18:15:26.6173874Z [INGESTION] Line 2: Original type='noop', Normalized type='noop'
+2026-10-25T18:15:26.6174838Z Line 2: type 'noop'
+2026-10-25T18:15:26.6178556Z Line 2: Valid noop item
+2026-10-25T18:15:26.6179302Z Successfully parsed 2 valid output items
+2026-10-25T18:15:26.6534505Z Stored validated output to: /tmp/gh-aw/agent_output.json
+2026-10-25T18:15:26.6542941Z output_types: add_labels, noop
+2026-10-25T18:15:26.6545417Z No patch or bundle files found in: /tmp/gh-aw

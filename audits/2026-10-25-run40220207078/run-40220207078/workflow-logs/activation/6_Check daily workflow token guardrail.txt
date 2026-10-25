@@ -1,0 +1,38 @@
+﻿2026-10-25T18:13:36.4789090Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-25T18:13:36.4790477Z with:
+2026-10-25T18:13:36.4794375Z   github-token: ***
+2026-10-25T18:13:36.4796498Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'check_daily_aic_workflow_guardrail.cjs'));
+await main();
+
+2026-10-25T18:13:36.4798855Z   debug: false
+2026-10-25T18:13:36.4799513Z   user-agent: actions/github-script
+2026-10-25T18:13:36.4800056Z   result-encoding: json
+2026-10-25T18:13:36.4800500Z   retries: 0
+2026-10-25T18:13:36.4800964Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-25T18:13:36.4801521Z env:
+2026-10-25T18:13:36.4801925Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-25T18:13:36.4802492Z   OTEL_SERVICE_NAME: gh-aw.safe-output-limits-test
+2026-10-25T18:13:36.4804080Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Safe-output%20limits%20test,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40220207078,github.run_id=40220207078,gh-aw.engine.id=copilot
+2026-10-25T18:13:36.4805583Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-25T18:13:36.4806127Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-25T18:13:36.4806724Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-25T18:13:36.4807237Z   GH_AW_MAX_DAILY_AI_CREDITS: 5000
+2026-10-25T18:13:36.4807755Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-25T18:13:36.4808329Z   GITHUB_AW_OTEL_TRACE_ID: 7ccabf9f30e3e0591ed62f0f2023e1e8
+2026-10-25T18:13:36.4809022Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 6ab7ec7e2b025266
+2026-10-25T18:13:36.4822356Z   GITHUB_AW_OTEL_JOB_START_MS: 1792952015513
+2026-10-25T18:13:36.4823040Z   GH_AW_WORKFLOW_NAME: Safe-output limits test
+2026-10-25T18:13:36.4823689Z   GH_AW_WORKFLOW_ID: safe-output-limits-test
+2026-10-25T18:13:36.4824585Z   GH_AW_RUN_URL: https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40220207078
+2026-10-25T18:13:36.4825480Z   GH_AW_WORKFLOW_DISPATCH_AW_CONTEXT: 
+2026-10-25T18:13:36.4826029Z   GH_AW_HAS_SLASH_COMMAND: false
+2026-10-25T18:13:36.4826546Z   GH_AW_HAS_LABEL_COMMAND: false
+2026-10-25T18:13:36.4830644Z   GH_AW_GITHUB_TOKEN: ***
+2026-10-25T18:13:36.4831160Z   GH_AW_MAX_AI_CREDITS: 1000
+2026-10-25T18:13:36.4831632Z ##[endgroup]
+2026-10-25T18:13:36.6974056Z [daily-workflow-aic] Resolved daily AIC guardrail limits: {"dailyAICThreshold":5000,"perRunMaxAICredits":1000,"perRunFallbackAvailable":true}
+2026-10-25T18:13:36.6982480Z Skipping daily workflow AI Credits guardrail for manual or command-driven runs.
