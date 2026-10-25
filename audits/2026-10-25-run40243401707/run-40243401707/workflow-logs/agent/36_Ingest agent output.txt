@@ -1,0 +1,73 @@
+﻿2026-10-25T23:11:30.4652544Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-25T23:11:30.4652987Z with:
+2026-10-25T23:11:30.4654212Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'collect_ndjson_output.cjs'));
+await main();
+
+2026-10-25T23:11:30.4657970Z   github-token: ***
+2026-10-25T23:11:30.4658237Z   debug: false
+2026-10-25T23:11:30.4658482Z   user-agent: actions/github-script
+2026-10-25T23:11:30.4658773Z   result-encoding: json
+2026-10-25T23:11:30.4659012Z   retries: 0
+2026-10-25T23:11:30.4659267Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-25T23:11:30.4659575Z env:
+2026-10-25T23:11:30.4659792Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-25T23:11:30.4660083Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-25T23:11:30.4660952Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40243401707,github.run_id=40243401707,gh-aw.engine.id=copilot
+2026-10-25T23:11:30.4661849Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-25T23:11:30.4662147Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-25T23:11:30.4662468Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-25T23:11:30.4662725Z   DEFAULT_BRANCH: main
+2026-10-25T23:11:30.4662973Z   GH_AW_ASSETS_ALLOWED_EXTS: 
+2026-10-25T23:11:30.4663242Z   GH_AW_ASSETS_BRANCH: 
+2026-10-25T23:11:30.4663479Z   GH_AW_ASSETS_MAX_SIZE_KB: 0
+2026-10-25T23:11:30.4663787Z   GH_AW_MCP_LOG_DIR: /tmp/gh-aw/mcp-logs/safeoutputs
+2026-10-25T23:11:30.4664117Z   GH_AW_PR_HEAD_BASE_BRANCH: 
+2026-10-25T23:11:30.4664376Z   GH_AW_PR_HEAD_BASE_PR_NUMBER: 
+2026-10-25T23:11:30.4664647Z   GH_AW_PR_HEAD_BASE_REF: 
+2026-10-25T23:11:30.4664895Z   GH_AW_PR_HEAD_BASE_REPO: 
+2026-10-25T23:11:30.4665148Z   GH_AW_PR_HEAD_BASE_SHA: 
+2026-10-25T23:11:30.4665390Z   GH_AW_PR_HEAD_REPO: 
+2026-10-25T23:11:30.4665636Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-25T23:11:30.4665891Z   GH_AW_TARGET_REPO_SLUG: 
+2026-10-25T23:11:30.4666159Z   GH_AW_WORKFLOW_ID_SANITIZED: issuetriage
+2026-10-25T23:11:30.4666514Z   GITHUB_AW_OTEL_TRACE_ID: eedb1e0e75961855b23005a00be7aea5
+2026-10-25T23:11:30.4666898Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 716aa37ce2182213
+2026-10-25T23:11:30.4667234Z   GITHUB_AW_OTEL_JOB_START_MS: 1792969776088
+2026-10-25T23:11:30.4667877Z   GH_AW_COPILOT_SDK_MCP_CONFIG_SHA256: 10bb5d38cf768a3374354ae61f7c53b612ed2b3a4d9a1c7ccdde0bd98cfc5267
+2026-10-25T23:11:30.4668549Z   AWF_TOKEN_USAGE_LOG: /tmp/gh-aw/sandbox/firewall/logs/api-proxy-logs/token-usage.jsonl
+2026-10-25T23:11:30.4669117Z   GH_AW_SAFE_OUTPUTS: /home/runner/work/_temp/gh-aw/safeoutputs/outputs.jsonl
+2026-10-25T23:11:30.4669662Z   GH_AW_ALLOWED_DOMAINS: github.com,groups.google.com,localhost,prometheus.io
+2026-10-25T23:11:30.4670094Z   GH_AW_ALLOWED_GITHUB_REFS: repo
+2026-10-25T23:11:30.4670397Z   GITHUB_SERVER_URL: https://github.com
+2026-10-25T23:11:30.4670722Z   GITHUB_API_URL: https://api.github.com
+2026-10-25T23:11:30.4671012Z ##[endgroup]
+2026-10-25T23:11:30.6336335Z Loaded validation config from /home/runner/work/_temp/gh-aw/safeoutputs/validation.json
+2026-10-25T23:11:30.6352588Z [INGESTION] Reading config from: /home/runner/work/_temp/gh-aw/safeoutputs/config.json
+2026-10-25T23:11:30.6359322Z [INGESTION] Raw config content: {"add_comment":{"max":1,"target":"triggering"},"add_labels":{"allowed":["component/agent","component/api","component/config","component/documentation","component/mixin","component/notify","component/otlp","component/promql","component/promtool","component/remote storage","component/rules","component/scraping","component/service discovery","component/service discovery/kubernetes","component/tests","component/tsdb","component/ui","component/wal","component/web","kind/enhancement","kind/feature","kind/more-info-needed","kind/question"],"blocked":["kind/bug","kind/breaking","kind/cleanup","kind/change","priority/*","won't fix","invalid","duplicate","stale"],"max":1,"max_labels":2,"target":"triggering"},"create_report_incomplete_issue":{},"mentions":{"enabled":false},"noop":{"max":2,"report-as-issue":"false"},"report_incomplete":{},"report_missing_data":{},"report_missing_tool":{}}
+2026-10-25T23:11:30.6367001Z [INGESTION] Parsed config keys: ["add_comment","add_labels","create_report_incomplete_issue","mentions","noop","report_incomplete","report_missing_data","report_missing_tool"]
+2026-10-25T23:11:30.6369274Z [INGESTION] Output file path: /home/runner/work/_temp/gh-aw/safeoutputs/outputs.jsonl
+2026-10-25T23:11:30.6370589Z Raw output content length: 755
+2026-10-25T23:11:30.6374419Z [INGESTION] First 500 chars of output: {"body":"Thanks for the detailed report. This issue appears to concern the kube-prometheus-stack Helm chart and the Prometheus Operator, which are maintained outside the core Prometheus server repository. For the best help, please open this issue at https://github.com/prometheus-community/helm-charts or https://github.com/prometheus-operator/prometheus-operator, where the maintainers of those components can assist you.","type":"add_comment","temporary_id":"aw_90eQTk0o"}
+2026-10-25T23:11:30.6378530Z {"labels":[{"confidence":
+2026-10-25T23:11:30.6379355Z [INGESTION] Normalizing config keys (dash -> underscore)
+2026-10-25T23:11:30.6382060Z [INGESTION] Expected output types after normalization: ["add_comment","add_labels","create_report_incomplete_issue","mentions","noop","report_incomplete","report_missing_data","report_missing_tool"]
+2026-10-25T23:11:30.6389512Z [INGESTION] Expected output types full config: {"add_comment":{"max":1,"target":"triggering"},"add_labels":{"allowed":["component/agent","component/api","component/config","component/documentation","component/mixin","component/notify","component/otlp","component/promql","component/promtool","component/remote storage","component/rules","component/scraping","component/service discovery","component/service discovery/kubernetes","component/tests","component/tsdb","component/ui","component/wal","component/web","kind/enhancement","kind/feature","kind/more-info-needed","kind/question"],"blocked":["kind/bug","kind/breaking","kind/cleanup","kind/change","priority/*","won't fix","invalid","duplicate","stale"],"max":1,"max_labels":2,"target":"triggering"},"create_report_incomplete_issue":{},"mentions":{"enabled":false},"noop":{"max":2,"report-as-issue":"false"},"report_incomplete":{},"report_missing_data":{},"report_missing_tool":{}}
+2026-10-25T23:11:30.6397190Z [INGESTION] Processing line 1: {"body":"Thanks for the detailed report. This issue appears to concern the kube-prometheus-stack Helm chart and the Prometheus Operator, which are maintained outside the core Prometheus server reposit...
+2026-10-25T23:11:30.6399741Z [INGESTION] Line 1: Original type='add_comment', Normalized type='add_comment'
+2026-10-25T23:11:30.6400797Z Line 1: type 'add_comment'
+2026-10-25T23:11:30.6401635Z GitHub reference filtering: allowed repos = repo
+2026-10-25T23:11:30.6413519Z Line 1: Valid add_comment item
+2026-10-25T23:11:30.6415673Z [INGESTION] Processing line 2: {"labels":[{"confidence":"HIGH","name":"component/otlp","rationale":"The issue concerns Prometheus deployment via kube-prometheus-stack, which is managed by the Operator and Helm chart, not core Prome...
+2026-10-25T23:11:30.6419191Z [INGESTION] Line 2: Original type='add_labels', Normalized type='add_labels'
+2026-10-25T23:11:30.6420264Z Line 2: type 'add_labels'
+2026-10-25T23:11:30.6421088Z GitHub reference filtering: allowed repos = repo
+2026-10-25T23:11:30.6424846Z GitHub reference filtering: allowed repos = repo
+2026-10-25T23:11:30.6427210Z Line 2: Valid add_labels item
+2026-10-25T23:11:30.6428236Z Successfully parsed 2 valid output items
+2026-10-25T23:11:30.6807351Z Stored validated output to: /tmp/gh-aw/agent_output.json
+2026-10-25T23:11:30.6815760Z output_types: add_comment, add_labels
+2026-10-25T23:11:30.6817922Z No patch or bundle files found in: /tmp/gh-aw
