@@ -1,0 +1,84 @@
+﻿2026-10-25T03:06:56.2093443Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-25T03:06:56.2095573Z with:
+2026-10-25T03:06:56.2102070Z   github-token: ***
+2026-10-25T03:06:56.2107282Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'check_daily_aic_workflow_guardrail.cjs'));
+await main();
+
+2026-10-25T03:06:56.2111534Z   debug: false
+2026-10-25T03:06:56.2112069Z   user-agent: actions/github-script
+2026-10-25T03:06:56.2113682Z   result-encoding: json
+2026-10-25T03:06:56.2114253Z   retries: 0
+2026-10-25T03:06:56.2115744Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-25T03:06:56.2116435Z env:
+2026-10-25T03:06:56.2117760Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-25T03:06:56.2118386Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-25T03:06:56.2121632Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40156979740,github.run_id=40156979740,gh-aw.engine.id=copilot
+2026-10-25T03:06:56.2124546Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-25T03:06:56.2126042Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-25T03:06:56.2126823Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-25T03:06:56.2163106Z   GH_AW_MAX_DAILY_AI_CREDITS: 2000
+2026-10-25T03:06:56.2164801Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-25T03:06:56.2165510Z   GITHUB_AW_OTEL_TRACE_ID: b705fe1fa11fd1efa6dea48c675b23f3
+2026-10-25T03:06:56.2167203Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 4a0475e53760ddb5
+2026-10-25T03:06:56.2167931Z   GITHUB_AW_OTEL_JOB_START_MS: 1792897614443
+2026-10-25T03:06:56.2169471Z   GH_AW_WORKFLOW_NAME: Prometheus Issue Triage
+2026-10-25T03:06:56.2170221Z   GH_AW_WORKFLOW_ID: issue-triage
+2026-10-25T03:06:56.2171993Z   GH_AW_RUN_URL: https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40156979740
+2026-10-25T03:06:56.2174052Z   GH_AW_WORKFLOW_DISPATCH_AW_CONTEXT: 
+2026-10-25T03:06:56.2175589Z   GH_AW_HAS_SLASH_COMMAND: false
+2026-10-25T03:06:56.2176233Z   GH_AW_HAS_LABEL_COMMAND: false
+2026-10-25T03:06:56.2183059Z   GH_AW_GITHUB_TOKEN: ***
+2026-10-25T03:06:56.2184572Z   GH_AW_MAX_AI_CREDITS: 200
+2026-10-25T03:06:56.2185152Z ##[endgroup]
+2026-10-25T03:06:56.7496287Z [daily-workflow-aic] Resolved daily AIC guardrail limits: {"dailyAICThreshold":2000,"perRunMaxAICredits":200,"perRunFallbackAvailable":true}
+2026-10-25T03:06:56.7498601Z [daily-workflow-aic] Started authoritative AIC scan: {"repository":"WyattLeoz/cs467-a3-prometheus-triage","currentRunId":40156979740,"workflowId":393698481,"fallbackAIC":200}
+2026-10-25T03:06:56.7534571Z [daily-workflow-aic] Loaded scan observations: {"workflowId":393698481,"cachedEntries":47}
+2026-10-25T03:06:57.9626877Z [daily-workflow-aic] Listed workflow run candidates: {"page":1,"lookupMode":"workflow_id","sourceRunCount":48,"returnedRunCount":48}
+2026-10-25T03:06:57.9636754Z [daily-workflow-aic] Resolving run AIC: {"runId":40139378911,"runAttempt":1,"conclusion":"failure","cacheHit":false}
+2026-10-25T03:06:58.7687776Z [daily-workflow-aic] Listed workflow artifacts: {"runId":40139378911,"artifactCount":7,"artifacts":[{"id":12578545432,"name":"detection","expired":false},{"id":12578188207,"name":"info","expired":false},{"id":12577849927,"name":"aic-usage-scan-v2","expired":false},{"id":12577794930,"name":"activation","expired":false},{"id":12577433967,"name":"agent-output-fallback","expired":false},{"id":12577024629,"name":"usage","expired":false},{"id":12576994481,"name":"agent","expired":false}]}
+2026-10-25T03:06:58.7703678Z [daily-workflow-aic] Selected guardrail artifact: {"runId":40139378911,"artifactId":12577024629,"artifactName":"usage"}
+2026-10-25T03:06:59.1693938Z [daily-workflow-aic] Downloaded guardrail artifact: {"runId":40139378911,"artifactId":12577024629,"artifactName":"usage","downloadPath":"/tmp/gh-aw-daily-guardrail-40139378911-2RZv4D","usageJSONLFiles":["/tmp/gh-aw-daily-guardrail-40139378911-2RZv4D/aw_session.jsonl","/tmp/gh-aw-daily-guardrail-40139378911-2RZv4D/github_rate_limits.jsonl","/tmp/gh-aw-daily-guardrail-40139378911-2RZv4D/agent/token_usage.jsonl","/tmp/gh-aw-daily-guardrail-40139378911-2RZv4D/detection/token_usage.jsonl"]}
+2026-10-25T03:06:59.1718717Z [daily-workflow-aic] Inspected component accounting: {"runId":40139378911,"component":"agent","jobId":121007852954,"runAttempt":1,"conclusion":"success","candidates":[{"file":"agent/token_usage.jsonl","state":"non-empty"},{"file":"agent_usage.jsonl","state":"missing"},{"file":"agent_usage.json","state":"non-empty"}]}
+2026-10-25T03:06:59.1741199Z [daily-workflow-aic] Computed component AIC: {"runId":40139378911,"component":"agent","jobId":121007852954,"runAttempt":1,"conclusion":"success","aic":9.5158,"reason":"accounting_file","source":"agent/token_usage.jsonl"}
+2026-10-25T03:06:59.1771894Z [daily-workflow-aic] Inspected component accounting: {"runId":40139378911,"component":"detection","jobId":121008264002,"runAttempt":1,"conclusion":"failure","candidates":[{"file":"detection/token_usage.jsonl","state":"non-empty"},{"file":"detection_usage.jsonl","state":"missing"}]}
+2026-10-25T03:06:59.1837053Z [daily-workflow-aic] Computed component AIC: {"runId":40139378911,"component":"detection","jobId":121008264002,"runAttempt":1,"conclusion":"failure","aic":4.908,"reason":"accounting_file","source":"detection/token_usage.jsonl"}
+2026-10-25T03:06:59.1842870Z [daily-workflow-aic] Computed covered component total: {"runId":40139378911,"aic":14.4238}
+2026-10-25T03:06:59.1847596Z [daily-workflow-aic] Computed run AIC from artifact: {"runId":40139378911,"artifactId":12577024629,"aic":14.4238,"reason":"covered_components"}
+2026-10-25T03:06:59.1851470Z [daily-workflow-aic] Computed run AIC: {"runId":40139378911,"aic":14.4238,"reason":"artifact_accounting"}
+2026-10-25T03:06:59.1855398Z [daily-workflow-aic] Resolving run AIC: {"runId":40138851031,"runAttempt":1,"conclusion":"success","cacheHit":true}
+2026-10-25T03:06:59.1858148Z [daily-workflow-aic] Computed run AIC: {"runId":40138851031,"aic":16.366,"reason":"scan_cache"}
+2026-10-25T03:06:59.1861504Z [daily-workflow-aic] Resolving run AIC: {"runId":40138003590,"runAttempt":1,"conclusion":"failure","cacheHit":true}
+2026-10-25T03:06:59.1941351Z [daily-workflow-aic] Computed run AIC: {"runId":40138003590,"aic":24.0122,"reason":"scan_cache"}
+2026-10-25T03:06:59.1946416Z [daily-workflow-aic] Resolving run AIC: {"runId":40137333324,"runAttempt":1,"conclusion":"failure","cacheHit":true}
+2026-10-25T03:06:59.1952478Z [daily-workflow-aic] Computed run AIC: {"runId":40137333324,"aic":34.430800000000005,"reason":"scan_cache"}
+2026-10-25T03:06:59.1958255Z [daily-workflow-aic] Resolving run AIC: {"runId":40115920773,"runAttempt":1,"conclusion":"failure","cacheHit":true}
+2026-10-25T03:06:59.1961980Z [daily-workflow-aic] Computed run AIC: {"runId":40115920773,"aic":6.6502,"reason":"scan_cache"}
+2026-10-25T03:06:59.1965040Z [daily-workflow-aic] Resolving run AIC: {"runId":40115335252,"runAttempt":1,"conclusion":"success","cacheHit":true}
+2026-10-25T03:06:59.1969286Z [daily-workflow-aic] Computed run AIC: {"runId":40115335252,"aic":33.2892,"reason":"scan_cache"}
+2026-10-25T03:06:59.1972517Z [daily-workflow-aic] Resolving run AIC: {"runId":40114590367,"runAttempt":1,"conclusion":"success","cacheHit":true}
+2026-10-25T03:06:59.1982106Z [daily-workflow-aic] Computed run AIC: {"runId":40114590367,"aic":46.592400000000005,"reason":"scan_cache"}
+2026-10-25T03:06:59.1987990Z [daily-workflow-aic] Resolving run AIC: {"runId":40094138397,"runAttempt":1,"conclusion":"failure","cacheHit":true}
+2026-10-25T03:06:59.1992016Z [daily-workflow-aic] Computed run AIC: {"runId":40094138397,"aic":28.8782,"reason":"scan_cache"}
+2026-10-25T03:06:59.1999061Z [daily-workflow-aic] Resolving run AIC: {"runId":40093315965,"runAttempt":1,"conclusion":"failure","cacheHit":true}
+2026-10-25T03:06:59.2005627Z [daily-workflow-aic] Computed run AIC: {"runId":40093315965,"aic":42.79499999999999,"reason":"scan_cache"}
+2026-10-25T03:06:59.2013032Z [daily-workflow-aic] Resolving run AIC: {"runId":40092757184,"runAttempt":1,"conclusion":"success","cacheHit":true}
+2026-10-25T03:06:59.2017624Z [daily-workflow-aic] Computed run AIC: {"runId":40092757184,"aic":17.866,"reason":"scan_cache"}
+2026-10-25T03:06:59.2023254Z [daily-workflow-aic] Resolving run AIC: {"runId":40074282890,"runAttempt":1,"conclusion":"failure","cacheHit":true}
+2026-10-25T03:06:59.2075842Z [daily-workflow-aic] Computed run AIC: {"runId":40074282890,"aic":4.614,"reason":"scan_cache"}
+2026-10-25T03:06:59.2080867Z [daily-workflow-aic] Resolving run AIC: {"runId":40073843243,"runAttempt":1,"conclusion":"success","cacheHit":true}
+2026-10-25T03:06:59.2096354Z [daily-workflow-aic] Computed run AIC: {"runId":40073843243,"aic":13.5768,"reason":"scan_cache"}
+2026-10-25T03:06:59.2100559Z [daily-workflow-aic] Resolving run AIC: {"runId":40073313293,"runAttempt":1,"conclusion":"success","cacheHit":true}
+2026-10-25T03:06:59.2105028Z [daily-workflow-aic] Computed run AIC: {"runId":40073313293,"aic":24.363799999999998,"reason":"scan_cache"}
+2026-10-25T03:06:59.2108721Z [daily-workflow-aic] Resolving run AIC: {"runId":40072852557,"runAttempt":1,"conclusion":"success","cacheHit":true}
+2026-10-25T03:06:59.2124587Z [daily-workflow-aic] Computed run AIC: {"runId":40072852557,"aic":16.793,"reason":"scan_cache"}
+2026-10-25T03:06:59.2128222Z [daily-workflow-aic] Resolving run AIC: {"runId":40072337381,"runAttempt":1,"conclusion":"success","cacheHit":true}
+2026-10-25T03:06:59.2154327Z [daily-workflow-aic] Computed run AIC: {"runId":40072337381,"aic":28.507399999999997,"reason":"scan_cache"}
+2026-10-25T03:06:59.2158456Z [daily-workflow-aic] Persisted scan observations: {"cachePath":"/tmp/gh-aw/agentic-workflow-usage-scan-v2.jsonl","entries":48}
+2026-10-25T03:06:59.2164747Z [daily-workflow-aic] Completed authoritative AIC scan: {"candidateRuns":15,"countedRuns":15,"cacheHits":14}
+2026-10-25T03:06:59.2173787Z [daily-workflow-aic] Completed AIC inspection window: {"candidateRunsCount":15,"inspectedRunsCount":15,"countedRunIds":[40139378911,40138851031,40138003590,40137333324,40115920773,40115335252,40114590367,40094138397,40093315965,40092757184,40074282890,40073843243,40073313293,40072852557,40072337381],"currentAIC":353.1588,"threshold":2000,"exceeded":false}
+2026-10-25T03:06:59.2182896Z [daily-workflow-aic] Daily AIC business API requests: {"requests":5,"cacheHits":14}
+2026-10-25T03:06:59.2185129Z Daily workflow AIC guardrail not exceeded (353.1588/2000).
