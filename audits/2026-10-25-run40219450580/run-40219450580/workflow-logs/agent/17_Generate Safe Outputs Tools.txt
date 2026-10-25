@@ -1,0 +1,140 @@
+﻿2026-10-25T18:05:38.0690389Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-25T18:05:38.0690782Z with:
+2026-10-25T18:05:38.0691886Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'generate_safe_outputs_tools.cjs'));
+await main();
+
+2026-10-25T18:05:38.0695408Z   github-token: ***
+2026-10-25T18:05:38.0695658Z   debug: false
+2026-10-25T18:05:38.0695895Z   user-agent: actions/github-script
+2026-10-25T18:05:38.0696176Z   result-encoding: json
+2026-10-25T18:05:38.0696378Z   retries: 0
+2026-10-25T18:05:38.0696595Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-25T18:05:38.0696866Z env:
+2026-10-25T18:05:38.0697056Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-25T18:05:38.0697330Z   OTEL_SERVICE_NAME: gh-aw.safe-output-limits-test
+2026-10-25T18:05:38.0698286Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Safe-output%20limits%20test,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40219450580,github.run_id=40219450580,gh-aw.engine.id=copilot
+2026-10-25T18:05:38.0699041Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-25T18:05:38.0699289Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-25T18:05:38.0699575Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-25T18:05:38.0699800Z   DEFAULT_BRANCH: main
+2026-10-25T18:05:38.0700009Z   GH_AW_ASSETS_ALLOWED_EXTS: 
+2026-10-25T18:05:38.0700228Z   GH_AW_ASSETS_BRANCH: 
+2026-10-25T18:05:38.0700437Z   GH_AW_ASSETS_MAX_SIZE_KB: 0
+2026-10-25T18:05:38.0700699Z   GH_AW_MCP_LOG_DIR: /tmp/gh-aw/mcp-logs/safeoutputs
+2026-10-25T18:05:38.0700984Z   GH_AW_PR_HEAD_BASE_BRANCH: 
+2026-10-25T18:05:38.0701212Z   GH_AW_PR_HEAD_BASE_PR_NUMBER: 
+2026-10-25T18:05:38.0701429Z   GH_AW_PR_HEAD_BASE_REF: 
+2026-10-25T18:05:38.0701632Z   GH_AW_PR_HEAD_BASE_REPO: 
+2026-10-25T18:05:38.0701841Z   GH_AW_PR_HEAD_BASE_SHA: 
+2026-10-25T18:05:38.0702135Z   GH_AW_PR_HEAD_REPO: 
+2026-10-25T18:05:38.0702347Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-25T18:05:38.0702567Z   GH_AW_TARGET_REPO_SLUG: 
+2026-10-25T18:05:38.0702816Z   GH_AW_WORKFLOW_ID_SANITIZED: safeoutputlimitstest
+2026-10-25T18:05:38.0703161Z   GITHUB_AW_OTEL_TRACE_ID: ff964e50feb92811abada636bbb993bd
+2026-10-25T18:05:38.0703495Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: c0720986a6e0aa43
+2026-10-25T18:05:38.0703790Z   GITHUB_AW_OTEL_JOB_START_MS: 1792951496355
+2026-10-25T18:05:38.0704877Z   GH_AW_TOOLS_META_JSON: {
+  "description_suffixes": {
+    "add_labels": " CONSTRAINTS: Maximum 1 add_labels call(s) allowed. Maximum 2 label(s) per call. Only these labels are allowed: [\"component/*\" \"kind/question\" \"kind/more-info-needed\" \"kind/enhancement\" \"kind/feature\"]. Target: *."
+  },
+  "repo_params": {},
+  "dynamic_tools": []
+}
+
+2026-10-25T18:05:38.0716998Z   GH_AW_VALIDATION_JSON: {
+  "add_labels": {
+    "defaultMax": 5,
+    "fields": {
+      "item_number": {
+        "issueNumberOrTemporaryId": true
+      },
+      "labels": {
+        "required": true,
+        "type": "array"
+      },
+      "repo": {
+        "type": "string",
+        "maxLength": 256
+      }
+    }
+  },
+  "noop": {
+    "defaultMax": 2,
+    "fields": {
+      "message": {
+        "required": true,
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 65000
+      }
+    }
+  },
+  "report_incomplete": {
+    "defaultMax": 5,
+    "fields": {
+      "details": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 65000
+      },
+      "reason": {
+        "required": true,
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 1024
+      }
+    }
+  },
+  "report_missing_data": {
+    "defaultMax": 20,
+    "fields": {
+      "alternatives": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 256
+      },
+      "context": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 256
+      },
+      "data_type": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 128
+      },
+      "reason": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 256
+      }
+    }
+  },
+  "report_missing_tool": {
+    "defaultMax": 20,
+    "fields": {
+      "alternatives": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 512
+      },
+      "reason": {
+        "required": true,
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 256
+      },
+      "tool": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 128
+      }
+    }
+  }
+}
+
+2026-10-25T18:05:38.0720867Z ##[endgroup]
