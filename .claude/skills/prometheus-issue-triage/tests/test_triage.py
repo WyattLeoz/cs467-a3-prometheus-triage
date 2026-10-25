@@ -1,10 +1,12 @@
 """Unit tests for scripts/triage.py. Run: python3 -m unittest discover -s .claude/skills/prometheus-issue-triage/tests -v"""
 import io
 import json
+import re
 import sys
 import tempfile
 import unittest
 from contextlib import redirect_stdout
+from fnmatch import fnmatch
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
@@ -102,8 +104,13 @@ class Labels(unittest.TestCase):
         root = Path(triage.REPO_ROOT)
         wf = (root / ".github/workflows/issue-triage.md").read_text()
         policy = json.loads((triage.REFS / "label-policy.json").read_text())
-        for pattern in policy["allowed"]:
-            self.assertIn(f'"{pattern}"', wf)
+        # The enforced allowlist is exactly the existing upstream labels the policy allows: GitHub
+        # creates unknown labels on demand, so a `component/*` glob would admit invented ones.
+        known = json.loads((triage.REFS / "labels.json").read_text())
+        expected = sorted(l for l in known if any(fnmatch(l, p) for p in policy["allowed"])
+                          and not any(fnmatch(l, p) for p in policy["blocked"]))
+        allow_block = wf.split("allowed:", 1)[1].split("blocked:", 1)[0]
+        self.assertEqual(sorted(re.findall(r'- "([^"]+)"', allow_block)), expected)
         # gh-aw: `max` counts add_labels calls, `max-labels` counts labels per call.
         self.assertIn("max: 1 ", wf)
         self.assertIn("max-labels: 2", wf)

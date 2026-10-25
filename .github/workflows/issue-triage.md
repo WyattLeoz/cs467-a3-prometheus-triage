@@ -95,7 +95,30 @@ safe-outputs:
   allowed-github-references: ["repo"]
   mentions: false
   add-labels:
-    allowed: ["component/*", "kind/question", "kind/more-info-needed", "kind/enhancement", "kind/feature"]
+    allowed:   # exact existing labels: GitHub creates any unknown label it is asked to add (limits test run 40220207078)
+      - "component/agent"
+      - "component/api"
+      - "component/config"
+      - "component/documentation"
+      - "component/mixin"
+      - "component/notify"
+      - "component/otlp"
+      - "component/promql"
+      - "component/promtool"
+      - "component/remote storage"
+      - "component/rules"
+      - "component/scraping"
+      - "component/service discovery"
+      - "component/service discovery/kubernetes"
+      - "component/tests"
+      - "component/tsdb"
+      - "component/ui"
+      - "component/wal"
+      - "component/web"
+      - "kind/enhancement"
+      - "kind/feature"
+      - "kind/more-info-needed"
+      - "kind/question"
     blocked: ["kind/bug", "kind/breaking", "kind/cleanup", "kind/change", "priority/*", "won't fix", "invalid", "duplicate", "stale"]
     max: 1          # add_labels calls per run (gh-aw default 5)
     max-labels: 2   # labels per call (gh-aw default 10); together: at most 2 labels per issue
