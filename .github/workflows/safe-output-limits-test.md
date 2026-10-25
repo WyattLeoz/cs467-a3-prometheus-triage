@@ -11,6 +11,10 @@ on:
       issue:
         description: Sandbox issue number to target (open it as the repository owner)
         required: true
+      first_labels:
+        description: Labels for the first add_labels call (comma-separated)
+        required: false
+        default: "component/tsdb, kind/feature, kind/question"
 
 permissions:
   contents: read
@@ -50,7 +54,7 @@ calls below are expected to be rejected; that is the point of the test. Make exa
 these `add_labels` calls, in this order, each with `item_number` ${{ github.event.inputs.issue }},
 and do not retry or change any of them:
 
-1. labels `component/tsdb`, `kind/feature`, `kind/question` (three labels)
+1. labels: ${{ github.event.inputs.first_labels }}
 2. label `kind/bug`
 3. label `component/does-not-exist`
 4. label `kind/feature`
