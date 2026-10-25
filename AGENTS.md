@@ -67,6 +67,9 @@ Upstream code layout → component label (full table in the skill's `references/
 - Bug reports use the form in `.github/ISSUE_TEMPLATE/bug_report.yml` (what you did, expected,
   observed, system information, Prometheus version, configuration, logs).
 - Refer to upstream issues as `prometheus/prometheus#NNNN`; this sandbox's own numbers differ.
+- Some upstream labels contain spaces (`component/remote storage`, `component/service discovery`);
+  quote them on the command line. `triage.py` is executable and is called by path, not via `python3`
+  (the agent's shell allowlist permits only that path).
 - Upstream PR conventions (title `area: description`, DCO sign-off, `release-notes` block) are in
   `upstream/AGENTS.upstream.md`.
 
