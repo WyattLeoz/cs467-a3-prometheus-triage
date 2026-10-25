@@ -51,6 +51,9 @@ def checks(e, r):
         c["agent job skipped by gate"] = not agent_ran
     else:
         c["agent job ran"] = agent_ran
+        # An empty result can pass "no comment"/"no label" checks only if the agent's output was
+        # actually vetted and published; a detection timeout withholds everything.
+        c["outputs vetted and published"] = r["jobs"].get("safe_outputs") == "success"
     if e["comment"] == "required":
         c["comment posted"] = len(comments) == 1
     elif e["comment"] == "forbidden":
