@@ -74,7 +74,8 @@ tried and rejected keyless `copilot-requests: write` (not available to a persona
   G13, G15), so nothing was published; three of the withheld drafts were correct.
 - **My own bug:** labels containing spaces (`component/service discovery`) were split by the shell
   and rejected without a hint; the model looped until `max-turns` stopped it (G12) or dropped or
-  guessed the label (G14, A02). v3 rejoins and suggests labels; re-test of 5 affected cases: {RUN3}.
+  guessed the label (G14, A02). v3 rejoins and suggests labels (`run3-v3`): A02, G12, G13 now pass;
+  G14's correct draft was withheld by detection again; G15 swapped a rejected label for a wrong one.
 - **gpt-4.1 judgement:** asked for information instead of redirecting to postgres_exporter (G04),
   rejected a true duplicate (G09), and chose SECURITY over citing the duplicate (G16).
 - **Rate limits bind:** Copilot Free returned HTTP 429 after 1–4 cases (`retry-after` ≈ 4.5 h).
