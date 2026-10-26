@@ -86,4 +86,5 @@ Upstream code layout → component label (full table in the skill's `references/
 - Never edit `evals/golden/cases.json` or `evals/golden/adversarial.json` after a run has been recorded;
   add a new case or a new dated result instead.
 - Do not modify `data/upstream-issues.jsonl` except to refresh it with a dated snapshot in its own commit.
-- Changes to `.github/`, `.claude/`, `AGENTS.md` and `CONTRIBUTING.md` require review by a CODEOWNER.
+- Changes to `.github/`, `.claude/`, `AGENTS.md` and `CONTRIBUTING.md` need review by the CODEOWNER
+  (advisory here: this private repo's plan cannot enforce it) and a golden rerun (CONTRIBUTING.md).
