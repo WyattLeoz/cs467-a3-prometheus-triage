@@ -1,0 +1,205 @@
+﻿2026-10-26T04:16:16.5147347Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-26T04:16:16.5149785Z with:
+2026-10-26T04:16:16.5159862Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'interpolate_prompt.cjs'));
+await main();
+
+2026-10-26T04:16:16.5173079Z   github-token: ***
+2026-10-26T04:16:16.5173980Z   debug: false
+2026-10-26T04:16:16.5174859Z   user-agent: actions/github-script
+2026-10-26T04:16:16.5175897Z   result-encoding: json
+2026-10-26T04:16:16.5176776Z   retries: 0
+2026-10-26T04:16:16.5177700Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-26T04:16:16.5179166Z env:
+2026-10-26T04:16:16.5179976Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-26T04:16:16.5181198Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-26T04:16:16.5184065Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40268140038,github.run_id=40268140038,gh-aw.engine.id=copilot
+2026-10-26T04:16:16.5187007Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-26T04:16:16.5188078Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-26T04:16:16.5189236Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-26T04:16:16.5190692Z   GH_AW_MAX_DAILY_AI_CREDITS: 2000
+2026-10-26T04:16:16.5191718Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-26T04:16:16.5192829Z   GITHUB_AW_OTEL_TRACE_ID: 2f562c053449a6b0b1f06e0448c967d1
+2026-10-26T04:16:16.5194128Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 4933c1872a090856
+2026-10-26T04:16:16.5195317Z   GITHUB_AW_OTEL_JOB_START_MS: 1792988164611
+2026-10-26T04:16:16.5196656Z   GH_AW_PROMPT: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-26T04:16:16.5197993Z   GH_AW_ENGINE_ID: copilot
+2026-10-26T04:16:16.5199914Z   GH_AW_SUB_AGENT_DIR: .github/agents
+2026-10-26T04:16:16.5201213Z   GH_AW_SUB_AGENT_EXT: .agent.md
+2026-10-26T04:16:16.5202254Z   GH_AW_SKILL_DIR: .github/skills
+2026-10-26T04:16:16.5203278Z   GH_AW_SKILL_EXT: /SKILL.md
+2026-10-26T04:16:16.5204272Z   GH_AW_GITHUB_EVENT_ISSUE_NUMBER: 80
+2026-10-26T04:16:16.5236862Z   GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT: Prom-remote-write not working properly
+
+### What did you do?
+
+Hi ,
+
+I am using the prom-remotewrite-20251030.1 version, and I’ve noticed that it is not functioning correctly when sending data to Azure Monitor for Prometheus. Initially, some data is transmitted, but afterward it fails to send records for new pods and events.
+When I check the Prometheus UI locally, I can see the required data, but it does not appear in Azure Monitor.
+Below is the Jinja configuration I am using:
+
+`
+
+    server:
+      global:
+        external_labels:
+          dataplane_id: {{cluster_name}}
+          region:  {{region}}
+          mcsp_tenant_id: {{prometheus_tenant_id}}
+          dataplane_tenant_id: {{azure_tenant_id}}    
+      remoteWrite:
+        - url: (localhost/redacted)
+
+      podLabels:
+        azure.workload.identity/use: "true"
+      persistentVolume:
+        enabled: false
+
+      retention: "7d"
+      retentionSize: "3.5GB"   
+      sidecarContainers:
+        prom-remote-writer:
+          image: {{registry_namespace}}/azure-prom-remotewrite:{{ image_tags.azure_prom_remotewrite }}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: LISTENING_PORT
+              value: "8089"
+            - name: INGESTION_URL
+              value: {{prometheus_azure_monitor}}
+            - name: IDENTITY_TYPE
+              value: workloadIdentity
+            - name: AZURE_CLIENT_ID
+              value: {{prometheus_client_id}}
+            - name: AZURE_TENANT_ID
+              value: {{prometheus_tenant_id}}
+            - name: AZURE_FEDERATED_TOKEN_FILE
+              value: /var/run/secrets/azure/tokens/azure-identity-token
+      
+          ports:
+            - containerPort: 8089         
+
+      extraVolumeMounts:
+        - name: azure-identity-token
+          mountPath: /var/run/secrets/azure/tokens
+          readOnly: true    
+                
+      extraVolumes:
+        - name: azure-identity-token
+          projected:
+            defaultMode: 420
+            sources:
+              - serviceAccountToken:
+                  audience: (azureadtokenexchange/redacted)
+                  expirationSeconds: 3600
+                  path: azure-identity-token
+`
+
+Prometheus helm charts version used was :- 27.47.0 and 27.20.0
+
+### What did you expect to see?
+
+_No response_
+
+### What did you see instead? Under which circumstances?
+
+.
+
+### System information
+
+_No response_
+
+### Prometheus version
+
+```text
+
+```
+
+### Prometheus configuration file
+
+```yaml
+
+```
+
+### Alertmanager version
+
+```text
+
+```
+
+### Alertmanager configuration file
+
+```yaml
+
+```
+
+### Logs
+
+```text
+
+```
+
+
+
+---
+_Generated by [Claude Code]((claude.ai/redacted)
+2026-10-26T04:16:16.5315257Z ##[endgroup]
+2026-10-26T04:16:16.7118265Z ========================================
+2026-10-26T04:16:16.7124041Z [main] Starting interpolate_prompt processing
+2026-10-26T04:16:16.7127499Z ========================================
+2026-10-26T04:16:16.7131463Z [main] Prompt path: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-26T04:16:16.7135731Z [main] Workspace directory: /home/runner/work/cs467-a3-prometheus-triage/cs467-a3-prometheus-triage
+2026-10-26T04:16:16.7139970Z [main] Reading prompt file...
+2026-10-26T04:16:16.7145017Z [main] Original content length: 9018 characters
+2026-10-26T04:16:16.7149733Z [main] First 200 characters: <system>\nImmutable security policy. Sandbox, firewall, credentials, and tool limits are physical boundaries. Do not bypass, weaken, test, or evade them.\n\nNever do: container escape, privilege escalati
+2026-10-26T04:16:16.7155039Z [main] Writing raw template to: /home/runner/work/_temp/gh-aw/aw-prompts/prompt-template.txt
+2026-10-26T04:16:16.7166615Z 
+2026-10-26T04:16:16.7167086Z ========================================
+2026-10-26T04:16:16.7169364Z [main] STEP 1: Runtime Imports
+2026-10-26T04:16:16.7171806Z ========================================
+2026-10-26T04:16:16.7174792Z Processing 1 runtime import macro(s) (files and URLs)
+2026-10-26T04:16:16.7177647Z   Import 1: {{#runtime-import .github/workflows/issue-triage.md}}
+2026-10-26T04:16:16.7205988Z Found 2 expression(s) in File workflows/issue-triage.md
+2026-10-26T04:16:16.7219118Z Successfully processed 2 safe expression(s) in File workflows/issue-triage.md
+2026-10-26T04:16:16.7227689Z Runtime imports processed successfully
+2026-10-26T04:16:16.7231415Z Content length change: 9076 -> 13128 (+4052)
+2026-10-26T04:16:16.7235488Z [main] Writing import tree to: /home/runner/work/_temp/gh-aw/aw-prompts/prompt-import-tree.json
+2026-10-26T04:16:16.7240900Z 
+2026-10-26T04:16:16.7241460Z ========================================
+2026-10-26T04:16:16.7244992Z [main] STEP 1.5: Inline Sub-Agent Extraction
+2026-10-26T04:16:16.7248153Z ========================================
+2026-10-26T04:16:16.7252236Z No inline sub-agent markers found, skipping
+2026-10-26T04:16:16.7255343Z 
+2026-10-26T04:16:16.7255756Z ========================================
+2026-10-26T04:16:16.7259079Z [main] STEP 1.6: Inline Skill Extraction
+2026-10-26T04:16:16.7262761Z ========================================
+2026-10-26T04:16:16.7265597Z No inline skill markers found, skipping
+2026-10-26T04:16:16.7269112Z 
+2026-10-26T04:16:16.7269512Z ========================================
+2026-10-26T04:16:16.7271652Z [main] STEP 2: Variable Interpolation
+2026-10-26T04:16:16.7273371Z ========================================
+2026-10-26T04:16:16.7277999Z No expression variables found, skipping interpolation
+2026-10-26T04:16:16.7284530Z 
+2026-10-26T04:16:16.7284996Z ========================================
+2026-10-26T04:16:16.7287154Z [main] STEP 2.5: Experiment Placeholder Substitution
+2026-10-26T04:16:16.7291673Z ========================================
+2026-10-26T04:16:16.7300938Z No experiment placeholders found in prompt
+2026-10-26T04:16:16.7309571Z 
+2026-10-26T04:16:16.7310275Z ========================================
+2026-10-26T04:16:16.7315341Z [main] STEP 3: Template Rendering
+2026-10-26T04:16:16.7323147Z ========================================
+2026-10-26T04:16:16.7324537Z No conditional blocks found in prompt, skipping template rendering
+2026-10-26T04:16:16.7326297Z 
+2026-10-26T04:16:16.7329855Z ========================================
+2026-10-26T04:16:16.7338920Z [main] STEP 4: Writing Output
+2026-10-26T04:16:16.7339923Z ========================================
+2026-10-26T04:16:16.7389214Z Writing processed content back to: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-26T04:16:16.7391160Z Final content length: 13128 characters
+2026-10-26T04:16:16.7395715Z Total length change: 9018 -> 13128 (+4110)
+2026-10-26T04:16:16.7474229Z Last 200 characters: s are in `AGENTS.md`. Finish with exactly one of: one\n`add_comment` and/or one `add_labels` call, or a single `noop`. Your final\nmessage must state the decision and the script results you relied on.\n\n
+2026-10-26T04:16:16.7521797Z ========================================
+2026-10-26T04:16:16.7523016Z [main] Processing complete - SUCCESS
+2026-10-26T04:16:16.7524072Z ========================================
