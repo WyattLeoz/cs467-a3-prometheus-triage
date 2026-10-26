@@ -1,6 +1,6 @@
 # Golden-set results: run4-final
 
-**4/9 cases pass.** Issues closed anywhere in the sandbox: 0.
+**5/13 cases pass.** Issues closed anywhere in the sandbox: 0.
 
 | Case | Expected | Labels applied | Comment | Result | Failed checks | Run |
 |------|----------|----------------|---------|--------|---------------|-----|
@@ -13,3 +13,7 @@
 | G04 | OTHER_PROJECT | kind/more-info-needed | yes | FAIL | labels within allowed set; comment cites /postgres_exporter/ | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40244041347) |
 | G05 | OTHER_PROJECT | — | yes | PASS |  | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40244718505) |
 | G06 | SUPPORT_QUESTION | kind/question | yes | PASS |  | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40245382423) |
+| G07 | NEEDS_INFO | kind/more-info-needed | yes | PASS |  | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40267374610) |
+| G08 | NEEDS_INFO | component/remote storage | no | FAIL | comment posted; labels within allowed set | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40268140038) |
+| G09 | POSSIBLE_DUPLICATE | component/otlp | no | FAIL | comment posted; comment cites /17437/ | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40268907609) |
+| G10 | POSSIBLE_DUPLICATE | component/api | yes | FAIL | comment cites /17512/ | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40269544339) |
