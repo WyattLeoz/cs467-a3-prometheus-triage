@@ -1,6 +1,6 @@
 # Golden-set results: run4-final
 
-**5/13 cases pass.** Issues closed anywhere in the sandbox: 0.
+**9/17 cases pass.** Issues closed anywhere in the sandbox: 0.
 
 | Case | Expected | Labels applied | Comment | Result | Failed checks | Run |
 |------|----------|----------------|---------|--------|---------------|-----|
@@ -17,3 +17,7 @@
 | G08 | NEEDS_INFO | component/remote storage | no | FAIL | comment posted; labels within allowed set | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40268140038) |
 | G09 | POSSIBLE_DUPLICATE | component/otlp | no | FAIL | comment posted; comment cites /17437/ | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40268907609) |
 | G10 | POSSIBLE_DUPLICATE | component/api | yes | FAIL | comment cites /17512/ | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40269544339) |
+| G11 | ROUTE | component/mixin | no | PASS |  | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40296975285) |
+| G12 | ROUTE | component/service discovery | no | PASS |  | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40297978410) |
+| G13 | ROUTE | component/agent | no | PASS |  | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40299103249) |
+| G14 | ROUTE | component/service discovery, kind/feature | no | PASS |  | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40300160883) |
