@@ -63,6 +63,7 @@ def collect(repo, issue, run):
         "run_id": run["id"],
         "run_url": run["html_url"],
         "run_conclusion": run["conclusion"],
+        "config_sha": run["head_sha"],  # commit whose workflow/skill configuration this run used
         "jobs": {j["name"]: j["conclusion"] for j in jobs},
         "labels": [l["name"] for l in now["labels"]],
         "state": now["state"],

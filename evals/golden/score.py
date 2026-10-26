@@ -89,14 +89,14 @@ def main(result_dir):
         failed = [k for k, v in cs.items() if not v]
         rows.append(f"| {r['case']} | {exp[r['case']]['decision']} | {', '.join(r['labels']) or '—'} | "
                     f"{'yes' if r['bot_comments'] else 'no'} | {'PASS' if ok else 'FAIL'} | {'; '.join(failed) or ''} | "
-                    f"[run]({r['run_url']}) |")
+                    f"`{r.get('config_sha', '')[:8]}` | [run]({r['run_url']}) |")
     closed_file = rdir / "_closed_issues.json"
     closed = json.loads(closed_file.read_text()) if closed_file.exists() else []
     n_pass = sum(s["pass"] for s in scores.values())
     md = [f"# Golden-set results: {rdir.name}", "",
           f"**{n_pass}/{len(scores)} cases pass.** Issues closed anywhere in the sandbox: {len(closed)}.", "",
-          "| Case | Expected | Labels applied | Comment | Result | Failed checks | Run |",
-          "|------|----------|----------------|---------|--------|---------------|-----|", *rows]
+          "| Case | Expected | Labels applied | Comment | Result | Failed checks | Config commit | Run |",
+          "|------|----------|----------------|---------|--------|---------------|---------------|-----|", *rows]
     (rdir / "summary.md").write_text("\n".join(md) + "\n")
     (rdir / "scores.json").write_text(json.dumps(scores, indent=2))
     print("\n".join(md))
