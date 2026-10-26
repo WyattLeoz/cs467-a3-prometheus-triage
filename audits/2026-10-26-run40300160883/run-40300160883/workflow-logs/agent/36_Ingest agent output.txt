@@ -1,0 +1,75 @@
+﻿2026-10-26T09:34:14.8644482Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-26T09:34:14.8645080Z with:
+2026-10-26T09:34:14.8646308Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'collect_ndjson_output.cjs'));
+await main();
+
+2026-10-26T09:34:14.8650469Z   github-token: ***
+2026-10-26T09:34:14.8650729Z   debug: false
+2026-10-26T09:34:14.8650974Z   user-agent: actions/github-script
+2026-10-26T09:34:14.8651277Z   result-encoding: json
+2026-10-26T09:34:14.8651514Z   retries: 0
+2026-10-26T09:34:14.8651766Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-26T09:34:14.8652078Z env:
+2026-10-26T09:34:14.8652307Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-26T09:34:14.8652598Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-26T09:34:14.8653495Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40300160883,github.run_id=40300160883,gh-aw.engine.id=copilot
+2026-10-26T09:34:14.8654598Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-26T09:34:14.8654902Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-26T09:34:14.8655221Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-26T09:34:14.8655479Z   DEFAULT_BRANCH: main
+2026-10-26T09:34:14.8655725Z   GH_AW_ASSETS_ALLOWED_EXTS: 
+2026-10-26T09:34:14.8655979Z   GH_AW_ASSETS_BRANCH: 
+2026-10-26T09:34:14.8656222Z   GH_AW_ASSETS_MAX_SIZE_KB: 0
+2026-10-26T09:34:14.8656529Z   GH_AW_MCP_LOG_DIR: /tmp/gh-aw/mcp-logs/safeoutputs
+2026-10-26T09:34:14.8656863Z   GH_AW_PR_HEAD_BASE_BRANCH: 
+2026-10-26T09:34:14.8657129Z   GH_AW_PR_HEAD_BASE_PR_NUMBER: 
+2026-10-26T09:34:14.8657399Z   GH_AW_PR_HEAD_BASE_REF: 
+2026-10-26T09:34:14.8657648Z   GH_AW_PR_HEAD_BASE_REPO: 
+2026-10-26T09:34:14.8657905Z   GH_AW_PR_HEAD_BASE_SHA: 
+2026-10-26T09:34:14.8658148Z   GH_AW_PR_HEAD_REPO: 
+2026-10-26T09:34:14.8658683Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-26T09:34:14.8658966Z   GH_AW_TARGET_REPO_SLUG: 
+2026-10-26T09:34:14.8659237Z   GH_AW_WORKFLOW_ID_SANITIZED: issuetriage
+2026-10-26T09:34:14.8659593Z   GITHUB_AW_OTEL_TRACE_ID: 149d01ad31f15dce260637ea8cd5a384
+2026-10-26T09:34:14.8659981Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: c331a4a87a93af85
+2026-10-26T09:34:14.8660306Z   GITHUB_AW_OTEL_JOB_START_MS: 1793007126319
+2026-10-26T09:34:14.8660821Z   GH_AW_COPILOT_SDK_MCP_CONFIG_SHA256: de7d4874c90d7d3dc0975db140ca57273638c15f22a0bf391426750fe19c7806
+2026-10-26T09:34:14.8661479Z   AWF_TOKEN_USAGE_LOG: /tmp/gh-aw/sandbox/firewall/logs/api-proxy-logs/token-usage.jsonl
+2026-10-26T09:34:14.8662048Z   GH_AW_SAFE_OUTPUTS: /home/runner/work/_temp/gh-aw/safeoutputs/outputs.jsonl
+2026-10-26T09:34:14.8662596Z   GH_AW_ALLOWED_DOMAINS: github.com,groups.google.com,localhost,prometheus.io
+2026-10-26T09:34:14.8663033Z   GH_AW_ALLOWED_GITHUB_REFS: repo
+2026-10-26T09:34:14.8663345Z   GITHUB_SERVER_URL: https://github.com
+2026-10-26T09:34:14.8663669Z   GITHUB_API_URL: https://api.github.com
+2026-10-26T09:34:14.8663961Z ##[endgroup]
+2026-10-26T09:34:15.0358626Z Loaded validation config from /home/runner/work/_temp/gh-aw/safeoutputs/validation.json
+2026-10-26T09:34:15.0364427Z [INGESTION] Reading config from: /home/runner/work/_temp/gh-aw/safeoutputs/config.json
+2026-10-26T09:34:15.0372385Z [INGESTION] Raw config content: {"add_comment":{"max":1,"target":"triggering"},"add_labels":{"allowed":["component/agent","component/api","component/config","component/documentation","component/mixin","component/notify","component/otlp","component/promql","component/promtool","component/remote storage","component/rules","component/scraping","component/service discovery","component/service discovery/kubernetes","component/tests","component/tsdb","component/ui","component/wal","component/web","kind/enhancement","kind/feature","kind/more-info-needed","kind/question"],"blocked":["kind/bug","kind/breaking","kind/cleanup","kind/change","priority/*","won't fix","invalid","duplicate","stale"],"max":1,"max_labels":2,"target":"triggering"},"create_report_incomplete_issue":{},"mentions":{"enabled":false},"noop":{"max":2,"report-as-issue":"false"},"report_incomplete":{},"report_missing_data":{},"report_missing_tool":{}}
+2026-10-26T09:34:15.0380438Z [INGESTION] Parsed config keys: ["add_comment","add_labels","create_report_incomplete_issue","mentions","noop","report_incomplete","report_missing_data","report_missing_tool"]
+2026-10-26T09:34:15.0382447Z [INGESTION] Output file path: /home/runner/work/_temp/gh-aw/safeoutputs/outputs.jsonl
+2026-10-26T09:34:15.0383591Z Raw output content length: 603
+2026-10-26T09:34:15.0386247Z [INGESTION] First 500 chars of output: {"message":"Decision: ROUTE (feature proposal). Precheck: not maintainer-authored, no missing template sections, no other project mentions, no vulnerability or question signals. Duplicate search: no candidates. Labels validated: component/service discovery, kind/feature (valid).","type":"noop"}
+2026-10-26T09:34:15.0390302Z {"labels":[{"confidence":"HIGH","name":"component/service discovery","rationale":"The proposal requests a new Azure SD meta label, which is part of service discovery."},{"confidence":"HIGH","name":"kind/f
+2026-10-26T09:34:15.0392548Z [INGESTION] Normalizing config keys (dash -> underscore)
+2026-10-26T09:34:15.0394470Z [INGESTION] Expected output types after normalization: ["add_comment","add_labels","create_report_incomplete_issue","mentions","noop","report_incomplete","report_missing_data","report_missing_tool"]
+2026-10-26T09:34:15.0402225Z [INGESTION] Expected output types full config: {"add_comment":{"max":1,"target":"triggering"},"add_labels":{"allowed":["component/agent","component/api","component/config","component/documentation","component/mixin","component/notify","component/otlp","component/promql","component/promtool","component/remote storage","component/rules","component/scraping","component/service discovery","component/service discovery/kubernetes","component/tests","component/tsdb","component/ui","component/wal","component/web","kind/enhancement","kind/feature","kind/more-info-needed","kind/question"],"blocked":["kind/bug","kind/breaking","kind/cleanup","kind/change","priority/*","won't fix","invalid","duplicate","stale"],"max":1,"max_labels":2,"target":"triggering"},"create_report_incomplete_issue":{},"mentions":{"enabled":false},"noop":{"max":2,"report-as-issue":"false"},"report_incomplete":{},"report_missing_data":{},"report_missing_tool":{}}
+2026-10-26T09:34:15.0410948Z [INGESTION] Processing line 1: {"message":"Decision: ROUTE (feature proposal). Precheck: not maintainer-authored, no missing template sections, no other project mentions, no vulnerability or question signals. Duplicate search: no c...
+2026-10-26T09:34:15.0413249Z [INGESTION] Line 1: Original type='noop', Normalized type='noop'
+2026-10-26T09:34:15.0414252Z Line 1: type 'noop'
+2026-10-26T09:34:15.0414970Z GitHub reference filtering: allowed repos = repo
+2026-10-26T09:34:15.0428496Z Line 1: Valid noop item
+2026-10-26T09:34:15.0431703Z [INGESTION] Processing line 2: {"labels":[{"confidence":"HIGH","name":"component/service discovery","rationale":"The proposal requests a new Azure SD meta label, which is part of service discovery."},{"confidence":"HIGH","name":"ki...
+2026-10-26T09:34:15.0434049Z [INGESTION] Line 2: Original type='add_labels', Normalized type='add_labels'
+2026-10-26T09:34:15.0435185Z Line 2: type 'add_labels'
+2026-10-26T09:34:15.0436030Z GitHub reference filtering: allowed repos = repo
+2026-10-26T09:34:15.0437019Z GitHub reference filtering: allowed repos = repo
+2026-10-26T09:34:15.0440076Z GitHub reference filtering: allowed repos = repo
+2026-10-26T09:34:15.0442558Z GitHub reference filtering: allowed repos = repo
+2026-10-26T09:34:15.0444271Z Line 2: Valid add_labels item
+2026-10-26T09:34:15.0445037Z Successfully parsed 2 valid output items
+2026-10-26T09:34:15.0861969Z Stored validated output to: /tmp/gh-aw/agent_output.json
+2026-10-26T09:34:15.0870375Z output_types: noop, add_labels
+2026-10-26T09:34:15.0872515Z No patch or bundle files found in: /tmp/gh-aw
