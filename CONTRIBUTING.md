@@ -11,8 +11,9 @@ everyone who opens issues, comments, or changes the agent configuration.
 
 ### What the triage agent does — and does not do
 
-- On every new issue it may post **one** comment and add **up to two** labels from
-  `component/*`, `kind/question`, `kind/more-info-needed`, `kind/feature`, `kind/enhancement`.
+- On every new issue it may post **one** comment and add **up to two** labels from an explicit
+  list of existing labels (the `component/*` labels, `kind/question`, `kind/more-info-needed`,
+  `kind/feature`, `kind/enhancement`), enforced by the workflow's safe outputs.
 - It never applies `kind/bug` (a *confirmed* bug), `priority/*`, `won't fix`, `duplicate` or
   `invalid`, and it cannot close, edit, lock or delete anything. Those are maintainer decisions.
 - Its comments are posted by `github-actions[bot]` and end with an attribution footer
@@ -44,9 +45,13 @@ everyone who opens issues, comments, or changes the agent configuration.
 Configuration lives in `.github/workflows/issue-triage.md` (hard limits),
 `.claude/skills/prometheus-issue-triage/` (procedure) and `AGENTS.md` (repository facts).
 
-1. Open a pull request; changes to these paths require CODEOWNER review (`.github/CODEOWNERS`).
+1. Open a pull request; changes to these paths need review by the CODEOWNER (`.github/CODEOWNERS`).
+   GitHub enforces this only with branch protection, which this private repo's plan does not offer,
+   so here it is a rule the owner follows, not a technical gate (DESIGN.md, Human approval).
 2. Recompile with `gh aw compile issue-triage` and commit the regenerated `.lock.yml` in the same PR.
 3. Run the unit tests and the golden set (`evals/golden/README.md`) and attach the score table.
+   The same rerun is required when the drift alert opens a `[drift]` issue; only then may the owner
+   update `.github/agent-baseline.json`.
    A change that lowers the pass rate or fails any HARD check must not be merged.
 4. Never widen `permissions:`, add a safe output, or relax `network:` without a DESIGN.md update
    explaining the new risk.
