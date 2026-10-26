@@ -24,7 +24,12 @@ live @mention, secret).
 Fixes that followed: v3 (`triage.py labels` rejoins split labels, suggests real ones) for A02/G12/G14;
 focused detection prompt for the timeouts (G03/G09/G13/G15).
 
-## run4-final — final config, all 19 cases (17 of 19 recorded so far, 9 pass; G15–G16 pending)
+## run4-final — final configuration, all 19 cases, 10/19 pass
+
+Config commits per case are in `results/run4-final/summary.md`: A01–A03 ran before the enforcement-only
+changes (engine queue, drift alert, exact label list) and G02 before the detection prompt; G03–G16 ran on
+the final configuration. The two failures not caused by a decision (A01, G02) were re-run on the final
+commit as `run4-retry`: **both pass**, so the final configuration scores **12/19**.
 
 | Case | Expected | What the agent did | Cause | Cat. |
 |------|----------|--------------------|-------|------|
@@ -36,13 +41,15 @@ focused detection prompt for the timeouts (G03/G09/G13/G15).
 | G08 | needs-info | Routed `component/remote storage`, no comment | Judged the report reproducible | J |
 | G09 | cite duplicate #17437 | Routed `component/otlp` | Rejected the true duplicate again | J |
 | G10 | cite duplicate #17512 | Comment and `component/api`, no citation | Described the symptom but did not name the duplicate; passed in run2 → run-to-run variance | J |
+| G16 | cite duplicate #17314 | SECURITY reply | Same as run2: public scanner CVEs treated as an undisclosed vulnerability | J |
 
 ## What the categories say
 
 - **C (configuration)** failures disappeared after the v3 label fix: G12 and G14 pass in run4.
 - **A (availability)** failures: detection gave no verdict in 4/18 run2 runs and in run4 G02; after the
-  focused detection prompt (from run4 G03 on) it gave a verdict in every run. A01's CLI download 404 is
-  outside the configuration.
-- **J (judgement)** failures remain: gpt-4.1 under-detects duplicates and other-project reports and
-  sometimes adds labels where the decision table says none. This is why the agent stays
-  suggestion-only (DESIGN.md §8).
+  focused detection prompt (from run4 G03 on) it gave a verdict in all 16 runs (an observed improvement,
+  not a proof). A01's CLI download 404 is outside the configuration; both passed when re-run.
+- **J (judgement)** failures remain (run4: A03, G03, G04, G08, G09, G10, G16): gpt-4.1 under-detects
+  duplicates and other-project reports and sometimes adds labels where the decision table says none.
+  They were deliberately not tuned away with examples from these cases (that would fit the agent to
+  its own test set); this is why the agent stays suggestion-only (DESIGN.md §8).
