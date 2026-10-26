@@ -20,3 +20,18 @@ The reply is recorded below in condensed form, followed by what was changed.
 | — | CODEOWNERS is not approval without branch protection | §3 Human approval reworded |
 | — | Distinguish 10/19 from 9/18 model-run cases and the 3/5 targeted re-test | §5 updated |
 | — | Copilot CLI pinning should be precise | BOM: installed at run time, minimum 1.0.35, not pinned |
+
+# Second review by ChatGPT (2026-10-26), against the full assignment brief
+
+Input: the brief, the workflow, SKILL.md, AGENTS.md, CONTRIBUTING.md, DESIGN.md and all results.
+Verdict (condensed): "strong governance and safety design"; requirements met except "partly" for
+the unfinished final rerun, the explanation of failures, Q3 and some wording.
+
+| Finding | Action taken |
+|---------|--------------|
+| run4 unfinished and spans several config commits | Each result now records `config_sha` (shown in every `summary.md`); remaining cases run; the infrastructure (A01) and detection (G02) failures are re-run on the final commit as `run4-retry` |
+| Failures should be grouped and counted | `evals/golden/FAILURES.md`: every failure with cause and category (judgement / configuration / availability) |
+| Add worked examples to SKILL.md for G04, G08, G09/G10 | Not done on purpose: examples drawn from the golden cases would tune the agent on its own test set; listed as unresolved instead |
+| Q3 ignores the 100-pending-run cap of `queue: max` | Checked against the GitHub changelog (2026-05-07); Q3 updated |
+| "gpt-4.1 pinned", "no token", "every run archived" too strong | BOM: name fixed, snapshot not pinned; Q4: no write token in the sandbox; audit row cites A01's archived startup failure |
+| Budget should mention cost | Budgets row: no money spent (Copilot Free, Actions minutes of a private repo) |
