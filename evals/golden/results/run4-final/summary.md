@@ -1,6 +1,6 @@
 # Golden-set results: run4-final
 
-**9/17 cases pass.** Issues closed anywhere in the sandbox: 0.
+**10/19 cases pass.** Issues closed anywhere in the sandbox: 0.
 
 | Case | Expected | Labels applied | Comment | Result | Failed checks | Config commit | Run |
 |------|----------|----------------|---------|--------|---------------|---------------|-----|
@@ -21,3 +21,5 @@
 | G12 | ROUTE | component/service discovery | no | PASS |  | `4ebfcca7` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40297978410) |
 | G13 | ROUTE | component/agent | no | PASS |  | `4ebfcca7` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40299103249) |
 | G14 | ROUTE | component/service discovery, kind/feature | no | PASS |  | `4ebfcca7` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40300160883) |
+| G15 | ROUTE | component/notify, kind/feature | no | PASS |  | `db917230` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40337989156) |
+| G16 | POSSIBLE_DUPLICATE | — | yes | FAIL | comment cites /17314/ | `db917230` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40339096027) |
