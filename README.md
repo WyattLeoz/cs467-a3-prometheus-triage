@@ -108,7 +108,9 @@ gh secret set COPILOT_GITHUB_TOKEN --repo OWNER/REPO      # fine-grained PAT, Co
 gh aw compile issue-triage --strict                       # after any change to issue-triage.md
 ```
 
-Push to the repository and open an issue. To stop the agent:
+Push to the repository. The agent then triages issues opened by anyone who is not an owner, member or
+collaborator (maintainers' own issues are skipped); to try it as the owner, replay the golden cases
+below, which carry a replay marker the gate honours only for the owner. To stop the agent:
 `gh workflow disable "Prometheus Issue Triage"`, then cancel any queued or running runs.
 
 ## Reproducing the evaluation
