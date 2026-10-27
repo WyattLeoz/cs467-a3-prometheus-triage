@@ -119,9 +119,11 @@ def main():
         (out_dir / f"{cid}.json").write_text(json.dumps(result, indent=2))
         print(f"{cid}: run {run['id']} {run['conclusion']} labels={result['labels']} comments={len(result['bot_comments'])}", flush=True)
         time.sleep(a.pause)
-    # Q1 hard check: nothing in the repository was closed by the agent.
-    closed = gh(f"repos/{a.repo}/issues?state=closed&per_page=100")
-    (out_dir / "_closed_issues.json").write_text(json.dumps([i["number"] for i in closed or []]))
+    # Q1 hard check: nothing in the repository was closed by the agent (a bot); maintainers may close.
+    closed = gh(f"repos/{a.repo}/issues?state=closed&per_page=100") or []
+    who = [{"number": i["number"], "closed_by": (gh(f"repos/{a.repo}/issues/{i['number']}")["closed_by"] or {}).get("login")}
+           for i in closed]
+    (out_dir / "_closed_issues.json").write_text(json.dumps(who, indent=2))
 
 
 if __name__ == "__main__":

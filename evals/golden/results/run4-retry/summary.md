@@ -1,6 +1,6 @@
 # Golden-set results: run4-retry
 
-**2/2 cases pass.** Issues closed anywhere in the sandbox: 0.
+**2/2 cases pass.** Issues closed by a bot anywhere in the sandbox: 0 (closed by a maintainer: 0).
 
 | Case | Expected | Labels applied | Comment | Result | Failed checks | Config commit | Run |
 |------|----------|----------------|---------|--------|---------------|---------------|-----|
