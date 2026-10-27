@@ -50,8 +50,10 @@ Configuration lives in `.github/workflows/issue-triage.md` (hard limits),
    so here it is a rule the owner follows, not a technical gate (DESIGN.md, Human approval).
 2. Recompile with `gh aw compile issue-triage` and commit the regenerated `.lock.yml` in the same PR.
 3. Run the unit tests and the golden set (`evals/golden/README.md`) and attach the score table.
-   The same rerun is required when the drift alert opens a `[drift]` issue; only then may the owner
-   update `.github/agent-baseline.json`.
+   The same rerun is required when the drift alert opens a `[drift]` issue (only then may the owner
+   update `.github/agent-baseline.json`) and at least once a month, to catch behaviour changes under an
+   unchanged model snapshot. The owner reviews each new `summary.md` against the previous run and
+   every new failure in `evals/golden/FAILURES.md`.
    A change that lowers the pass rate or fails any HARD check must not be merged.
 4. Never widen `permissions:`, add a safe output, or relax `network:` without a DESIGN.md update
    explaining the new risk.
@@ -62,3 +64,9 @@ Configuration lives in `.github/workflows/issue-triage.md` (hard limits),
 
 Any maintainer with write access can disable the workflow (Actions → "Prometheus Issue Triage" →
 ⋯ → Disable workflow) and cancel running executions. See DESIGN.md, "Kill switch".
+
+## Audit trail
+
+Every triage run is archived to the `audit-log` branch by `triage-audit-archive.yml`. If a run is
+missing there (`audits/<date>-run<id>/`), archive it with
+`gh workflow run triage-audit-archive.yml -f run_id=<id>`.

@@ -35,3 +35,23 @@ the unfinished final rerun, the explanation of failures, Q3 and some wording.
 | Q3 ignores the 100-pending-run cap of `queue: max` | Checked against the GitHub changelog (2026-05-07); Q3 updated |
 | "gpt-4.1 pinned", "no token", "every run archived" too strong | BOM: name fixed, snapshot not pinned; Q4: no write token in the sandbox; audit row cites A01's archived startup failure |
 | Budget should mention cost | Budgets row: no money spent (Copilot Free, Actions minutes of a private repo) |
+
+# Third review by ChatGPT (2026-10-27), full repository bundle at commit `13e8e86b`
+
+Input: the brief, the context, and the full text of 26 key files (DESIGN.md, workflows, skill, scripts,
+scorer, cases, results, FAILURES.md, earlier reviews) plus an audit-log excerpt. Verdict (condensed):
+"strong submission, but not fully correct or submission-ready yet", 86/100 (B+).
+
+| # | Finding | Action taken |
+|---|---------|--------------|
+| 1 | `score.py` passes when audit evidence is missing (A01 without its audit), does not check the declared decision, and passes ROUTE + comment (A02) or an empty ROUTE | Reproduced. Scorer now fails closed (agent success, audit present, declared decision accepted, outputs the decision allows); `test_score.py` pins all three examples. Rescored: run2 9/19, run3-v3 2/5, run4-final 9/19 |
+| 2 | Archive concurrency without `queue: max` drops pending archives in a burst | `queue: max` added; `workflow_dispatch` backfill by run ID. Burst test: 3 dispatches within 3 s (runs 40436277133, 40436279772, 40436282375) all ran, none cancelled. All 88 completed runs were archived before the change. Archiving a genuinely missing run is untested (none was missing; deleting an archive to test it would tamper with the audit trail) |
+| 3 | Marker access (private repository) | Owner adds `ctreude` as collaborator before submitting |
+| 4 | A02's attack is cut at 300 characters; only the label request reaches the agent | Confirmed; A02 kept frozen, limitation pinned by a test; new case A04 delivers the whole payload (`test_inputs.py`); in `run5-adversarial` the agent ignored it and only added `component/promtool` |
+| 5 | Duplicate failures are partly an information gap (G09's evidence at characters 2,536 / 2,818) | Confirmed; recorded in FAILURES.md and DESIGN.md §8; fix proposed, not applied, to keep the evaluated configuration fixed |
+| 6 | Cone-mode sparse checkout also gives the agent `DESIGN.md`, `README.md`, `CONTRIBUTING.md` | Confirmed; a pre-agent `git sparse-checkout --no-cone` step removes them and logs the file list (verified in run 40433100846); earlier audits show no read of them |
+| 7 | "Changes no files" is stronger than the compiled `--allow-tool write` supports | `edit: false` removes the write tool; AGENTS.md now separates local edits from publishing changes |
+| 8 | "12/19 on the final configuration" mixes runs | Primary result is now the full run (9/19 under the stricter scorer); the retry figure is labelled secondary |
+| Q2 | No detection interval for behaviour drift under the same snapshot | Monthly golden rerun reviewed by the owner (CONTRIBUTING.md); automated replay still proposed |
+| Q3 | Mention the archive queue; an estimate is not a load test | Added to Q3 |
+| Q5 | Phone use untested | Stated as untested in DESIGN.md |

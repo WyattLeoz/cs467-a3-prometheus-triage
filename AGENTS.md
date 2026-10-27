@@ -19,11 +19,13 @@ This repository (Python 3.11+, stdlib only; `gh` with the `gh-aw` extension v0.9
 | Task | Command |
 |------|---------|
 | Unit-test the skill scripts | `python3 -m unittest discover -s .claude/skills/prometheus-issue-triage/tests -v` |
+| Test the scorer and adversarial inputs | `python3 -m unittest discover -s evals/golden -p 'test_*.py' -v` |
 | Recompile the workflow after editing `issue-triage.md` | `gh aw compile issue-triage` (commit the `.lock.yml` with it) |
 | Validate workflow security | `gh aw compile issue-triage --strict` |
 | Replay the golden set in a sandbox repo | `python3 evals/golden/run_eval.py --repo OWNER/REPO` |
-| Score collected results | `python3 evals/golden/score.py` |
+| Score collected results | `python3 evals/golden/score.py evals/golden/results/<tag>` |
 | Inspect a run (audit trail) | `gh aw audit <run-id>` / `gh aw logs issue-triage` |
+| Archive a run the audit trail missed | `gh workflow run triage-audit-archive.yml -f run_id=<run-id>` |
 
 Upstream Prometheus (useful when judging reports; not built here):
 
@@ -48,9 +50,13 @@ Upstream Prometheus (useful when judging reports; not built here):
     scripts/triage.py               deterministic checks: precheck, duplicates, labels
     references/                     label snapshot + policy, component map, other-project list
     tests/                          unit tests for triage.py
-data/upstream-issues.jsonl          frozen corpus of upstream issues (2025-07-01 .. 2026-10-22) for duplicate search
+data/upstream-issues.jsonl          frozen corpus of upstream issues (2025-07-01 .. 2026-10-22) + 2 synthetic adversarial fixtures
 upstream/                           upstream files at commit 22c287a (README, MAINTAINERS, SECURITY, CONTRIBUTING, TREE.txt, wiki label page)
 evals/golden/                       golden cases, expected outcomes, results and logs (not visible to the agent)
+
+Before the agent starts, its workspace is narrowed to `.claude/`, `AGENTS.md` and `data/` (gh-aw adds its
+installed copy of the skill under `.github/skills/`); every other path above exists only for humans and
+the evaluation.
 ```
 
 Upstream code layout → component label (full table in the skill's `references/component-map.md`):
@@ -78,13 +84,16 @@ Upstream code layout → component label (full table in the skill's `references/
 
 ## Forbidden changes
 
-- The triage agent changes **no files** and **no repository settings**. Its only outputs are one
-  comment, up to two labels from the allowlist, or a no-op — enforced by the workflow, not by this file.
+- The triage agent publishes **no file or settings changes**. It has no file-edit tool (`edit: false`),
+  its token is read-only (`contents: read`) and there is no push or pull-request safe output; anything
+  it changed in its runner's workspace would be discarded with the runner. Its only published outputs
+  are one comment, up to two labels from the allowlist, or a no-op — enforced by the workflow, not by this file.
 - Never close, reopen, lock, transfer, delete or edit issues; never merge or push. (The workflow has
   `issues: read`, `contents: read`, and no such safe outputs.)
 - Never hand-edit `*.lock.yml`; change `issue-triage.md` and recompile.
-- Never edit `evals/golden/cases.json` or `evals/golden/adversarial.json` after a run has been recorded;
-  add a new case or a new dated result instead.
-- Do not modify `data/upstream-issues.jsonl` except to refresh it with a dated snapshot in its own commit.
+- Never change an existing entry in `evals/golden/cases.json` or `evals/golden/adversarial.json` after a
+  run has been recorded; append a new case (committed before its first run) or a new dated result instead.
+- Do not modify `data/upstream-issues.jsonl` except to refresh it with a dated snapshot in its own commit,
+  or to add a synthetic adversarial fixture (marked `synthetic_adversarial_fixture`) together with its case.
 - Changes to `.github/`, `.claude/`, `AGENTS.md` and `CONTRIBUTING.md` need review by the CODEOWNER
   (advisory here: this private repo's plan cannot enforce it) and a golden rerun (CONTRIBUTING.md).
