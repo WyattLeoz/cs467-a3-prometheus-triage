@@ -1,0 +1,47 @@
+﻿2026-10-27T06:54:20.3588409Z ##[group]Run git sparse-checkout set --no-cone '/.claude/' '!/.claude/skills/prometheus-issue-triage/tests/' '/AGENTS.md' '/data/'
+2026-10-27T06:54:20.3588948Z [36;1mgit sparse-checkout set --no-cone '/.claude/' '!/.claude/skills/prometheus-issue-triage/tests/' '/AGENTS.md' '/data/'[0m
+2026-10-27T06:54:20.3589354Z [36;1mecho "files visible to the agent:"; find . -path ./.git -prune -o -type f -print | sort[0m
+2026-10-27T06:54:20.3589630Z [36;1mmkdir -p /tmp/gh-aw/agent[0m
+2026-10-27T06:54:20.3589857Z [36;1mjq '{issue: .issue}' "$GITHUB_EVENT_PATH" > /tmp/gh-aw/agent/issue.json[0m
+2026-10-27T06:54:20.3590138Z [36;1ms=.claude/skills/prometheus-issue-triage/scripts/triage.py[0m
+2026-10-27T06:54:20.3590425Z [36;1m"$s" precheck /tmp/gh-aw/agent/issue.json > /tmp/gh-aw/agent/precheck.json[0m
+2026-10-27T06:54:20.3590732Z [36;1m"$s" duplicates /tmp/gh-aw/agent/issue.json > /tmp/gh-aw/agent/duplicates.json[0m
+2026-10-27T06:54:20.3591341Z [36;1mjq -c '{skill, maintainer_authored, missing_bug_template_sections, other_project_mentions}' /tmp/gh-aw/agent/precheck.json[0m
+2026-10-27T06:54:20.3591731Z [36;1mjq -c '[.candidates[] | {ref, score}]' /tmp/gh-aw/agent/duplicates.json[0m
+2026-10-27T06:54:20.3647004Z shell: /usr/bin/bash -e {0}
+2026-10-27T06:54:20.3647183Z env:
+2026-10-27T06:54:20.3647321Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-27T06:54:20.3647639Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-27T06:54:20.3648119Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40463761502,github.run_id=40463761502,gh-aw.engine.id=copilot
+2026-10-27T06:54:20.3648586Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-27T06:54:20.3648763Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-27T06:54:20.3648949Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-27T06:54:20.3649104Z   DEFAULT_BRANCH: main
+2026-10-27T06:54:20.3649250Z   GH_AW_ASSETS_ALLOWED_EXTS: 
+2026-10-27T06:54:20.3649401Z   GH_AW_ASSETS_BRANCH: 
+2026-10-27T06:54:20.3649554Z   GH_AW_ASSETS_MAX_SIZE_KB: 0
+2026-10-27T06:54:20.3649727Z   GH_AW_MCP_LOG_DIR: /tmp/gh-aw/mcp-logs/safeoutputs
+2026-10-27T06:54:20.3649912Z   GH_AW_PR_HEAD_BASE_BRANCH: 
+2026-10-27T06:54:20.3650069Z   GH_AW_PR_HEAD_BASE_PR_NUMBER: 
+2026-10-27T06:54:20.3650223Z   GH_AW_PR_HEAD_BASE_REF: 
+2026-10-27T06:54:20.3650367Z   GH_AW_PR_HEAD_BASE_REPO: 
+2026-10-27T06:54:20.3650519Z   GH_AW_PR_HEAD_BASE_SHA: 
+2026-10-27T06:54:20.3650661Z   GH_AW_PR_HEAD_REPO: 
+2026-10-27T06:54:20.3650949Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-27T06:54:20.3651127Z   GH_AW_TARGET_REPO_SLUG: 
+2026-10-27T06:54:20.3651282Z   GH_AW_WORKFLOW_ID_SANITIZED: issuetriage
+2026-10-27T06:54:20.3651492Z   GITHUB_AW_OTEL_TRACE_ID: 0bcc86bba5c70738ccb0d68aadbb767e
+2026-10-27T06:54:20.3651719Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: e65f2bbefddc82ef
+2026-10-27T06:54:20.3651911Z   GITHUB_AW_OTEL_JOB_START_MS: 1793084055483
+2026-10-27T06:54:20.3652081Z ##[endgroup]
+2026-10-27T06:54:20.3822374Z files visible to the agent:
+2026-10-27T06:54:20.3833776Z ./.claude/skills/prometheus-issue-triage/SKILL.md
+2026-10-27T06:54:20.3834365Z ./.claude/skills/prometheus-issue-triage/references/component-map.md
+2026-10-27T06:54:20.3835013Z ./.claude/skills/prometheus-issue-triage/references/label-policy.json
+2026-10-27T06:54:20.3835721Z ./.claude/skills/prometheus-issue-triage/references/labels.json
+2026-10-27T06:54:20.3836278Z ./.claude/skills/prometheus-issue-triage/references/other-projects.json
+2026-10-27T06:54:20.3836832Z ./.claude/skills/prometheus-issue-triage/scripts/triage.py
+2026-10-27T06:54:20.3839026Z ./AGENTS.md
+2026-10-27T06:54:20.3839407Z ./data/upstream-issues.jsonl
+2026-10-27T06:54:20.4742798Z {"skill":"prometheus-issue-triage/1.1","maintainer_authored":false,"missing_bug_template_sections":[],"other_project_mentions":[]}
+2026-10-27T06:54:20.4763701Z []
