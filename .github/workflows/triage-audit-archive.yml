@@ -61,8 +61,14 @@ jobs:
           gh extension install github/gh-aw --pin v0.93.1
           dir="audits/$(date -u +%Y-%m-%d)-run$RUN_ID"
           mkdir -p "$dir" /tmp/audit
-          gh aw audit "$RUN_ID" --repo "$GITHUB_REPOSITORY" --parse --no-baseline -o /tmp/audit > "$dir/report.md" 2>&1 || echo "audit exited $?" >> "$dir/report.md"
-          gh aw audit "$RUN_ID" --repo "$GITHUB_REPOSITORY" --no-baseline -o /tmp/audit --json > "$dir/report.json" 2>/dev/null || true
+          # Never commit a partial archive: an existing directory is treated as complete (skip above), so a
+          # failed audit must fail this job and leave nothing behind; re-run or backfill it later.
+          if ! gh aw audit "$RUN_ID" --repo "$GITHUB_REPOSITORY" --parse --no-baseline -o /tmp/audit > "$dir/report.md" 2>&1 \
+             || ! gh aw audit "$RUN_ID" --repo "$GITHUB_REPOSITORY" --no-baseline -o /tmp/audit --json > "$dir/report.json" \
+             || ! jq -e --argjson id "$RUN_ID" '.overview.run_id == $id' "$dir/report.json" >/dev/null; then
+            echo "::error::audit of run $RUN_ID failed or is incomplete; nothing archived. Backfill: gh workflow run triage-audit-archive.yml -f run_id=$RUN_ID"
+            exit 1
+          fi
           # Keep the human-readable parsed logs and small JSON/Markdown evidence; skip large raw dumps.
           find /tmp/audit -type f \( -name '*.md' -o -name '*.json' -o -name '*.jsonl' -o -name '*.txt' \) -size -2M \
             -exec sh -c 'for f; do rel="${f#/tmp/audit/}"; mkdir -p "$0/$(dirname "$rel")"; cp "$f" "$0/$rel"; done' "$dir" {} +
