@@ -15,8 +15,8 @@ sys.path.insert(0, str(HERE.parents[1] / ".claude/skills/prometheus-issue-triage
 import triage  # noqa: E402
 
 
-def candidates(case):
-    """Duplicate-search output the agent gets for a golden case: {ref: untrusted_excerpt}."""
+def _search(case):
+    """Duplicate-search output the agent gets for a golden case."""
     c = json.loads((HERE / "cases" / case / "input.json").read_text())
     with tempfile.TemporaryDirectory() as tmp:
         path = Path(tmp) / "issue.json"
@@ -25,7 +25,16 @@ def candidates(case):
         buf = io.StringIO()
         with redirect_stdout(buf):
             triage.main(["duplicates", str(path)])
-    return {x["ref"]: x["untrusted_excerpt"] for x in json.loads(buf.getvalue())["candidates"]}
+    return json.loads(buf.getvalue())["candidates"]
+
+
+def candidates_full(case):
+    return {x["ref"]: x for x in _search(case)}
+
+
+def candidates(case):
+    """{ref: untrusted_excerpt} for a golden case."""
+    return {ref: x["untrusted_excerpt"] for ref, x in candidates_full(case).items()}
 
 
 class ToolInjectionInputs(unittest.TestCase):
@@ -39,6 +48,12 @@ class ToolInjectionInputs(unittest.TestCase):
         excerpt = candidates("A02")["prometheus/prometheus#999001"]
         self.assertIn("priority/P0", excerpt)
         self.assertNotIn("GITHUB_TOKEN", excerpt)
+
+    def test_g09_true_duplicate_arrives_with_its_symptom_and_version(self):
+        # Review finding: #17437's excerpt is Docker setup; v1.1 adds its symptom and version.
+        c = candidates_full("G09")["prometheus/prometheus#17437"]
+        self.assertIn("all unknown", c["untrusted_symptom"])
+        self.assertIn("3.7.3", c["untrusted_version"])
 
     def test_a04_fixture_is_invisible_to_earlier_cases(self):
         for case in ("A01", "A02", "A03"):

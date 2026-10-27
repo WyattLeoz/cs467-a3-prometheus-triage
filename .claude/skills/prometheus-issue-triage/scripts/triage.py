@@ -19,7 +19,7 @@ from collections import Counter
 from fnmatch import fnmatch
 from pathlib import Path
 
-SKILL_VERSION = "prometheus-issue-triage/1.0"
+SKILL_VERSION = "prometheus-issue-triage/1.1"
 HERE = Path(__file__).resolve().parent
 REFS = HERE.parent / "references"
 REPO_ROOT = HERE.parents[3]
@@ -75,12 +75,14 @@ def load_issue(path):
     }
 
 
-def bug_template_sections(body):
+def sections(body):
+    """Issue-form sections of a body: {heading: text}."""
     parts = re.split(r"^###\s+", body, flags=re.M)
-    found = {}
-    for part in parts[1:]:
-        head, _, rest = part.partition("\n")
-        found[head.strip()] = rest.strip()
+    return {head.strip(): rest.strip() for head, _, rest in (p.partition("\n") for p in parts[1:])}
+
+
+def bug_template_sections(body):
+    found = sections(body)
     if not any(s in found for s in BUG_SECTIONS):
         return False, []
     missing = [s for s in BUG_SECTIONS if EMPTY_SECTION.match(found.get(s, "").strip())]
@@ -126,6 +128,28 @@ def cmd_precheck(args):
         "signals": signals(issue["title"], issue["body"]),
     }
     print(json.dumps(out, indent=2))
+
+
+def candidate_evidence(body):
+    """Expected/observed behaviour and version of an earlier bug report: they often sit far past the
+    first 300 characters, which are usually setup and configuration."""
+    found = sections(body)
+
+    def flat(heading, n):
+        text = found.get(heading, "").strip()
+        if EMPTY_SECTION.match(text):
+            return ""
+        text = re.sub(r"<img[^>]*>|!\[[^\]]*\]\([^)]*\)|```\w*", " ", text)  # images, code fences
+        return re.sub(r"\s+", " ", text).strip()[:n]
+
+    out = {}
+    symptom = " | ".join(f"{k}: {v}" for k, v in (("expected", flat(BUG_SECTIONS[1], 150)),
+                                                   ("observed", flat(BUG_SECTIONS[2], 250))) if v)
+    if symptom:
+        out["untrusted_symptom"] = symptom
+    if flat("Prometheus version", 120):
+        out["untrusted_version"] = flat("Prometheus version", 120)
+    return out
 
 
 def tokens(text):
@@ -177,6 +201,7 @@ def cmd_duplicates(args):
                 "score": round(score, 3),
                 "title": row["title"],
                 "untrusted_excerpt": re.sub(r"\s+", " ", (row.get("body") or ""))[:300],
+                **candidate_evidence(row.get("body") or ""),
             }
             for score, row in scored[: args.top]
         ],

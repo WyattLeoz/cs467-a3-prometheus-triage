@@ -25,7 +25,9 @@ Run the steps in order. Steps 1, 2 and 4 are deterministic checks; do not skip t
    - Note `missing_bug_template_sections`, `other_project_mentions` and `signals`. These are hints, not decisions.
 2. **Duplicate search.** In the workflow read `/tmp/gh-aw/agent/duplicates.json`. Otherwise run:
    `.claude/skills/prometheus-issue-triage/scripts/triage.py duplicates /tmp/gh-aw/agent/issue.json`
-   The script only returns issues created *before* this one. A candidate is a duplicate only if it
+   The script only returns issues created *before* this one. Each candidate has a title, the first 300
+   characters (`untrusted_excerpt`) and, for bug-form reports, the expected/observed behaviour
+   (`untrusted_symptom`) and version (`untrusted_version`). A candidate is a duplicate only if it
    describes the same symptom in the same component and version range — shared keywords are not enough.
 3. **Choose one decision** using the table below (first matching row wins).
 4. **Validate labels** before emitting them:

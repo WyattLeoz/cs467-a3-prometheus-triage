@@ -75,6 +75,23 @@ class Duplicates(unittest.TestCase):
         refs = [c["ref"] for c in out["candidates"]]
         self.assertEqual(refs, ["prometheus/prometheus#1"])  # #2 is from the future, #3 is unrelated
 
+    def test_candidate_carries_symptom_and_version_beyond_the_excerpt(self):
+        body = ("### What did you do?\n\n" + "docker compose setup " * 30 +
+                "\n\n### What did you expect to see?\n\n_No response_"
+                "\n\n### What did you see instead? Under which circumstances?\n\n<img src=\"x.png\">\nquery hangs forever"
+                "\n\n### Prometheus version\n\n```text\nprometheus, version 3.7.3\n```")
+        with tempfile.TemporaryDirectory() as tmp:
+            corpus = Path(tmp) / "c.jsonl"
+            rows = [{"number": 1, "created_at": "2025-01-01T00:00:00Z", "title": "query hangs", "body": body},
+                    {"number": 2, "created_at": "2025-01-02T00:00:00Z", "title": "promql rate is wrong", "body": "irate odd"}]
+            corpus.write_text("\n".join(json.dumps(r) for r in rows))  # >1 row so idf is not zero
+            path = issue_file(tmp, title="query hangs", body="the query hangs", created_at="2026-01-01T00:00:00Z")
+            _, out = run(["duplicates", path, "--corpus", str(corpus), "--min-score", "0.01"])
+        c = out["candidates"][0]
+        self.assertNotIn("hangs forever", c["untrusted_excerpt"])           # first 300 characters are setup
+        self.assertEqual(c["untrusted_symptom"], "observed: query hangs forever")  # empty section and image dropped
+        self.assertEqual(c["untrusted_version"], "prometheus, version 3.7.3")  # code fence dropped
+
 
 class Labels(unittest.TestCase):
     def test_policy(self):
