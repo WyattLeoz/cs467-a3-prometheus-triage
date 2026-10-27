@@ -64,7 +64,9 @@ skills:
   - .claude/skills/prometheus-issue-triage
 
 # Only the triage skill, repository facts and the frozen data the skill needs.
-# evals/ (expected outcomes) is deliberately not checked out for the agent.
+# evals/ (expected outcomes) is deliberately not checked out for the agent. Cone mode still
+# adds root files (DESIGN.md and README.md quote results); the first step below narrows the
+# workspace to the skill (without its tests), AGENTS.md and data/, and prints the file list.
 checkout:
   sparse-checkout: |
     .claude/
@@ -75,6 +77,7 @@ network: {}
 
 tools:
   github: false
+  edit: false  # no file-edit tool (compiles without --allow-tool write)
   bash:
     - ".claude/skills/prometheus-issue-triage/scripts/triage.py:*"
 
@@ -82,6 +85,8 @@ steps:
   # The skill's deterministic checks run here, before the model starts, so they cannot be skipped.
   - name: Run the triage skill's deterministic checks
     run: |
+      git sparse-checkout set --no-cone '/.claude/' '!/.claude/skills/prometheus-issue-triage/tests/' '/AGENTS.md' '/data/'
+      echo "files visible to the agent:"; find . -path ./.git -prune -o -type f -print | sort
       mkdir -p /tmp/gh-aw/agent
       jq '{issue: .issue}' "$GITHUB_EVENT_PATH" > /tmp/gh-aw/agent/issue.json
       s=.claude/skills/prometheus-issue-triage/scripts/triage.py
