@@ -1,0 +1,47 @@
+﻿2026-10-27T01:40:26.8574387Z ##[group]Run git sparse-checkout set --no-cone '/.claude/' '!/.claude/skills/prometheus-issue-triage/tests/' '/AGENTS.md' '/data/'
+2026-10-27T01:40:26.8575375Z [36;1mgit sparse-checkout set --no-cone '/.claude/' '!/.claude/skills/prometheus-issue-triage/tests/' '/AGENTS.md' '/data/'[0m
+2026-10-27T01:40:26.8576160Z [36;1mecho "files visible to the agent:"; find . -path ./.git -prune -o -type f -print | sort[0m
+2026-10-27T01:40:26.8576681Z [36;1mmkdir -p /tmp/gh-aw/agent[0m
+2026-10-27T01:40:26.8577102Z [36;1mjq '{issue: .issue}' "$GITHUB_EVENT_PATH" > /tmp/gh-aw/agent/issue.json[0m
+2026-10-27T01:40:26.8577606Z [36;1ms=.claude/skills/prometheus-issue-triage/scripts/triage.py[0m
+2026-10-27T01:40:26.8578152Z [36;1m"$s" precheck /tmp/gh-aw/agent/issue.json > /tmp/gh-aw/agent/precheck.json[0m
+2026-10-27T01:40:26.8579132Z [36;1m"$s" duplicates /tmp/gh-aw/agent/issue.json > /tmp/gh-aw/agent/duplicates.json[0m
+2026-10-27T01:40:26.8579879Z [36;1mjq -c '{skill, maintainer_authored, missing_bug_template_sections, other_project_mentions}' /tmp/gh-aw/agent/precheck.json[0m
+2026-10-27T01:40:26.8580621Z [36;1mjq -c '[.candidates[] | {ref, score}]' /tmp/gh-aw/agent/duplicates.json[0m
+2026-10-27T01:40:26.8642951Z shell: /usr/bin/bash -e {0}
+2026-10-27T01:40:26.8643233Z env:
+2026-10-27T01:40:26.8643467Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-27T01:40:26.8643945Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-27T01:40:26.8644829Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40433798552,github.run_id=40433798552,gh-aw.engine.id=copilot
+2026-10-27T01:40:26.8645729Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-27T01:40:26.8646035Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-27T01:40:26.8646356Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-27T01:40:26.8646622Z   DEFAULT_BRANCH: main
+2026-10-27T01:40:26.8646866Z   GH_AW_ASSETS_ALLOWED_EXTS: 
+2026-10-27T01:40:26.8647125Z   GH_AW_ASSETS_BRANCH: 
+2026-10-27T01:40:26.8647384Z   GH_AW_ASSETS_MAX_SIZE_KB: 0
+2026-10-27T01:40:26.8647677Z   GH_AW_MCP_LOG_DIR: /tmp/gh-aw/mcp-logs/safeoutputs
+2026-10-27T01:40:26.8648008Z   GH_AW_PR_HEAD_BASE_BRANCH: 
+2026-10-27T01:40:26.8648262Z   GH_AW_PR_HEAD_BASE_PR_NUMBER: 
+2026-10-27T01:40:26.8648701Z   GH_AW_PR_HEAD_BASE_REF: 
+2026-10-27T01:40:26.8648953Z   GH_AW_PR_HEAD_BASE_REPO: 
+2026-10-27T01:40:26.8649212Z   GH_AW_PR_HEAD_BASE_SHA: 
+2026-10-27T01:40:26.8649461Z   GH_AW_PR_HEAD_REPO: 
+2026-10-27T01:40:26.8649693Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-27T01:40:26.8649934Z   GH_AW_TARGET_REPO_SLUG: 
+2026-10-27T01:40:26.8650202Z   GH_AW_WORKFLOW_ID_SANITIZED: issuetriage
+2026-10-27T01:40:26.8650553Z   GITHUB_AW_OTEL_TRACE_ID: e2ba485af196abb0366487c82d309bd2
+2026-10-27T01:40:26.8650928Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 6d7e8fa311300b6e
+2026-10-27T01:40:26.8651261Z   GITHUB_AW_OTEL_JOB_START_MS: 1793065224115
+2026-10-27T01:40:26.8651548Z ##[endgroup]
+2026-10-27T01:40:26.8850618Z files visible to the agent:
+2026-10-27T01:40:26.8875470Z ./.claude/skills/prometheus-issue-triage/SKILL.md
+2026-10-27T01:40:26.8876481Z ./.claude/skills/prometheus-issue-triage/references/component-map.md
+2026-10-27T01:40:26.8879480Z ./.claude/skills/prometheus-issue-triage/references/label-policy.json
+2026-10-27T01:40:26.8880619Z ./.claude/skills/prometheus-issue-triage/references/labels.json
+2026-10-27T01:40:26.8881703Z ./.claude/skills/prometheus-issue-triage/references/other-projects.json
+2026-10-27T01:40:26.8882817Z ./.claude/skills/prometheus-issue-triage/scripts/triage.py
+2026-10-27T01:40:26.8883705Z ./AGENTS.md
+2026-10-27T01:40:26.8884303Z ./data/upstream-issues.jsonl
+2026-10-27T01:40:27.0182646Z {"skill":"prometheus-issue-triage/1.0","maintainer_authored":false,"missing_bug_template_sections":[],"other_project_mentions":[]}
+2026-10-27T01:40:27.0211689Z [{"ref":"prometheus/prometheus#18379","score":0.211},{"ref":"prometheus/prometheus#999001","score":0.17},{"ref":"prometheus/prometheus#19687","score":0.159}]
