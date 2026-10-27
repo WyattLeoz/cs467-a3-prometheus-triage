@@ -9,15 +9,23 @@ on:
   workflow_run:
     workflows: ["Prometheus Issue Triage", "Safe-output limits test"]
     types: [completed]
+  workflow_dispatch:  # backfill: archive one run that has no audits/*-run<id>/ directory
+    inputs:
+      run_id:
+        description: "Run ID of a completed triage or limits-test run to archive"
+        required: true
 
 permissions:
   actions: read    # download the triage run's logs and artifacts
   contents: write  # push to the audit-log branch only
   issues: write    # open a [drift] alert issue (GITHUB_TOKEN issues do not trigger the agent)
 
+# One archive at a time (they push to the same branch). queue: max keeps up to 100 pending
+# archives instead of the default one, so a burst of completions does not drop records.
 concurrency:
   group: triage-audit-archive
   cancel-in-progress: false
+  queue: max
 
 jobs:
   archive:
@@ -31,11 +39,16 @@ jobs:
       - name: Archive gh aw audit report
         env:
           GH_TOKEN: ${{ github.token }}
-          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_ID: ${{ github.event.workflow_run.id || inputs.run_id }}
           RUN_EVENT: ${{ github.event.workflow_run.event }}
           RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
         run: |
           set -euo pipefail
+          [[ "$RUN_ID" =~ ^[0-9]+$ ]] || { echo "run_id must be numeric"; exit 1; }
+          if [ -z "$RUN_CONCLUSION" ]; then  # backfill: read the run's own event and result
+            RUN_EVENT=$(gh run view "$RUN_ID" -R "$GITHUB_REPOSITORY" --json event -q .event)
+            RUN_CONCLUSION=$(gh run view "$RUN_ID" -R "$GITHUB_REPOSITORY" --json conclusion -q .conclusion)
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if git ls-remote --exit-code --heads origin audit-log >/dev/null; then
@@ -44,6 +57,7 @@ jobs:
             git checkout --orphan audit-log && git rm -rq --cached . && git clean -fdq
             echo "# Triage agent audit log (written by triage-audit-archive.yml)" > README.md
           fi
+          if ls -d audits/*-run"$RUN_ID" >/dev/null 2>&1; then echo "run $RUN_ID already archived"; exit 0; fi
           gh extension install github/gh-aw --pin v0.93.1
           dir="audits/$(date -u +%Y-%m-%d)-run$RUN_ID"
           mkdir -p "$dir" /tmp/audit
@@ -61,7 +75,7 @@ jobs:
       - name: Alert on model or CLI drift
         env:
           GH_TOKEN: ${{ github.token }}
-          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_ID: ${{ github.event.workflow_run.id || inputs.run_id }}
         run: |
           set -euo pipefail
           report=$(ls -d audits/*-run"$RUN_ID")/report.json
