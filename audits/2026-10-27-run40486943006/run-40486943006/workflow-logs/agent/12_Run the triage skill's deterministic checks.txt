@@ -1,0 +1,47 @@
+﻿2026-10-27T10:16:00.6847341Z ##[group]Run git sparse-checkout set --no-cone '/.claude/' '!/.claude/skills/prometheus-issue-triage/tests/' '/AGENTS.md' '/data/'
+2026-10-27T10:16:00.6847925Z [36;1mgit sparse-checkout set --no-cone '/.claude/' '!/.claude/skills/prometheus-issue-triage/tests/' '/AGENTS.md' '/data/'[0m
+2026-10-27T10:16:00.6848359Z [36;1mecho "files visible to the agent:"; find . -path ./.git -prune -o -type f -print | sort[0m
+2026-10-27T10:16:00.6848655Z [36;1mmkdir -p /tmp/gh-aw/agent[0m
+2026-10-27T10:16:00.6848891Z [36;1mjq '{issue: .issue}' "$GITHUB_EVENT_PATH" > /tmp/gh-aw/agent/issue.json[0m
+2026-10-27T10:16:00.6849181Z [36;1ms=.claude/skills/prometheus-issue-triage/scripts/triage.py[0m
+2026-10-27T10:16:00.6849486Z [36;1m"$s" precheck /tmp/gh-aw/agent/issue.json > /tmp/gh-aw/agent/precheck.json[0m
+2026-10-27T10:16:00.6849806Z [36;1m"$s" duplicates /tmp/gh-aw/agent/issue.json > /tmp/gh-aw/agent/duplicates.json[0m
+2026-10-27T10:16:00.6850221Z [36;1mjq -c '{skill, maintainer_authored, missing_bug_template_sections, other_project_mentions}' /tmp/gh-aw/agent/precheck.json[0m
+2026-10-27T10:16:00.6850653Z [36;1mjq -c '[.candidates[] | {ref, score}]' /tmp/gh-aw/agent/duplicates.json[0m
+2026-10-27T10:16:00.6906325Z shell: /usr/bin/bash -e {0}
+2026-10-27T10:16:00.6906497Z env:
+2026-10-27T10:16:00.6906632Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-27T10:16:00.6907018Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-27T10:16:00.6907525Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40486943006,github.run_id=40486943006,gh-aw.engine.id=copilot
+2026-10-27T10:16:00.6908022Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-27T10:16:00.6908199Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-27T10:16:00.6908408Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-27T10:16:00.6908561Z   DEFAULT_BRANCH: main
+2026-10-27T10:16:00.6908701Z   GH_AW_ASSETS_ALLOWED_EXTS: 
+2026-10-27T10:16:00.6908850Z   GH_AW_ASSETS_BRANCH: 
+2026-10-27T10:16:00.6909001Z   GH_AW_ASSETS_MAX_SIZE_KB: 0
+2026-10-27T10:16:00.6909175Z   GH_AW_MCP_LOG_DIR: /tmp/gh-aw/mcp-logs/safeoutputs
+2026-10-27T10:16:00.6909363Z   GH_AW_PR_HEAD_BASE_BRANCH: 
+2026-10-27T10:16:00.6909513Z   GH_AW_PR_HEAD_BASE_PR_NUMBER: 
+2026-10-27T10:16:00.6909668Z   GH_AW_PR_HEAD_BASE_REF: 
+2026-10-27T10:16:00.6909812Z   GH_AW_PR_HEAD_BASE_REPO: 
+2026-10-27T10:16:00.6909962Z   GH_AW_PR_HEAD_BASE_SHA: 
+2026-10-27T10:16:00.6910107Z   GH_AW_PR_HEAD_REPO: 
+2026-10-27T10:16:00.6910242Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-27T10:16:00.6910382Z   GH_AW_TARGET_REPO_SLUG: 
+2026-10-27T10:16:00.6910537Z   GH_AW_WORKFLOW_ID_SANITIZED: issuetriage
+2026-10-27T10:16:00.6910740Z   GITHUB_AW_OTEL_TRACE_ID: c1524421db42480b30cd9547fb1c1f63
+2026-10-27T10:16:00.6910955Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 9b69784f3cb85201
+2026-10-27T10:16:00.6911148Z   GITHUB_AW_OTEL_JOB_START_MS: 1793096158622
+2026-10-27T10:16:00.6911559Z ##[endgroup]
+2026-10-27T10:16:00.7077332Z files visible to the agent:
+2026-10-27T10:16:00.7099183Z ./.claude/skills/prometheus-issue-triage/SKILL.md
+2026-10-27T10:16:00.7099768Z ./.claude/skills/prometheus-issue-triage/references/component-map.md
+2026-10-27T10:16:00.7100336Z ./.claude/skills/prometheus-issue-triage/references/label-policy.json
+2026-10-27T10:16:00.7101004Z ./.claude/skills/prometheus-issue-triage/references/labels.json
+2026-10-27T10:16:00.7102120Z ./.claude/skills/prometheus-issue-triage/references/other-projects.json
+2026-10-27T10:16:00.7102842Z ./.claude/skills/prometheus-issue-triage/scripts/triage.py
+2026-10-27T10:16:00.7103599Z ./AGENTS.md
+2026-10-27T10:16:00.7103941Z ./data/upstream-issues.jsonl
+2026-10-27T10:16:00.8185999Z {"skill":"prometheus-issue-triage/1.1","maintainer_authored":false,"missing_bug_template_sections":["System information","Prometheus version","Prometheus configuration file"],"other_project_mentions":[{"project":"postgres_exporter","where":"https://github.com/prometheus-community/postgres_exporter"}]}
+2026-10-27T10:16:00.8208184Z []
