@@ -1,0 +1,26 @@
+﻿2026-10-27T07:09:38.6647573Z ##[group]Run assoc=$(jq -r '.issue.author_association' "$GITHUB_EVENT_PATH")
+2026-10-27T07:09:38.6651721Z [36;1massoc=$(jq -r '.issue.author_association' "$GITHUB_EVENT_PATH")[0m
+2026-10-27T07:09:38.6652520Z [36;1mif [ "$assoc" = "OWNER" ]; then[0m
+2026-10-27T07:09:38.6653742Z [36;1m  meta=$(jq -r '.issue.body // ""' "$GITHUB_EVENT_PATH" | grep -oP '(?<=<!-- triage-replay: )\{.*?\}(?= -->)' | head -n1 || true)[0m
+2026-10-27T07:09:38.6655986Z [36;1m  if [ -n "$meta" ]; then assoc=$(printf '%s' "$meta" | jq -r '.author_association // "OWNER"'); fi[0m
+2026-10-27T07:09:38.6656863Z [36;1mfi[0m
+2026-10-27T07:09:38.6657359Z [36;1mecho "effective author_association: $assoc"[0m
+2026-10-27T07:09:38.6657968Z [36;1mcase "$assoc" in[0m
+2026-10-27T07:09:38.6658953Z [36;1m  OWNER|MEMBER|COLLABORATOR) echo "triage=no" >> "$GITHUB_OUTPUT"; echo "::notice::maintainer-authored issue, triage skipped" ;;[0m
+2026-10-27T07:09:38.6660039Z [36;1m  *) echo "triage=yes" >> "$GITHUB_OUTPUT" ;;[0m
+2026-10-27T07:09:38.6660663Z [36;1mesac[0m
+2026-10-27T07:09:38.6669422Z shell: /usr/bin/bash -e {0}
+2026-10-27T07:09:38.6670000Z env:
+2026-10-27T07:09:38.6670468Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-27T07:09:38.6671015Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-27T07:09:38.6672542Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40465414644,github.run_id=40465414644,gh-aw.engine.id=copilot
+2026-10-27T07:09:38.6674008Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-27T07:09:38.6674561Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-27T07:09:38.6675157Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-27T07:09:38.6676120Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-27T07:09:38.6676730Z   GITHUB_AW_OTEL_TRACE_ID: d3cf3892f3bdc543e84868fc3704f80b
+2026-10-27T07:09:38.6677425Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 910f3ae0b7472d60
+2026-10-27T07:09:38.6678044Z   GITHUB_AW_OTEL_JOB_START_MS: 1793084977277
+2026-10-27T07:09:38.6678587Z ##[endgroup]
+2026-10-27T07:09:38.6926831Z effective author_association: MEMBER
+2026-10-27T07:09:38.7036505Z ##[notice]maintainer-authored issue, triage skipped
