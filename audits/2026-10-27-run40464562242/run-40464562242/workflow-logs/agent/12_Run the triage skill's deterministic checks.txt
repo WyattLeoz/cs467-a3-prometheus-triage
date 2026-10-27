@@ -1,0 +1,47 @@
+﻿2026-10-27T07:02:38.4750154Z ##[group]Run git sparse-checkout set --no-cone '/.claude/' '!/.claude/skills/prometheus-issue-triage/tests/' '/AGENTS.md' '/data/'
+2026-10-27T07:02:38.4751799Z [36;1mgit sparse-checkout set --no-cone '/.claude/' '!/.claude/skills/prometheus-issue-triage/tests/' '/AGENTS.md' '/data/'[0m
+2026-10-27T07:02:38.4753176Z [36;1mecho "files visible to the agent:"; find . -path ./.git -prune -o -type f -print | sort[0m
+2026-10-27T07:02:38.4754074Z [36;1mmkdir -p /tmp/gh-aw/agent[0m
+2026-10-27T07:02:38.4754791Z [36;1mjq '{issue: .issue}' "$GITHUB_EVENT_PATH" > /tmp/gh-aw/agent/issue.json[0m
+2026-10-27T07:02:38.4755686Z [36;1ms=.claude/skills/prometheus-issue-triage/scripts/triage.py[0m
+2026-10-27T07:02:38.4756625Z [36;1m"$s" precheck /tmp/gh-aw/agent/issue.json > /tmp/gh-aw/agent/precheck.json[0m
+2026-10-27T07:02:38.4757915Z [36;1m"$s" duplicates /tmp/gh-aw/agent/issue.json > /tmp/gh-aw/agent/duplicates.json[0m
+2026-10-27T07:02:38.4759275Z [36;1mjq -c '{skill, maintainer_authored, missing_bug_template_sections, other_project_mentions}' /tmp/gh-aw/agent/precheck.json[0m
+2026-10-27T07:02:38.4760710Z [36;1mjq -c '[.candidates[] | {ref, score}]' /tmp/gh-aw/agent/duplicates.json[0m
+2026-10-27T07:02:38.4826318Z shell: /usr/bin/bash -e {0}
+2026-10-27T07:02:38.4826612Z env:
+2026-10-27T07:02:38.4826841Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-27T07:02:38.4827634Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-27T07:02:38.4828561Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40464562242,github.run_id=40464562242,gh-aw.engine.id=copilot
+2026-10-27T07:02:38.4829443Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-27T07:02:38.4829775Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-27T07:02:38.4830114Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-27T07:02:38.4830372Z   DEFAULT_BRANCH: main
+2026-10-27T07:02:38.4830627Z   GH_AW_ASSETS_ALLOWED_EXTS: 
+2026-10-27T07:02:38.4830877Z   GH_AW_ASSETS_BRANCH: 
+2026-10-27T07:02:38.4831128Z   GH_AW_ASSETS_MAX_SIZE_KB: 0
+2026-10-27T07:02:38.4831425Z   GH_AW_MCP_LOG_DIR: /tmp/gh-aw/mcp-logs/safeoutputs
+2026-10-27T07:02:38.4831752Z   GH_AW_PR_HEAD_BASE_BRANCH: 
+2026-10-27T07:02:38.4832013Z   GH_AW_PR_HEAD_BASE_PR_NUMBER: 
+2026-10-27T07:02:38.4832278Z   GH_AW_PR_HEAD_BASE_REF: 
+2026-10-27T07:02:38.4832535Z   GH_AW_PR_HEAD_BASE_REPO: 
+2026-10-27T07:02:38.4832785Z   GH_AW_PR_HEAD_BASE_SHA: 
+2026-10-27T07:02:38.4833019Z   GH_AW_PR_HEAD_REPO: 
+2026-10-27T07:02:38.4833250Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-27T07:02:38.4833486Z   GH_AW_TARGET_REPO_SLUG: 
+2026-10-27T07:02:38.4833743Z   GH_AW_WORKFLOW_ID_SANITIZED: issuetriage
+2026-10-27T07:02:38.4834094Z   GITHUB_AW_OTEL_TRACE_ID: df89541057b1dea737b8d75feeebbd6d
+2026-10-27T07:02:38.4834470Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: e14b907857d050e4
+2026-10-27T07:02:38.4834807Z   GITHUB_AW_OTEL_JOB_START_MS: 1793084556777
+2026-10-27T07:02:38.4835092Z ##[endgroup]
+2026-10-27T07:02:38.5031086Z files visible to the agent:
+2026-10-27T07:02:38.5055004Z ./.claude/skills/prometheus-issue-triage/SKILL.md
+2026-10-27T07:02:38.5056231Z ./.claude/skills/prometheus-issue-triage/references/component-map.md
+2026-10-27T07:02:38.5057102Z ./.claude/skills/prometheus-issue-triage/references/label-policy.json
+2026-10-27T07:02:38.5062258Z ./.claude/skills/prometheus-issue-triage/references/labels.json
+2026-10-27T07:02:38.5063133Z ./.claude/skills/prometheus-issue-triage/references/other-projects.json
+2026-10-27T07:02:38.5064014Z ./.claude/skills/prometheus-issue-triage/scripts/triage.py
+2026-10-27T07:02:38.5064609Z ./AGENTS.md
+2026-10-27T07:02:38.5065100Z ./data/upstream-issues.jsonl
+2026-10-27T07:02:38.6783086Z {"skill":"prometheus-issue-triage/1.1","maintainer_authored":false,"missing_bug_template_sections":[],"other_project_mentions":[]}
+2026-10-27T07:02:38.6819606Z [{"ref":"prometheus/prometheus#999002","score":0.66},{"ref":"prometheus/prometheus#20045","score":0.371},{"ref":"prometheus/prometheus#19432","score":0.346},{"ref":"prometheus/prometheus#17008","score":0.262},{"ref":"prometheus/prometheus#18093","score":0.258}]
