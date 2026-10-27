@@ -1,0 +1,312 @@
+﻿2026-10-27T06:46:12.5098478Z ##[group]Run set -o pipefail
+2026-10-27T06:46:12.5098935Z [36;1mset -o pipefail[0m
+2026-10-27T06:46:12.5099296Z [36;1mprintf '%s' "$(date +%s%3N)" > /tmp/gh-aw/agent_cli_start_ms.txt[0m
+2026-10-27T06:46:12.5099695Z [36;1mgh_aw_exit_code=0[0m
+2026-10-27T06:46:12.5100756Z [36;1mtrap 'gh_aw_exit_code=$?; mkdir -p /tmp/gh-aw >/dev/null 2>&1 || true; printf "%s" "$gh_aw_exit_code" > /tmp/gh-aw/agent_execution_exit_code.txt || true; rm -f "$HOME/.copilot/settings.json"; if [ "$gh_aw_exit_code" -ne 0 ]; then echo "::error::Agent execution exited with code $gh_aw_exit_code"; fi' EXIT[0m
+2026-10-27T06:46:12.5101836Z [36;1mmkdir -p "$HOME/.copilot"[0m
+2026-10-27T06:46:12.5102420Z [36;1mprintf '%s' '{"builtInAgents":{"rubberDuck":false},"enabledFeatureFlags":{"EXTENSIONS":false}}' > "$HOME/.copilot/settings.json"[0m
+2026-10-27T06:46:12.5103470Z [36;1mexport XDG_CONFIG_HOME="$HOME"[0m
+2026-10-27T06:46:12.5103859Z [36;1mexport GH_AW_MCP_CONFIG="$HOME/.copilot/mcp-config.json"[0m
+2026-10-27T06:46:12.5104348Z [36;1mGH_AW_COPILOT_SRC="$(command -v copilot 2>/dev/null || true)"[0m
+2026-10-27T06:46:12.5104834Z [36;1mif [ -z "$GH_AW_COPILOT_SRC" ] || [ ! -x "$GH_AW_COPILOT_SRC" ]; then[0m
+2026-10-27T06:46:12.5105359Z [36;1m  echo "GitHub Copilot CLI executable not found on PATH after installation" >&2[0m
+2026-10-27T06:46:12.5105801Z [36;1m  exit 127[0m
+2026-10-27T06:46:12.5106026Z [36;1mfi[0m
+2026-10-27T06:46:12.5106298Z [36;1mGH_AW_COPILOT_BIN="${RUNNER_TEMP}/gh-aw/bin/copilot"[0m
+2026-10-27T06:46:12.5106666Z [36;1mmkdir -p "${RUNNER_TEMP}/gh-aw/bin"[0m
+2026-10-27T06:46:12.5107040Z [36;1mif [ "$GH_AW_COPILOT_SRC" != "$GH_AW_COPILOT_BIN" ]; then[0m
+2026-10-27T06:46:12.5107421Z [36;1m  cp "$GH_AW_COPILOT_SRC" "$GH_AW_COPILOT_BIN"[0m
+2026-10-27T06:46:12.5107728Z [36;1mfi[0m
+2026-10-27T06:46:12.5107951Z [36;1mchmod 755 "$GH_AW_COPILOT_BIN"[0m
+2026-10-27T06:46:12.5108226Z [36;1m[0m
+2026-10-27T06:46:12.5108479Z [36;1mtouch /tmp/gh-aw/agent-step-summary.md[0m
+2026-10-27T06:46:12.5108854Z [36;1mGH_AW_NODE_BIN=$(command -v node 2>/dev/null || true)[0m
+2026-10-27T06:46:12.5109203Z [36;1mexport GH_AW_NODE_BIN[0m
+2026-10-27T06:46:12.5109501Z [36;1mexport COPILOT_API_KEY="$COPILOT_DUMMY_BYOK"[0m
+2026-10-27T06:46:12.5110070Z [36;1m(umask 177 && touch /tmp/gh-aw/agent-stdio.log)[0m
+2026-10-27T06:46:12.5110407Z [36;1mGH_AW_MAX_AI_CREDITS="200"[0m
+2026-10-27T06:46:12.5110730Z [36;1mif [[ ! "$GH_AW_MAX_AI_CREDITS" =~ ^[0-9]+$ ]]; then[0m
+2026-10-27T06:46:12.5111057Z [36;1m  GH_AW_MAX_AI_CREDITS="200"[0m
+2026-10-27T06:46:12.5111319Z [36;1mfi[0m
+2026-10-27T06:46:12.5111717Z [36;1mif [[ "${GH_AW_ADMISSION_RESULT:-}" == "admitted" && -z "${GH_AW_ADMISSION_MAX_AI_CREDITS:-}" ]]; then[0m
+2026-10-27T06:46:12.5112315Z [36;1m  echo "ERR_ADMISSION: Missing required runtime admission allowance." >&2[0m
+2026-10-27T06:46:12.5112728Z [36;1m  exit 1[0m
+2026-10-27T06:46:12.5113251Z [36;1mfi[0m
+2026-10-27T06:46:12.5113570Z [36;1m[0m
+2026-10-27T06:46:12.5113968Z [36;1mif [[ "${GH_AW_ADMISSION_RESULT:-}" == "admitted" && -n "${GH_AW_ADMISSION_MAX_AI_CREDITS:-}" ]]; then[0m
+2026-10-27T06:46:12.5114668Z [36;1m  if [[ ! "$GH_AW_ADMISSION_MAX_AI_CREDITS" =~ ^[1-9][0-9]{0,9}$ ]] || (( GH_AW_ADMISSION_MAX_AI_CREDITS > 2147483647 )); then[0m
+2026-10-27T06:46:12.5115289Z [36;1m    echo "ERR_ADMISSION: Invalid runtime admission allowance." >&2[0m
+2026-10-27T06:46:12.5115660Z [36;1m    exit 1[0m
+2026-10-27T06:46:12.5115877Z [36;1m  fi[0m
+2026-10-27T06:46:12.5116149Z [36;1m  GH_AW_MAX_AI_CREDITS="$GH_AW_ADMISSION_MAX_AI_CREDITS"[0m
+2026-10-27T06:46:12.5116559Z [36;1m  echo "Admission allowance applied (value withheld)."[0m
+2026-10-27T06:46:12.5116915Z [36;1melse[0m
+2026-10-27T06:46:12.5117318Z [36;1m  echo "No component admission allowance; retaining existing budget policy (value withheld)."[0m
+2026-10-27T06:46:12.5117782Z [36;1mfi[0m
+2026-10-27T06:46:12.5118072Z [36;1munset GH_AW_ADMISSION_RESULT GH_AW_ADMISSION_MAX_AI_CREDITS[0m
+2026-10-27T06:46:12.5135164Z [36;1mprintf '%s\n' "{\"\$schema\":\"https://github.com/github/gh-aw-firewall/releases/download/v0.28.70/awf-config.schema.json\",\"network\":{\"isolation\":true,\"topologyAttach\":[\"awmg-mcpg\"]},\"apiProxy\":{\"enabled\":true,\"enableTokenSteering\":true,\"maxRuns\":20,\"maxCacheMisses\":5,\"maxAiCredits\":${GH_AW_MAX_AI_CREDITS},\"providers\":{\"github-copilot\":{\"models\":{\"gpt-4.1\":{\"cost\":{\"cache_read\":\"5e-07\",\"input\":\"2e-06\",\"output\":\"8e-06\"}}}}},\"models\":{\"agent\":[\"sonnet-6x\",\"gpt-6\",\"gpt-5.4\",\"gpt-5.5\",\"gpt-5.6\",\"gpt-5.3\",\"gemini-pro\",\"any\"],\"antigravity\":[\"copilot/antigravity*\",\"google/antigravity*\",\"gemini/antigravity*\"],\"any\":[\"copilot/*\",\"anthropic/*\",\"openai/*\",\"google/*\",\"gemini/*\"],\"auto\":[\"copilot/auto\",\"large\"],\"claude\":[\"agent\"],\"codex\":[\"agent\"],\"coding\":[\"copilot/gpt-5*codex*\",\"openai/gpt-5*codex*\",\"gpt-5-codex\",\"kimi\"],\"computer-use\":[\"copilot/*computer-use*\",\"google/*computer-use*\",\"gemini/*computer-use*\",\"openai/*computer-use*\"],\"copilot\":[\"agent\"],\"deep-research\":[\"copilot/deep-research*\",\"copilot/o3-deep-research*\",\"copilot/o4-mini-deep-research*\",\"google/deep-research*\",\"gemini/deep-research*\",\"openai/o3-deep-research*\",\"openai/o4-mini-deep-research*\"],\"detection\":[\"small\"],\"evals\":[\"small\"],\"fable\":[\"copilot/*fable*\",\"anthropic/*fable*\"],\"gemini\":[\"agent\"],\"gemini-3-flash\":[\"copilot/gemini-3*flash*\",\"google/gemini-3*flash*\",\"gemini/gemini-3*flash*\"],\"gemini-3-pro\":[\"copilot/gemini-3*pro*\",\"google/gemini-3*pro*\",\"google/nano-banana*\",\"gemini/gemini-3*pro*\"],\"gemini-3.1-flash\":[\"copilot/gemini-3.1*flash*\",\"google/gemini-3.1*flash*\",\"gemini/gemini-3.1*flash*\"],\"gemini-3.1-pro\":[\"copilot/gemini-3.1*pro*\",\"google/gemini-3.1*pro*\",\"gemini/gemini-3.1*pro*\"],\"gemini-3.5-flash\":[\"copilot/gemini-3.5*flash*\",\"google/gemini-3.5*flash*\",\"gemini/gemini-3.5*flash*\"],\"gemini-3.6-flash\":[\"copilot/gemini-3.6*flash*\",\"google/gemini-3.6*flash*\",\"gemini/gemini-3.6*flash*\"],\"gemini-3.7-flash\":[\"copilot/gemini-3.7*flash*\",\"google/gemini-3.7*flash*\",\"gemini/gemini-3.7*flash*\"],\"gemini-3.8-flash\":[\"copilot/gemini-3.8*flash*\",\"google/gemini-3.8*flash*\",\"gemini/gemini-3.8*flash*\"],\"gemini-flash\":[\"copilot/gemini-*flash*\",\"google/gemini-*flash*\",\"gemini/gemini-*flash*\"],\"gemini-flash-lite\":[\"copilot/gemini-*flash*lite*\",\"google/gemini-*flash*lite*\",\"gemini/gemini-*flash*lite*\"],\"gemini-omni\":[\"copilot/gemini-omni*\",\"google/gemini-omni*\",\"gemini/gemini-omni*\"],\"gemini-pro\":[\"copilot/gemini-*pro*\",\"google/gemini-*pro*\",\"gemini/gemini-*pro*\"],\"gemma\":[\"copilot/gemma*\",\"google/gemma*\",\"gemini/gemma*\"],\"gpt-5\":[\"copilot/gpt-5*\",\"openai/gpt-5*\"],\"gpt-5-codex\":[\"copilot/gpt-5*codex*\",\"openai/gpt-5*codex*\"],\"gpt-5-mini\":[\"copilot/gpt-5*mini*\",\"openai/gpt-5*mini*\"],\"gpt-5-nano\":[\"copilot/gpt-5*nano*\",\"openai/gpt-5*nano*\"],\"gpt-5-pro\":[\"copilot/gpt-5*pro*\",\"openai/gpt-5*pro*\"],\"gpt-5.1\":[\"copilot/gpt-5.1*\",\"openai/gpt-5.1*\"],\"gpt-5.2\":[\"copilot/gpt-5.2*\",\"openai/gpt-5.2*\"],\"gpt-5.3\":[\"copilot/gpt-5.3*\",\"openai/gpt-5.3*\"],\"gpt-5.4\":[\"copilot/gpt-5.4*\",\"openai/gpt-5.4*\"],\"gpt-5.5\":[\"copilot/gpt-5.5*\",\"openai/gpt-5.5*\"],\"gpt-5.6\":[\"copilot/gpt-5.6*\",\"openai/gpt-5.6*\"],\"gpt-6\":[\"copilot/gpt-6*\",\"openai/gpt-6*\"],\"grok\":[\"copilot/*grok*\",\"openai/*grok*\"],\"haiku\":[\"copilot/*haiku*\",\"anthropic/*haiku*\"],\"image-generation\":[\"copilot/gpt-image*\",\"openai/gpt-image*\",\"openai/chatgpt-image*\",\"copilot/gemini-*image*\",\"google/gemini-*image*\",\"gemini/gemini-*image*\",\"google/imagen*\"],\"kimi\":[\"copilot/kimi*\",\"openai/kimi*\"],\"kiwi\":[\"copilot/kiwi*\",\"openai/kiwi*\"],\"large\":[\"sonnet\",\"gpt-6\",\"gpt-5-pro\",\"gpt-5\",\"gemini-pro\"],\"lyria\":[\"google/lyria*\",\"gemini/lyria*\",\"copilot/lyria*\"],\"mai-code\":[\"copilot/MAI-Code*\",\"copilot/mai-code*\",\"openai/MAI-Code*\"],\"mini\":[\"haiku\",\"gpt-5-mini\",\"gpt-5-nano\",\"gemini-flash-lite\"],\"nano-banana\":[\"copilot/nano-banana*\",\"google/nano-banana*\",\"gemini/nano-banana*\"],\"opus\":[\"copilot/*opus*\",\"anthropic/*opus*\"],\"opusplan\":[\"opus?effort=high\"],\"raptor-mini\":[\"copilot/raptor*\",\"openai/raptor*\"],\"reasoning\":[\"copilot/o1*\",\"copilot/o3*\",\"copilot/o4*\",\"openai/o1*\",\"openai/o3*\",\"openai/o4*\"],\"robotics\":[\"copilot/*robotics*\",\"google/*robotics*\",\"gemini/*robotics*\"],\"small\":[\"mini\"],\"small-agent\":[\"haiku\",\"gpt-5-mini\",\"gemini-flash\"],\"sonnet\":[\"copilot/*sonnet*\",\"anthropic/*sonnet*\"],\"sonnet-6x\":[\"copilot/*sonnet-4.5*\",\"copilot/*sonnet-4.6*\",\"copilot/*sonnet-5*\",\"copilot/*sonnet-4-5-*\",\"anthropic/*sonnet-4-5-*\",\"copilot/*sonnet-4-6*\",\"anthropic/*sonnet-4-6*\",\"anthropic/*sonnet-5*\"],\"summarization\":[\"haiku\",\"gpt-5-mini\",\"gemini-flash-lite\",\"mini\"],\"veo\":[\"google/veo*\",\"gemini/veo*\"],\"vision\":[\"copilot/gemini-*image*\",\"google/gemini-*image*\",\"gemini/gemini-*image*\",\"copilot/gemini-*flash*\",\"google/gemini-*flash*\",\"gemini/gemini-*flash*\"]}},\"container\":{\"imageTag\":\"0.28.70,squid=sha256:b5bc53f4becfd96e926e63c83831f1b3c9512f713c83161d2b8c9b7204b3e917,agent=sha256:b15ab48cbbab02904eb9bbd359a398db59690eebbea1e6934d47ed2bb407dd34,api-proxy=sha256:9ac8f9c7294e892c916de3da9d2588dfd8cd4931e5c39b00143266d7ed9fd52a,cli-proxy=sha256:372ac51a5cccffdfe484f3f7be427d2d1c566e8ae550d55bd45d9fd166a154b4\",\"agentTimeout\":10},\"logging\":{\"proxyLogsDir\":\"/tmp/gh-aw/sandbox/firewall/logs\",\"auditDir\":\"/tmp/gh-aw/sandbox/firewall/audit\"}}" > "${RUNNER_TEMP}/gh-aw/awf-config.json"[0m
+2026-10-27T06:46:12.5152753Z [36;1mcp "${RUNNER_TEMP}/gh-aw/awf-config.json" /tmp/gh-aw/awf-config.json[0m
+2026-10-27T06:46:12.5153328Z [36;1mexport GH_AW_MODELS_JSON_PATH="/tmp/gh-aw/models.json"[0m
+2026-10-27T06:46:12.5153687Z [36;1mGH_AW_DOCKER_HOST=""[0m
+2026-10-27T06:46:12.5153975Z [36;1mif [[ "${DOCKER_HOST:-}" =~ ^tcp:// ]]; then[0m
+2026-10-27T06:46:12.5154301Z [36;1m  GH_AW_DOCKER_HOST="${DOCKER_HOST}"[0m
+2026-10-27T06:46:12.5154608Z [36;1mfi[0m
+2026-10-27T06:46:12.5154844Z [36;1mif [[ "${DOCKER_HOST:-}" =~ ^tcp:// ]]; then[0m
+2026-10-27T06:46:12.5155596Z [36;1m  GH_AW_CHROOT_BINARIES_SOURCE_PATH="${RUNNER_TEMP}/gh-aw" GH_AW_CHROOT_IDENTITY_HOME="${RUNNER_TEMP}/gh-aw/home" node "${RUNNER_TEMP}/gh-aw/actions/patch_awf_chroot_config.cjs"[0m
+2026-10-27T06:46:12.5156433Z [36;1mfi[0m
+2026-10-27T06:46:12.5156640Z [36;1mGH_AW_TOOL_CACHE_MOUNT=""[0m
+2026-10-27T06:46:12.5157025Z [36;1mGH_AW_TOOL_CACHE="${RUNNER_TOOL_CACHE:?RUNNER_TOOL_CACHE must be set}"[0m
+2026-10-27T06:46:12.5157440Z [36;1mif [ -d "$GH_AW_TOOL_CACHE" ]; then[0m
+2026-10-27T06:46:12.5157769Z [36;1m  if [[ "$GH_AW_TOOL_CACHE" != /opt/* ]]; then[0m
+2026-10-27T06:46:12.5158162Z [36;1m    GH_AW_TOOL_CACHE_MOUNT="$GH_AW_TOOL_CACHE:$GH_AW_TOOL_CACHE:ro"[0m
+2026-10-27T06:46:12.5158520Z [36;1m  fi[0m
+2026-10-27T06:46:12.5158721Z [36;1mfi[0m
+2026-10-27T06:46:12.5158957Z [36;1m# shellcheck disable=SC1003,SC2016,SC2086[0m
+2026-10-27T06:46:12.5159284Z [36;1mmkdir -p "/tmp/gh-aw"[0m
+2026-10-27T06:46:12.5159621Z [36;1mevidence_tmp="/tmp/gh-aw/agent_execution.json.tmp"[0m
+2026-10-27T06:46:12.5160300Z [36;1mprintf '{"version":1,"component":"agent","run_id":%s,"run_attempt":%s,"state":"started"}\n' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" > "$evidence_tmp"[0m
+2026-10-27T06:46:12.5160985Z [36;1mmv "$evidence_tmp" "/tmp/gh-aw/agent_execution.json"[0m
+2026-10-27T06:46:12.5161368Z [36;1mexport GH_AW_AWF_EXECUTION_COMPONENT="agent"[0m
+2026-10-27T06:46:12.5161814Z [36;1mexport GH_AW_AWF_EXECUTION_EVIDENCE_FILE="/tmp/gh-aw/agent_execution.json"[0m
+2026-10-27T06:46:12.5162247Z [36;1mGH_AW_AWF_ENGINE_NAME=copilot \[0m
+2026-10-27T06:46:12.5162579Z [36;1mGH_AW_AWF_HARNESS_MARKER='[copilot-harness]' \[0m
+2026-10-27T06:46:12.5163075Z [36;1mGH_AW_AWF_LOG_FILE=/tmp/gh-aw/agent-stdio.log \[0m
+2026-10-27T06:46:12.5163426Z [36;1mGH_AW_AWF_ATTEMPT_LOG_NAME=copilot \[0m
+2026-10-27T06:46:12.5163857Z [36;1mbash "${RUNNER_TEMP}/gh-aw/actions/run_awf_with_startup_retries.sh" -- \[0m
+2026-10-27T06:46:12.5166764Z [36;1m  awf --config "${RUNNER_TEMP}/gh-aw/awf-config.json" --container-workdir "${GITHUB_WORKSPACE}" --mount "${RUNNER_TEMP}/gh-aw:${RUNNER_TEMP}/gh-aw:ro" --mount "${RUNNER_TEMP}/gh-aw:/host${RUNNER_TEMP}/gh-aw:ro" ${GH_AW_TOOL_CACHE_MOUNT:+--mount "$GH_AW_TOOL_CACHE_MOUNT"} ${GH_AW_DOCKER_HOST:+--docker-host "$GH_AW_DOCKER_HOST"} --env-all --exclude-env ACTIONS_ID_TOKEN_REQUEST_TOKEN --exclude-env ACTIONS_ID_TOKEN_REQUEST_URL --exclude-env COPILOT_GITHUB_TOKEN --exclude-env GH_AW_OTLP_ALL_HEADERS --exclude-env GH_AW_OTLP_ENDPOINTS --exclude-env MCP_GATEWAY_AGENT_ID --exclude-env OTEL_EXPORTER_OTLP_ENDPOINT --exclude-env OTEL_EXPORTER_OTLP_HEADERS --mount /tmp/gh-aw:/tmp/gh-aw:rw --log-level info --session-state-dir /tmp/gh-aw/sandbox/agent/session-state --skip-pull \[0m
+2026-10-27T06:46:12.5175502Z [36;1m  -- /bin/bash -c 'set +o histexpand; export PATH="${RUNNER_TEMP}/gh-aw/mcp-cli/bin:$PATH" && : "${RUNNER_TOOL_CACHE:?RUNNER_TOOL_CACHE must be set}"; GH_AW_TOOL_CACHE="$RUNNER_TOOL_CACHE"; GH_AW_TOOL_BINS="$(find "$GH_AW_TOOL_CACHE" -maxdepth 5 -type d -name bin 2>/dev/null | tr "\n" ":")"; GH_AW_TOOL_BINS="${GH_AW_TOOL_BINS%:}"; export PATH="$PATH${GH_AW_TOOL_BINS:+:}$GH_AW_TOOL_BINS"; [ -n "$GOROOT" ] && export PATH="$GOROOT/bin:$PATH" || true; [ -n "$ERLANG_HOME" ] && export PATH="$ERLANG_HOME/bin:$PATH" || true && GH_AW_NODE_EXEC="${GH_AW_NODE_BIN:-}"; if [ -z "$GH_AW_NODE_EXEC" ] || [ ! -x "$GH_AW_NODE_EXEC" ]; then GH_AW_NODE_EXEC="$(command -v node 2>/dev/null || true)"; fi; if [ -z "$GH_AW_NODE_EXEC" ]; then echo "node runtime missing on this runner — check runtimes.node in workflow YAML" >&2; exit 127; fi; GH_AW_NPM_GLOBAL_ROOT="$(npm root -g 2>/dev/null || true)"; if [ -n "$GH_AW_NPM_GLOBAL_ROOT" ]; then export NODE_PATH="${GH_AW_NPM_GLOBAL_ROOT}${NODE_PATH:+:${NODE_PATH}}"; fi; "$GH_AW_NODE_EXEC" "${RUNNER_TEMP}/gh-aw/actions/copilot_harness.cjs" "${RUNNER_TEMP}/gh-aw/bin/copilot" --add-dir /tmp/gh-aw/ --log-level all --log-dir /tmp/gh-aw/sandbox/agent/logs/ --disable-builtin-mcps --no-ask-user --allow-tool safeoutputs --allow-tool '\''shell(.claude/skills/prometheus-issue-triage/scripts/triage.py:*)'\'' --allow-tool '\''shell(cat)'\'' --allow-tool '\''shell(date)'\'' --allow-tool '\''shell(echo)'\'' --allow-tool '\''shell(grep)'\'' --allow-tool '\''shell(head)'\'' --allow-tool '\''shell(ls)'\'' --allow-tool '\''shell(printf)'\'' --allow-tool '\''shell(pwd)'\'' --allow-tool '\''shell(safeoutputs:*)'\'' --allow-tool '\''shell(sort)'\'' --allow-tool '\''shell(tail)'\'' --allow-tool '\''shell(uniq)'\'' --allow-tool '\''shell(wc)'\'' --allow-tool '\''shell(yq)'\'' --deny-tool workflow --add-dir "${GITHUB_WORKSPACE}" --prompt-file /tmp/gh-aw/aw-prompts/prompt.txt'[0m
+2026-10-27T06:46:12.5243821Z shell: /usr/bin/bash -e {0}
+2026-10-27T06:46:12.5244102Z env:
+2026-10-27T06:46:12.5244347Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-27T06:46:12.5244634Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-27T06:46:12.5245507Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40462874671,github.run_id=40462874671,gh-aw.engine.id=copilot
+2026-10-27T06:46:12.5246378Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-27T06:46:12.5246679Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-27T06:46:12.5246998Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-27T06:46:12.5247249Z   DEFAULT_BRANCH: main
+2026-10-27T06:46:12.5247484Z   GH_AW_ASSETS_ALLOWED_EXTS: 
+2026-10-27T06:46:12.5247729Z   GH_AW_ASSETS_BRANCH: 
+2026-10-27T06:46:12.5247951Z   GH_AW_ASSETS_MAX_SIZE_KB: 0
+2026-10-27T06:46:12.5248243Z   GH_AW_MCP_LOG_DIR: /tmp/gh-aw/mcp-logs/safeoutputs
+2026-10-27T06:46:12.5248565Z   GH_AW_PR_HEAD_BASE_BRANCH: 
+2026-10-27T06:46:12.5248824Z   GH_AW_PR_HEAD_BASE_PR_NUMBER: 
+2026-10-27T06:46:12.5249090Z   GH_AW_PR_HEAD_BASE_REF: 
+2026-10-27T06:46:12.5249324Z   GH_AW_PR_HEAD_BASE_REPO: 
+2026-10-27T06:46:12.5249562Z   GH_AW_PR_HEAD_BASE_SHA: 
+2026-10-27T06:46:12.5249803Z   GH_AW_PR_HEAD_REPO: 
+2026-10-27T06:46:12.5250216Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-27T06:46:12.5250454Z   GH_AW_TARGET_REPO_SLUG: 
+2026-10-27T06:46:12.5250709Z   GH_AW_WORKFLOW_ID_SANITIZED: issuetriage
+2026-10-27T06:46:12.5251057Z   GITHUB_AW_OTEL_TRACE_ID: 80f5526742a284d7c9004b4aaee87fca
+2026-10-27T06:46:12.5251425Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 2cb4c9a4f06b276d
+2026-10-27T06:46:12.5251742Z   GITHUB_AW_OTEL_JOB_START_MS: 1793083532865
+2026-10-27T06:46:12.5252237Z   GH_AW_COPILOT_SDK_MCP_CONFIG_SHA256: 9999eb7a93ef88627968bf2f02f8921b3179319faf9ebbb87a928baaef077982
+2026-10-27T06:46:12.5252777Z   AWF_REFLECT_ENABLED: 1
+2026-10-27T06:46:12.5253186Z   COPILOT_AGENT_RUNNER_TYPE: STANDALONE
+2026-10-27T06:46:12.5253526Z   COPILOT_DUMMY_BYOK: dummy-byok-key-for-offline-mode
+2026-10-27T06:46:12.5254459Z   COPILOT_GITHUB_TOKEN: ***
+2026-10-27T06:46:12.5254723Z   COPILOT_MODEL: gpt-4.1
+2026-10-27T06:46:12.5254981Z   GH_AW_ADMISSION_MAX_AI_CREDITS: 
+2026-10-27T06:46:12.5255255Z   GH_AW_ADMISSION_RESULT: 
+2026-10-27T06:46:12.5255509Z   GH_AW_LLM_PROVIDER: github
+2026-10-27T06:46:12.5255753Z   GH_AW_MAX_TURNS: 20
+2026-10-27T06:46:12.5255973Z   GH_AW_PHASE: agent
+2026-10-27T06:46:12.5256244Z   GH_AW_PROMPT: /tmp/gh-aw/aw-prompts/prompt.txt
+2026-10-27T06:46:12.5256683Z   GH_AW_SAFE_OUTPUTS: /home/runner/work/_temp/gh-aw/safeoutputs/outputs.jsonl
+2026-10-27T06:46:12.5257089Z   GH_AW_TIMEOUT_MINUTES: 10
+2026-10-27T06:46:12.5257344Z   GH_AW_VERSION: v0.93.1
+2026-10-27T06:46:12.5257606Z   GITHUB_API_URL: https://api.github.com
+2026-10-27T06:46:12.5257885Z   GITHUB_AW: true
+2026-10-27T06:46:12.5258144Z   GITHUB_COPILOT_INTEGRATION_ID: agentic-workflows
+2026-10-27T06:46:12.5258487Z   GITHUB_COPILOT_PROMPT_MODE_EXTENSIONS: false
+2026-10-27T06:46:12.5258789Z   GITHUB_HEAD_REF: 
+2026-10-27T06:46:12.5259005Z   GITHUB_REF_NAME: main
+2026-10-27T06:46:12.5259251Z   GITHUB_SERVER_URL: https://github.com
+2026-10-27T06:46:12.5259585Z   GITHUB_STEP_SUMMARY: /tmp/gh-aw/agent-step-summary.md
+2026-10-27T06:46:12.5260088Z   GITHUB_WORKSPACE: /home/runner/work/cs467-a3-prometheus-triage/cs467-a3-prometheus-triage
+2026-10-27T06:46:12.5260652Z   GIT_AUTHOR_EMAIL: github-actions[bot]@users.noreply.github.com
+2026-10-27T06:46:12.5261028Z   GIT_AUTHOR_NAME: github-actions[bot]
+2026-10-27T06:46:12.5261599Z   GIT_COMMITTER_EMAIL: github-actions[bot]@users.noreply.github.com
+2026-10-27T06:46:12.5261992Z   GIT_COMMITTER_NAME: github-actions[bot]
+2026-10-27T06:46:12.5262293Z   RUNNER_TEMP: /home/runner/work/_temp
+2026-10-27T06:46:12.5262659Z   TRACEPARENT: 00-80f5526742a284d7c9004b4aaee87fca-2cb4c9a4f06b276d-01
+2026-10-27T06:46:12.5263203Z ##[endgroup]
+2026-10-27T06:46:12.6085134Z No component admission allowance; retaining existing budget policy (value withheld).
+2026-10-27T06:46:13.2785221Z [INFO] Auto-detected DNS servers from /run/systemd/resolve/resolv.conf: 168.63.129.16
+2026-10-27T06:46:13.2825438Z [INFO] Agent timeout set to 10 minutes
+2026-10-27T06:46:13.2829772Z [WARN] ⚠️  Using --env-all: All host environment variables will be passed to container
+2026-10-27T06:46:13.2831432Z [WARN]    This may expose sensitive credentials if logs or configs are shared
+2026-10-27T06:46:13.2836081Z [INFO] API proxy enabled: OpenAI=false, Anthropic=false, Copilot=true (github-token), Gemini=false, Vertex=false
+2026-10-27T06:46:15.5431910Z [INFO] Allowed domains: awmg-mcpg
+2026-10-27T06:46:15.6106895Z [INFO] Network-isolation mode: enforcing egress via Docker network topology (no host iptables, no sudo).
+2026-10-27T06:46:15.6107573Z [INFO] Generating configuration files...
+2026-10-27T06:46:15.6506731Z [WARN] Copilot API proxy mode sets COPILOT_OFFLINE=true: native web_fetch and web_search tools are unavailable, even for allowlisted domains. Use shell curl with --allow-url <host> (or --allow-all-urls); AWF still enforces the domain allowlist. See docs/troubleshooting.md#copilot-web-tools-unavailable-in-api-proxy-mode
+2026-10-27T06:46:15.6524255Z [INFO] API proxy sidecar enabled - API keys will be held securely in sidecar container
+2026-10-27T06:46:15.6525255Z [INFO] API proxy will route through Squid to respect domain whitelisting
+2026-10-27T06:46:15.8963416Z [INFO] Starting containers...
+2026-10-27T06:46:15.9543947Z [INFO] Topology mode: starting squid-proxy first to create awf-net...
+2026-10-27T06:46:16.0903092Z  Network awf-net  Creating
+2026-10-27T06:46:16.1182754Z  Network awf-net  Created
+2026-10-27T06:46:16.1195361Z  Network awf-lnmni2_awf-ext  Creating
+2026-10-27T06:46:16.1657749Z  Network awf-lnmni2_awf-ext  Created
+2026-10-27T06:46:16.1668674Z  Container awf-squid  Creating
+2026-10-27T06:46:16.1925386Z  Container awf-squid  Created
+2026-10-27T06:46:16.1938685Z  Container awf-squid  Starting
+2026-10-27T06:46:16.3925767Z  Container awf-squid  Started
+2026-10-27T06:46:16.4969066Z [INFO] squid-proxy started; attaching topology peers before full bring-up...
+2026-10-27T06:46:16.4971131Z [INFO] Attaching 1 trusted container(s) to the internal network...
+2026-10-27T06:46:16.4972647Z [INFO] Network-isolation: connecting container "awmg-mcpg" to "awf-net"...
+2026-10-27T06:46:16.5764344Z [INFO] Topology peer "awmg-mcpg" has IP 172.30.0.2 on awf-net
+2026-10-27T06:46:16.5964522Z [INFO] cli-proxy not enabled; no topology DNS patch needed
+2026-10-27T06:46:16.6051165Z [INFO] Patched docker-compose.yml with 3 topology peer host(s) for static DNS compatibility
+2026-10-27T06:46:16.6052444Z [INFO] Appended 3 topology peer(s) to chroot hosts file: /tmp/awf-LnMnI2/chroot-4gmKUA/hosts
+2026-10-27T06:46:16.6053753Z [INFO] Topology peers attached; continuing with full container bring-up...
+2026-10-27T06:46:16.7250062Z  Container awf-api-proxy  Creating
+2026-10-27T06:46:16.7256398Z  Container awf-squid  Recreate
+2026-10-27T06:46:16.7539194Z  Container awf-api-proxy  Created
+2026-10-27T06:46:18.9173426Z  Container awf-squid  Recreated
+2026-10-27T06:46:18.9194132Z  Container awf-agent  Creating
+2026-10-27T06:46:18.9541394Z  Container awf-agent  Created
+2026-10-27T06:46:18.9570497Z  Container awf-squid  Starting
+2026-10-27T06:46:18.9616927Z  Container awf-api-proxy  Starting
+2026-10-27T06:46:19.1702725Z  Container awf-api-proxy  Started
+2026-10-27T06:46:19.2244511Z  Container awf-squid  Started
+2026-10-27T06:46:19.2245364Z  Container awf-squid  Waiting
+2026-10-27T06:46:19.2246018Z  Container awf-api-proxy  Waiting
+2026-10-27T06:46:24.2274053Z  Container awf-api-proxy  Healthy
+2026-10-27T06:46:24.7265427Z  Container awf-squid  Healthy
+2026-10-27T06:46:24.7266058Z  Container awf-agent  Starting
+2026-10-27T06:46:24.8872035Z  Container awf-agent  Started
+2026-10-27T06:46:24.9954330Z [SUCCESS] Containers started successfully
+2026-10-27T06:46:24.9974707Z [INFO] Executing agent command...
+2026-10-27T06:46:25.0012644Z [INFO] Agent timeout: 10 minutes
+2026-10-27T06:46:25.0301844Z [entrypoint] Agentic Workflow Firewall - Agent Container
+2026-10-27T06:46:25.0303556Z [entrypoint] ==================================
+2026-10-27T06:46:25.0304386Z [entrypoint] Configuring DNS...
+2026-10-27T06:46:25.0305179Z [entrypoint] DNS configured with Docker embedded DNS (127.0.0.11) only
+2026-10-27T06:46:25.0306288Z [entrypoint] iptables-init skipped (proxy-based egress): skipping init container wait
+2026-10-27T06:46:25.0307301Z [health-check] API Proxy Pre-flight Check
+2026-10-27T06:46:25.0308065Z [health-check] ==========================================
+2026-10-27T06:46:25.0308990Z [health-check] Checking GitHub Copilot API proxy configuration...
+2026-10-27T06:46:25.0310517Z [health-check] COPILOT_API_URL=http://172.30.0.30:10002
+2026-10-27T06:46:25.0311935Z [health-check] ✓ COPILOT_GITHUB_TOKEN is placeholder value (correct)
+2026-10-27T06:46:25.0313381Z [health-check] ✓ COPILOT_TOKEN is placeholder value (correct)
+2026-10-27T06:46:25.0314383Z [health-check] ✓ COPILOT_PROVIDER_API_KEY is placeholder value (correct)
+2026-10-27T06:46:25.0329750Z [health-check] COPILOT_PROVIDER_BASE_URL=http://172.30.0.30:10002 (offline+BYOK mode)
+2026-10-27T06:46:25.0330971Z [health-check] ✓ COPILOT_PROVIDER_BASE_URL matches COPILOT_API_URL
+2026-10-27T06:46:25.0331838Z [health-check] ✓ Copilot CLI offline+BYOK mode configured
+2026-10-27T06:46:25.0332711Z [health-check] Testing connectivity to GitHub Copilot API proxy at http://172.30.0.30:10002...
+2026-10-27T06:46:25.0344747Z [health-check] ✓ GitHub Copilot API proxy is reachable at http://172.30.0.30:10002
+2026-10-27T06:46:25.0345612Z [health-check] ==========================================
+2026-10-27T06:46:25.0346359Z [health-check] ✓ All API proxy health checks passed
+2026-10-27T06:46:25.0347042Z [health-check] ✓ Credential isolation verified
+2026-10-27T06:46:25.0347648Z [health-check] ✓ Connectivity established
+2026-10-27T06:46:25.0348203Z [health-check] ==========================================
+2026-10-27T06:46:25.0348953Z [entrypoint] Pre-seeding JVM build tool proxy configuration (squid-proxy:3128)...
+2026-10-27T06:46:25.0350069Z [entrypoint] ✓ Created Maven proxy config (/host/home/runner/.m2/settings.xml)
+2026-10-27T06:46:25.0351143Z [entrypoint] ✓ Created Gradle proxy config (/host/home/runner/.gradle/gradle.properties)
+2026-10-27T06:46:25.0352422Z [entrypoint] ✓ Set JAVA_TOOL_OPTIONS with proxy and nonProxyHosts flags
+2026-10-27T06:46:25.0363996Z [entrypoint] Proxy configuration:
+2026-10-27T06:46:25.0364613Z [entrypoint]   HTTP_PROXY=http://172.30.0.10:3128
+2026-10-27T06:46:25.0365245Z [entrypoint]   HTTPS_PROXY=http://172.30.0.10:3128
+2026-10-27T06:46:25.0365839Z [entrypoint] Network information:
+2026-10-27T06:46:25.0366311Z [entrypoint]   IP address: 172.30.0.20 
+2026-10-27T06:46:25.0366785Z [entrypoint]   Hostname: 7da969dc2185
+2026-10-27T06:46:25.0367273Z [entrypoint] ==================================
+2026-10-27T06:46:25.0367957Z [entrypoint] Chroot mode enabled - dropping CAP_SYS_CHROOT and CAP_SYS_ADMIN
+2026-10-27T06:46:25.0368712Z [entrypoint] Switching to awfuser (UID: 1001, GID: 1001)
+2026-10-27T06:46:25.0395849Z [entrypoint] Executing command: /bin/bash -c /bin/bash -c 'set +o histexpand; export PATH="${RUNNER_TEMP}/gh-aw/mcp-cli/bin:$PATH" && : "${RUNNER_TOOL_CACHE:?RUNNER_TOOL_CACHE must be set}"; GH_AW_TOOL_CACHE="$RUNNER_TOOL_CACHE"; GH_AW_TOOL_BINS="$(find "$GH_AW_TOOL_CACHE" -maxdepth 5 -type d -name bin 2>/dev/null | tr "\n" ":")"; GH_AW_TOOL_BINS="${GH_AW_TOOL_BINS%:}"; export PATH="$PATH${GH_AW_TOOL_BINS:+:}$GH_AW_TOOL_BINS"; [ -n "$GOROOT" ] && export PATH="$GOROOT/bin:$PATH" || true; [ -n "$ERLANG_HOME" ] && export PATH="$ERLANG_HOME/bin:$PATH" || true && GH_AW_NODE_EXEC="${GH_AW_NODE_BIN:-}"; if [ -z "$GH_AW_NODE_EXEC" ] || [ ! -x "$GH_AW_NODE_EXEC" ]; then GH_AW_NODE_EXEC="$(command -v node 2>/dev/null || true)"; fi; if [ -z "$GH_AW_NODE_EXEC" ]; then echo "node runtime missing on this runner — check runtimes.node in workflow YAML" >&2; exit 127; fi; GH_AW_NPM_GLOBAL_ROOT="$(npm root -g 2>/dev/null || true)"; if [ -n "$GH_AW_NPM_GLOBAL_ROOT" ]; then export NODE_PATH="${GH_AW_NPM_GLOBAL_ROOT}${NODE_PATH:+:${NODE_PATH}}"; fi; "$GH_AW_NODE_EXEC" "${RUNNER_TEMP}/gh-aw/actions/copilot_harness.cjs" "${RUNNER_TEMP}/gh-aw/bin/copilot" --add-dir /tmp/gh-aw/ --log-level all --log-dir /tmp/gh-aw/sandbox/agent/logs/ --disable-builtin-mcps --no-ask-user --allow-tool safeoutputs --allow-tool '\''shell(.claude/skills/prometheus-issue-triage/scripts/triage.py:*)'\'' --allow-tool '\''shell(cat)'\'' --allow-tool '\''shell(date)'\'' --allow-tool '\''shell(echo)'\'' --allow-tool '\''shell(grep)'\'' --allow-tool '\''shell(head)'\'' --allow-tool '\''shell(ls)'\'' --allow-tool '\''shell(printf)'\'' --allow-tool '\''shell(pwd)'\'' --allow-tool '\''shell(safeoutputs:*)'\'' --allow-tool '\''shell(sort)'\'' --allow-tool '\''shell(tail)'\'' --allow-tool '\''shell(uniq)'\'' --allow-tool '\''shell(wc)'\'' --allow-tool '\''shell(yq)'\'' --deny-tool workflow --add-dir "${GITHUB_WORKSPACE}" --prompt-file /tmp/gh-aw/aw-prompts/prompt.txt'
+2026-10-27T06:46:25.0409618Z 
+2026-10-27T06:46:25.0409958Z [entrypoint] Agent runtime start recorded for timeout steering
+2026-10-27T06:46:25.0410782Z [entrypoint] Chroot mode: running command inside host filesystem (/host)
+2026-10-27T06:46:25.0411658Z [entrypoint] Mounted procfs at /host/proc (nosuid,nodev,noexec,hidepid=2)
+2026-10-27T06:46:25.0412506Z [entrypoint] Bind-mounted container cgroup subtree at /host/sys/fs/cgroup (ro)
+2026-10-27T06:46:25.0414156Z [entrypoint] One-shot token library copied to chroot at /run/awf-lib/one-shot-token.so
+2026-10-27T06:46:25.9983812Z [entrypoint] Chromium/Playwright runtime libraries staged for chroot at /host/run/awf-lib/browser-libs
+2026-10-27T06:46:27.6421645Z AWF trust policy: removed distrusted CA key 8d417db2dd8bf5e3084d1e3f196d583849d81bdd4c00c70b9d39369e96b8c782
+2026-10-27T06:46:32.1552360Z [entrypoint] Filtered host CA trust staged at /run/awf-lib/trust/ca-certificates.crt (host store unchanged)
+2026-10-27T06:46:32.1572637Z [entrypoint] DNS configuration created in chroot (/host/etc/resolv.conf)
+2026-10-27T06:46:32.1635876Z [entrypoint] Running as host user: runner (UID: 1001)
+2026-10-27T06:46:32.1637051Z [entrypoint] Chroot working directory: /home/runner/work/cs467-a3-prometheus-triage/cs467-a3-prometheus-triage
+2026-10-27T06:46:32.1678934Z [entrypoint] Using host PATH for chroot
+2026-10-27T06:46:32.1711825Z [entrypoint] Adding JAVA_HOME/bin to PATH: /usr/lib/jvm/temurin-17-jdk-amd64/bin
+2026-10-27T06:46:32.1782802Z [entrypoint] DNS configuration will be removed on exit
+2026-10-27T06:46:32.1826488Z [entrypoint] Transferred /host/tmp/gh-aw ownership to chroot user (1001:1001)
+2026-10-27T06:46:32.1941385Z [entrypoint][WARN] Failed to transfer /host/home/runner/work/_temp/gh-aw/safeoutputs ownership to chroot user
+2026-10-27T06:46:32.2073941Z [entrypoint] Node.js available via GH_AW_NODE_BIN: /usr/local/bin/node
+2026-10-27T06:46:33.1775875Z [copilot-harness] starting: command=/home/runner/work/_temp/gh-aw/bin/copilot maxRetries=3 initialDelayMs=5000 backoffMultiplier=2 maxDelayMs=60000 nodeVersion=v22.23.3 platform=linux
+2026-10-27T06:46:33.1793660Z [copilot-harness] pre-flight: command is accessible and executable: /home/runner/work/_temp/gh-aw/bin/copilot
+2026-10-27T06:46:33.1799155Z [copilot-harness] resolved --prompt-file: path=/tmp/gh-aw/aw-prompts/prompt.txt size=11251B
+2026-10-27T06:46:33.1813270Z [copilot-harness] awf-reflect: fetching http://api-proxy:10000/reflect (timeout=60000ms)
+2026-10-27T06:46:33.2426360Z [entrypoint] Unsetting sensitive tokens from parent shell environment...
+2026-10-27T06:46:33.2434101Z [entrypoint] Unset COPILOT_GITHUB_TOKEN from /proc/1/environ
+2026-10-27T06:46:33.2444156Z [entrypoint] Unset COPILOT_PROVIDER_API_KEY from /proc/1/environ
+2026-10-27T06:46:33.2699542Z [copilot-harness] awf-reflect: saved 39138B to /tmp/gh-aw/agent/awf-reflect.json
+2026-10-27T06:46:33.2714303Z [copilot-harness] model resolution: engine=copilot role=main configured=gpt-4.1 resolved=gpt-4.1 provider=(unscoped) status=exact
+2026-10-27T06:46:33.2754685Z [copilot-harness] COPILOT_PROVIDER_WIRE_API unset — source=CLI default
+2026-10-27T06:46:33.2834836Z [copilot-harness] inference routing: mode=cli configuredModel="gpt-4.1" endpoint=managed-by-copilot-cli
+2026-10-27T06:46:33.2875724Z [copilot-harness] attempt 1: spawning: /home/runner/work/_temp/gh-aw/bin/copilot --add-dir /tmp/gh-aw/ --log-level all --log-dir /tmp/gh-aw/sandbox/agent/logs/ --disable-builtin-mcps --no-ask-user --allow-tool safeoutputs --allow-tool shell(.claude/skills/prometheus-issue-triage/s
+2026-10-27T06:46:33.3034405Z [copilot-harness] attempt 1: process started (pid=1912)
+2026-10-27T06:46:40.5655034Z ● skill(prometheus-issue-triage)
+2026-10-27T06:46:40.5655789Z 
+2026-10-27T06:47:01.6254004Z ● Read precheck and duplicate search results (shell)
+2026-10-27T06:47:01.6255822Z   │ cat /tmp/gh-aw/agent/precheck.json /tmp/gh-aw/agent/duplicates.json
+2026-10-27T06:47:01.6259638Z   └ 44 lines…
+2026-10-27T06:47:01.6259944Z 
+2026-10-27T06:47:01.6771495Z ● Validate the component/remote storage label (shell)
+2026-10-27T06:47:01.6773838Z   │ .claude/skills/prometheus-issue-triage/scripts/triage.py labels component/remote storage
+2026-10-27T06:47:01.6775151Z   └ 9 lines…
+2026-10-27T06:47:01.6775623Z 
+2026-10-27T06:47:27.6217121Z ● add_comment (MCP: safeoutputs) · body: "Thanks for the detailed report. This appears to be a clea…
+2026-10-27T06:47:27.6225899Z   └ {"result":"success","temporary_id":"aw_vKwp25fI","comment":"#aw_vKwp25fI"}
+2026-10-27T06:47:27.6231913Z 
+2026-10-27T06:47:27.6391723Z ● add_labels (MCP: safeoutputs) · labels: [1 item]
+2026-10-27T06:47:27.6398119Z   └ {"result":"success"}
+2026-10-27T06:47:27.6403942Z 
+2026-10-27T06:47:28.3783445Z [safeoutputs-cli] hasTerminalSafeOutput: terminal entry found in /home/runner/work/_temp/gh-aw/safeoutputs/outputs.jsonl: type=add_comment
+2026-10-27T06:47:28.3785269Z [copilot-harness] attempt 1: post-result watchdog armed inactivityTimeout=120000ms
+2026-10-27T06:47:45.5819001Z ● noop (MCP: safeoutputs) · message: "Decision: ROUTE. Precheck: not maintainer-authored, all bug …"
+2026-10-27T06:47:45.5819852Z   └ {"result":"success"}
+2026-10-27T06:47:45.5820291Z 
+2026-10-27T06:47:54.3639115Z Decision: ROUTE. Added the label component/remote storage and a comment acknowledging the clear, reproducible bug report. Precheck: all bug template sections present, not maintainer-authored, related project mentions noted but not relevant. Duplicate search found a similar canonical issue, but this is not a duplicate. Label validated as correct.
+2026-10-27T06:47:54.3641412Z 
+2026-10-27T06:47:54.3778202Z 
+2026-10-27T06:47:54.3779171Z 
+2026-10-27T06:47:54.3780382Z Changes    +0 -0
+2026-10-27T06:47:54.3780853Z Duration   1m 20s
+2026-10-27T06:47:54.3781547Z Tokens     ↑ 93.3k (73.6k cached) • ↓ 426
+2026-10-27T06:47:54.3782143Z Resume     copilot --resume=ebdf7f03-9a8d-4d7b-8680-5b193c644693
+2026-10-27T06:47:54.4559949Z [copilot-harness] attempt 1: process exit event exitCode=0
+2026-10-27T06:47:54.4569274Z [copilot-harness] attempt 1: process closed exitCode=0 duration=1m 21s stdout=1106B stderr=150B hasOutput=true
+2026-10-27T06:47:54.4587398Z [copilot-harness] success on attempt 1: totalDuration=1m 21s
+2026-10-27T06:47:54.4589955Z [copilot-harness] awf-reflect: fetching http://api-proxy:10000/reflect (timeout=60000ms)
+2026-10-27T06:47:54.4919187Z [copilot-harness] awf-reflect: saved 39427B to /tmp/gh-aw/agent/awf-reflect.json
+2026-10-27T06:47:54.4924041Z [copilot-harness] done: exitCode=0 totalDuration=1m 21s
+2026-10-27T06:47:54.5048300Z [entrypoint] Relaxed /host/tmp/gh-aw group permissions for host-side post-processing
+2026-10-27T06:47:54.5081545Z [entrypoint] Relaxed /host/tmp/gh-aw/memory-validation group permissions for host-side post-processing
+2026-10-27T06:47:54.8457810Z [INFO] Stopping containers...
+2026-10-27T06:47:55.0093466Z  Container awf-agent  Stopping
+2026-10-27T06:47:55.0106952Z  Container awf-agent  Stopped
+2026-10-27T06:47:55.0107764Z  Container awf-agent  Removing
+2026-10-27T06:47:55.0512370Z  Container awf-agent  Removed
+2026-10-27T06:47:55.0515729Z  Container awf-api-proxy  Stopping
+2026-10-27T06:47:55.0516604Z  Container awf-squid  Stopping
+2026-10-27T06:47:55.1445093Z  Container awf-api-proxy  Stopped
+2026-10-27T06:47:55.1475976Z  Container awf-api-proxy  Removing
+2026-10-27T06:47:55.1612374Z  Container awf-api-proxy  Removed
+2026-10-27T06:47:56.1865885Z  Container awf-squid  Stopped
+2026-10-27T06:47:56.1873381Z  Container awf-squid  Removing
+2026-10-27T06:47:56.2031186Z  Container awf-squid  Removed
+2026-10-27T06:47:56.2048419Z  Network awf-net  Removing
+2026-10-27T06:47:56.2066199Z  Network awf-lnmni2_awf-ext  Removing
+2026-10-27T06:47:56.2071236Z  Network awf-net  Resource is still in use
+2026-10-27T06:47:56.2832454Z  Network awf-lnmni2_awf-ext  Removed
+2026-10-27T06:47:56.3884792Z [SUCCESS] Containers stopped successfully
+2026-10-27T06:47:56.3922828Z [INFO] Agent session state available at: /tmp/gh-aw/sandbox/agent/session-state
+2026-10-27T06:47:56.3934271Z [INFO] API proxy logs available at: /tmp/gh-aw/sandbox/firewall/logs/api-proxy-logs
+2026-10-27T06:47:56.3936728Z [INFO] Token usage log available at: /tmp/gh-aw/sandbox/firewall/logs/api-proxy-logs/token-usage.jsonl
+2026-10-27T06:47:56.3961341Z [INFO] CLI proxy logs available at: /tmp/gh-aw/sandbox/firewall/logs/cli-proxy-logs
+2026-10-27T06:47:56.4024104Z [INFO] Squid logs available at: /tmp/gh-aw/sandbox/firewall/logs
+2026-10-27T06:47:56.4064355Z [INFO] Audit artifacts available at: /tmp/gh-aw/sandbox/firewall/audit
+2026-10-27T06:47:56.9347763Z [SUCCESS] Command completed successfully
+2026-10-27T06:47:56.9364641Z Process exiting with code: 0
