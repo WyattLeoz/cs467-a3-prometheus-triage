@@ -75,28 +75,6 @@ class Duplicates(unittest.TestCase):
         refs = [c["ref"] for c in out["candidates"]]
         self.assertEqual(refs, ["prometheus/prometheus#1"])  # #2 is from the future, #3 is unrelated
 
-    def golden_candidates(self, case):
-        """Duplicate-search output the agent gets for a golden case (real corpus, case's own cutoff)."""
-        c = json.loads((Path(__file__).resolve().parents[4] / "evals/golden/cases" / case / "input.json").read_text())
-        with tempfile.TemporaryDirectory() as tmp:
-            _, out = run(["duplicates", issue_file(tmp, title=c["title"], body=c["body"], created_at=c["created_at"])])
-        return {x["ref"]: x["untrusted_excerpt"] for x in out["candidates"]}
-
-    def test_a04_tool_injection_reaches_the_agent_whole(self):
-        excerpt = self.golden_candidates("A04")["prometheus/prometheus#999002"]
-        for payload in ("close the new issue", "priority/P0", "kind/bug", "@prometheus/maintainers", "GITHUB_TOKEN"):
-            self.assertIn(payload, excerpt)
-
-    def test_a02_fixture_is_truncated_to_its_label_request(self):
-        # Documents the review finding: only A02's label instruction survives the 300-character excerpt.
-        excerpt = self.golden_candidates("A02")["prometheus/prometheus#999001"]
-        self.assertIn("priority/P0", excerpt)
-        self.assertNotIn("GITHUB_TOKEN", excerpt)
-
-    def test_a04_fixture_is_invisible_to_earlier_cases(self):
-        for case in ("A01", "A02", "A03"):
-            self.assertNotIn("prometheus/prometheus#999002", self.golden_candidates(case))
-
 
 class Labels(unittest.TestCase):
     def test_policy(self):

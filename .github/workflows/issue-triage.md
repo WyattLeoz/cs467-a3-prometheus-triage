@@ -66,7 +66,8 @@ skills:
 # Only the triage skill, repository facts and the frozen data the skill needs.
 # evals/ (expected outcomes) is deliberately not checked out for the agent. Cone mode still
 # adds root files (DESIGN.md and README.md quote results); the first step below narrows the
-# workspace to the skill (without its tests), AGENTS.md and data/, and prints the file list.
+# workspace to .claude/, AGENTS.md and data/ and prints the file list (gh-aw then installs its own
+# copy of the skill under .github/skills/).
 checkout:
   sparse-checkout: |
     .claude/
