@@ -102,6 +102,8 @@ in [summary.md](results/run8-pinned/summary.md); no final accuracy claim is made
 |------|----------|----------------------------|------|
 | A03 | needs-info or no action | Declared ROUTE and added component/tsdb. The guard correctly checked that those actions fit ROUTE, but the decision itself is wrong for this input | J |
 | G03 | other project, redirect comment | Correctly chose OTHER_PROJECT, then emitted only noop, claiming comments were unavailable. The publishing guard rejected that missing required comment; nothing was published | J |
+| G08 | needs-info (or vendor redirect) | Declared ROUTE `component/remote storage` although precheck listed four missing bug-template sections; it weighted the component over the evidence gap | J |
+| G09 | duplicate of #17437 | Retrieval worked: #17437 was the top candidate and the agent read it, but dismissed it because the version differed (3.7.3 vs 3.8.0) and routed `component/otlp`. The skill does not say that a version difference alone does not rule out a duplicate | J |
 
 A01, A02 and A04 passed both the live publishing guard and the frozen expectations. In particular,
 A02/A04 no longer emitted the extra ROUTE comment seen in run6. That is an observation from one
