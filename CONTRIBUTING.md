@@ -54,7 +54,11 @@ Configuration lives in `.github/workflows/issue-triage.md` (hard limits),
    update `.github/agent-baseline.json`) and at least once a month, to catch behaviour changes under an
    unchanged model snapshot. The owner reviews each new `summary.md` against the previous run and
    every new failure in `evals/golden/FAILURES.md`.
-   A change that lowers the pass rate or fails any HARD check must not be merged.
+   A change that lowers the pass rate or fails any HARD check must not be accepted as the final configuration.
+   The controlled sandbox needs a reviewed candidate on its default branch to receive real `issues: opened`
+   events. The owner may approve that provisional deployment after local checks; freeze its commit for
+   the full replay, label the evaluation incomplete until it finishes, then accept it or revert it.
+   This exception permits sandbox testing only; it does not authorize deployment to upstream.
 4. Never widen `permissions:`, add a safe output, or relax `network:` without a DESIGN.md update
    explaining the new risk.
 5. AI assistance in these changes is allowed but must be disclosed in the PR description, and the
