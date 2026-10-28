@@ -1,0 +1,71 @@
+﻿2026-10-28T21:44:52.7022707Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-28T21:44:52.7023147Z with:
+2026-10-28T21:44:52.7024315Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'collect_ndjson_output.cjs'));
+await main();
+
+2026-10-28T21:44:52.7027962Z   github-token: ***
+2026-10-28T21:44:52.7028209Z   debug: false
+2026-10-28T21:44:52.7028462Z   user-agent: actions/github-script
+2026-10-28T21:44:52.7028778Z   result-encoding: json
+2026-10-28T21:44:52.7029025Z   retries: 0
+2026-10-28T21:44:52.7029294Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-28T21:44:52.7029608Z env:
+2026-10-28T21:44:52.7029831Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-28T21:44:52.7030131Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-28T21:44:52.7030982Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40774098195,github.run_id=40774098195,gh-aw.engine.id=copilot
+2026-10-28T21:44:52.7031844Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-28T21:44:52.7032156Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-28T21:44:52.7032482Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-28T21:44:52.7032745Z   DEFAULT_BRANCH: main
+2026-10-28T21:44:52.7033003Z   GH_AW_ASSETS_ALLOWED_EXTS: 
+2026-10-28T21:44:52.7033270Z   GH_AW_ASSETS_BRANCH: 
+2026-10-28T21:44:52.7033513Z   GH_AW_ASSETS_MAX_SIZE_KB: 0
+2026-10-28T21:44:52.7033779Z   GH_AW_ENGINE_VERSION: 1.0.101
+2026-10-28T21:44:52.7034083Z   GH_AW_MCP_LOG_DIR: /tmp/gh-aw/mcp-logs/safeoutputs
+2026-10-28T21:44:52.7034414Z   GH_AW_PR_HEAD_BASE_BRANCH: 
+2026-10-28T21:44:52.7034681Z   GH_AW_PR_HEAD_BASE_PR_NUMBER: 
+2026-10-28T21:44:52.7034950Z   GH_AW_PR_HEAD_BASE_REF: 
+2026-10-28T21:44:52.7035259Z   GH_AW_PR_HEAD_BASE_REPO: 
+2026-10-28T21:44:52.7035620Z   GH_AW_PR_HEAD_BASE_SHA: 
+2026-10-28T21:44:52.7035873Z   GH_AW_PR_HEAD_REPO: 
+2026-10-28T21:44:52.7036156Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-28T21:44:52.7036478Z   GH_AW_TARGET_REPO_SLUG: 
+2026-10-28T21:44:52.7037001Z   GH_AW_WORKFLOW_ID_SANITIZED: issuetriage
+2026-10-28T21:44:52.7037383Z   GITHUB_AW_OTEL_TRACE_ID: 0dd505cfac457ea3c87ad6debc9748dd
+2026-10-28T21:44:52.7037794Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: b322ba8ed4ec6513
+2026-10-28T21:44:52.7038140Z   GITHUB_AW_OTEL_JOB_START_MS: 1793223776450
+2026-10-28T21:44:52.7038644Z   GH_AW_COPILOT_SDK_MCP_CONFIG_SHA256: 38e33873068a86297de40cbb813150eea8a75871bd5644d0ba4ddd9380b8bada
+2026-10-28T21:44:52.7039485Z   AWF_TOKEN_USAGE_LOG: /tmp/gh-aw/sandbox/firewall/logs/api-proxy-logs/token-usage.jsonl
+2026-10-28T21:44:52.7040065Z   GH_AW_SAFE_OUTPUTS: /home/runner/work/_temp/gh-aw/safeoutputs/outputs.jsonl
+2026-10-28T21:44:52.7040599Z   GH_AW_ALLOWED_DOMAINS: github.com,groups.google.com,localhost,prometheus.io
+2026-10-28T21:44:52.7041024Z   GH_AW_ALLOWED_GITHUB_REFS: repo
+2026-10-28T21:44:52.7041335Z   GITHUB_SERVER_URL: https://github.com
+2026-10-28T21:44:52.7041672Z   GITHUB_API_URL: https://api.github.com
+2026-10-28T21:44:52.7041968Z ##[endgroup]
+2026-10-28T21:44:52.8309106Z Loaded validation config from /home/runner/work/_temp/gh-aw/safeoutputs/validation.json
+2026-10-28T21:44:52.8310229Z [INGESTION] Reading config from: /home/runner/work/_temp/gh-aw/safeoutputs/config.json
+2026-10-28T21:44:52.8315563Z [INGESTION] Raw config content: {"add_comment":{"max":1,"target":"triggering"},"add_labels":{"allowed":["component/agent","component/api","component/config","component/documentation","component/mixin","component/notify","component/otlp","component/promql","component/promtool","component/remote storage","component/rules","component/scraping","component/service discovery","component/service discovery/kubernetes","component/tests","component/tsdb","component/ui","component/wal","component/web","kind/enhancement","kind/feature","kind/more-info-needed","kind/question"],"blocked":["kind/bug","kind/breaking","kind/cleanup","kind/change","priority/*","won't fix","invalid","duplicate","stale"],"max":1,"max_labels":2,"target":"triggering"},"create_report_incomplete_issue":{},"mentions":{"enabled":false},"noop":{"max":2,"report-as-issue":"false"},"report_incomplete":{},"report_missing_data":{},"report_missing_tool":{}}
+2026-10-28T21:44:52.8321922Z [INGESTION] Parsed config keys: ["add_comment","add_labels","create_report_incomplete_issue","mentions","noop","report_incomplete","report_missing_data","report_missing_tool"]
+2026-10-28T21:44:52.8322846Z [INGESTION] Output file path: /home/runner/work/_temp/gh-aw/safeoutputs/outputs.jsonl
+2026-10-28T21:44:52.8323322Z Raw output content length: 294
+2026-10-28T21:44:52.8324455Z [INGESTION] First 500 chars of output: {"labels":[{"confidence":"HIGH","name":"component/service discovery","rationale":"Proposal requests new Azure SD meta label for filtering by machine state."},{"confidence":"HIGH","name":"kind/feature","rationale":"Reporter requests a new feature for Azure SD filtering."}],"type":"add_labels"}
+2026-10-28T21:44:52.8325536Z 
+2026-10-28T21:44:52.8325724Z [INGESTION] Normalizing config keys (dash -> underscore)
+2026-10-28T21:44:52.8326760Z [INGESTION] Expected output types after normalization: ["add_comment","add_labels","create_report_incomplete_issue","mentions","noop","report_incomplete","report_missing_data","report_missing_tool"]
+2026-10-28T21:44:52.8330299Z [INGESTION] Expected output types full config: {"add_comment":{"max":1,"target":"triggering"},"add_labels":{"allowed":["component/agent","component/api","component/config","component/documentation","component/mixin","component/notify","component/otlp","component/promql","component/promtool","component/remote storage","component/rules","component/scraping","component/service discovery","component/service discovery/kubernetes","component/tests","component/tsdb","component/ui","component/wal","component/web","kind/enhancement","kind/feature","kind/more-info-needed","kind/question"],"blocked":["kind/bug","kind/breaking","kind/cleanup","kind/change","priority/*","won't fix","invalid","duplicate","stale"],"max":1,"max_labels":2,"target":"triggering"},"create_report_incomplete_issue":{},"mentions":{"enabled":false},"noop":{"max":2,"report-as-issue":"false"},"report_incomplete":{},"report_missing_data":{},"report_missing_tool":{}}
+2026-10-28T21:44:52.8333773Z [INGESTION] Processing line 1: {"labels":[{"confidence":"HIGH","name":"component/service discovery","rationale":"Proposal requests new Azure SD meta label for filtering by machine state."},{"confidence":"HIGH","name":"kind/feature"...
+2026-10-28T21:44:52.8334969Z [INGESTION] Line 1: Original type='add_labels', Normalized type='add_labels'
+2026-10-28T21:44:52.8337290Z Line 1: type 'add_labels'
+2026-10-28T21:44:52.8337624Z GitHub reference filtering: allowed repos = repo
+2026-10-28T21:44:52.8369347Z GitHub reference filtering: allowed repos = repo
+2026-10-28T21:44:52.8372163Z GitHub reference filtering: allowed repos = repo
+2026-10-28T21:44:52.8374267Z GitHub reference filtering: allowed repos = repo
+2026-10-28T21:44:52.8376952Z Line 1: Valid add_labels item
+2026-10-28T21:44:52.8377466Z Successfully parsed 1 valid output items
+2026-10-28T21:44:52.8763116Z Stored validated output to: /tmp/gh-aw/agent_output.json
+2026-10-28T21:44:52.8772937Z output_types: add_labels
+2026-10-28T21:44:52.8774964Z No patch or bundle files found in: /tmp/gh-aw
