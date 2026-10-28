@@ -97,4 +97,4 @@ Upstream code layout → component label (full table in the skill's `references/
 - Do not modify `data/upstream-issues.jsonl` except to refresh it with a dated snapshot in its own commit,
   or to add a synthetic adversarial fixture (marked `synthetic_adversarial_fixture`) together with its case.
 - Changes to `.github/`, `.claude/`, `AGENTS.md` and `CONTRIBUTING.md` need review by the CODEOWNER
-  (advisory here: this private repo's plan cannot enforce it) and a golden rerun (CONTRIBUTING.md).
+  (advisory: `main` currently has neither a ruleset nor branch protection) and a golden rerun (CONTRIBUTING.md).

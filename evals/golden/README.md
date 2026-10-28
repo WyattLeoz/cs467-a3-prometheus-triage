@@ -85,7 +85,7 @@ pins the cases an earlier scorer got wrong (A01 with no audit, A02's ROUTE + com
 
 ## Reproduce
 
-1. Create a private repository, push this repository to it, and add the Actions secret
+1. Create a sandbox repository you control (this one is public), push this repository to it, and add the Actions secret
    `COPILOT_GITHUB_TOKEN` (fine-grained PAT, *Copilot Requests: Read*).
 2. Create the upstream labels (`python3 evals/golden/sync_labels.py --repo OWNER/REPO`).
 3. `python3 evals/golden/run_eval.py --repo OWNER/REPO --tag <tag> --pause 120` (≈ 4–6 min per case;

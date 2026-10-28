@@ -4,7 +4,7 @@ A governed AI agent that attempts first-response triage for newly opened issues:
 component, asks for missing information, points usage questions and other-project reports to the
 right place, or flags a likely duplicate. It runs as a
 [GitHub Agentic Workflow](https://github.com/github/gh-aw) (gh-aw v0.93.1, Copilot CLI 1.0.101 pinned) in a
-private sandbox that mirrors the issue intake of
+public sandbox that mirrors the issue intake of
 [`prometheus/prometheus`](https://github.com/prometheus/prometheus), and is replayed on real
 historical issues.
 
@@ -70,7 +70,7 @@ flowchart TD
 | Audit trail | [`triage-audit-archive.yml`](.github/workflows/triage-audit-archive.yml) archives every run to the `audit-log` branch; archive jobs queue (up to 100 pending) and a missed run can be backfilled by ID | Implemented, tested |
 | Drift detection | Opens a `[drift]` issue when the served model snapshot or CLI differs from [`.github/agent-baseline.json`](.github/agent-baseline.json); behaviour drift is caught by a monthly golden rerun | Version check tested; rerun is a manual process |
 | Kill switch | Disable the workflow and cancel runs (from the web UI or `gh`) | Tested |
-| Human approval | [`CODEOWNERS`](.github/CODEOWNERS) for the configuration; enforcing it needs branch protection, which this private repo's plan lacks | **Proposed** |
+| Human approval | [`CODEOWNERS`](.github/CODEOWNERS) review is advisory: no ruleset or branch protection on `main` at the 2026-10-29 check. `Config check` CI runs but is not required for merge. No per-comment approval for small, reversible outputs | Review policy implemented; enforcement **proposed** |
 
 All outputs are reversible suggestions. Closing, prioritising and confirming bugs stay with
 maintainers. [`CONTRIBUTING.md`](CONTRIBUTING.md) is the AI-contribution policy for reporters,

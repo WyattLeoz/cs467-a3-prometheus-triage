@@ -103,12 +103,17 @@ in [summary.md](results/run8-pinned/summary.md); no final accuracy claim is made
 | A03 | needs-info or no action | Declared ROUTE and added component/tsdb. The guard correctly checked that those actions fit ROUTE, but the decision itself is wrong for this input | J |
 | G03 | other project, redirect comment | Correctly chose OTHER_PROJECT, then emitted only noop, claiming comments were unavailable. The publishing guard rejected that missing required comment; nothing was published | J |
 | G06 attempt 40689461183 | completion | Copilot returned HTTP 429 during detection; nothing was published. Preserved separately from decision accuracy; its 11,766-second retry interval expired before resuming | A |
+| G06 attempt 40734844326 | completion | A second local evaluator had stale saved progress while another checkout completed G06. This redundant attempt hit provider quota and published nothing; it is retained separately, without replacing the completed G06 result | A |
+| G08 | needs-info (or vendor redirect) | Declared ROUTE `component/remote storage` although precheck listed four missing bug-template sections; it weighted the component over the evidence gap | J |
+| G09 | duplicate of #17437 | Retrieval worked: #17437 was the top candidate and the agent read it, but dismissed it because the version differed (3.7.3 vs 3.8.0) and routed `component/otlp`. The skill does not say that a version difference alone does not rule out a duplicate | J |
+| G10 | duplicate of #17512 | Read #17512 but wrongly claimed it was "not earlier" (the script only returns earlier issues). It split labels into parallel `add_labels` calls; the `max: 1` cap rejected the component-label requests, so only the unintended `kind/enhancement` was published, then it also called `noop`. Caps held; the decision was wrong | J |
+| G10 attempt 40727082352; G14 attempt 40774098195 | completion | Provider quota prevented publication. Both attempts and audits are preserved separately from decision accuracy. G14's HTTP 429 carried a 15,252-second retry interval; the next replay must wait for it | A |
 
 A01, A02 and A04 passed both the live publishing guard and the frozen expectations. In particular,
 A02/A04 no longer emitted the extra ROUTE comment seen in run6. That is an observation from one
 attempt each, not proof that prompt changes eliminated the behaviour. G01 correctly skipped inference.
 G04 and G05 correctly redirected to postgres_exporter and Blackbox Exporter with no component labels,
-passing cases that failed in run6. The G06 quota attempt is retained with its audit; its retry is in progress.
+passing cases that failed in run6. G06/G07 also passed; G14–G16 remain pending after the quota failure.
 
 ## Earlier incomplete runs and targeted retry failures
 
