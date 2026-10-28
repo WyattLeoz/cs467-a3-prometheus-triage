@@ -1,0 +1,212 @@
+﻿2026-10-28T21:29:50.3688409Z ##[group]Run set -eo pipefail
+2026-10-28T21:29:50.3689058Z [36;1mset -eo pipefail[0m
+2026-10-28T21:29:50.3689872Z [36;1mmkdir -p "${RUNNER_TEMP}/gh-aw/mcp-config"[0m
+2026-10-28T21:29:50.3690602Z [36;1mif [ -n "${GITHUB_EVENT_PATH:-}" ] && [ -r "${GITHUB_EVENT_PATH}" ]; then[0m
+2026-10-28T21:29:50.3691554Z [36;1m  GH_AW_SAFEOUTPUTS_EVENT_PATH="${RUNNER_TEMP}/gh-aw/safeoutputs/github_event.json"[0m
+2026-10-28T21:29:50.3692461Z [36;1m  cp "${GITHUB_EVENT_PATH}" "${GH_AW_SAFEOUTPUTS_EVENT_PATH}"[0m
+2026-10-28T21:29:50.3693227Z [36;1m  export GITHUB_EVENT_PATH="${GH_AW_SAFEOUTPUTS_EVENT_PATH}"[0m
+2026-10-28T21:29:50.3693855Z [36;1mfi[0m
+2026-10-28T21:29:50.3694175Z [36;1m[0m
+2026-10-28T21:29:50.3694728Z [36;1m# Export gateway environment variables for MCP config and gateway script[0m
+2026-10-28T21:29:50.3695513Z [36;1mexport MCP_GATEWAY_PORT="8080"[0m
+2026-10-28T21:29:50.3696050Z [36;1mexport MCP_GATEWAY_DOMAIN="awmg-mcpg"[0m
+2026-10-28T21:29:50.3696628Z [36;1mexport MCP_GATEWAY_HOST_DOMAIN="localhost"[0m
+2026-10-28T21:29:50.3697340Z [36;1mMCP_GATEWAY_AGENT_ID=$(openssl rand -base64 45 | tr -d '/+=')[0m
+2026-10-28T21:29:50.3698028Z [36;1mecho "::add-mask::${MCP_GATEWAY_AGENT_ID}"[0m
+2026-10-28T21:29:50.3698564Z [36;1mexport MCP_GATEWAY_AGENT_ID[0m
+2026-10-28T21:29:50.3699488Z [36;1mexport MCP_GATEWAY_PAYLOAD_DIR="/tmp/gh-aw/mcp-payloads"[0m
+2026-10-28T21:29:50.3700176Z [36;1mmkdir -p "${MCP_GATEWAY_PAYLOAD_DIR}"[0m
+2026-10-28T21:29:50.3700801Z [36;1mexport MCP_GATEWAY_PAYLOAD_SIZE_THRESHOLD="524288"[0m
+2026-10-28T21:29:50.3702069Z [36;1mexport MCP_GATEWAY_ALLOWED_MOUNT_ROOTS="${GITHUB_WORKSPACE}:rw,${RUNNER_TEMP}/gh-aw:ro,${RUNNER_TEMP}/gh-aw/safeoutputs:rw,/opt:ro,/tmp:rw,/usr/bin/gh:ro"[0m
+2026-10-28T21:29:50.3703430Z [36;1mexport GH_AW_PR_HEAD_BASE_BRANCH="${GH_AW_PR_HEAD_BASE_BRANCH:-}"[0m
+2026-10-28T21:29:50.3704232Z [36;1mexport GH_AW_PR_HEAD_BASE_SHA="${GH_AW_PR_HEAD_BASE_SHA:-}"[0m
+2026-10-28T21:29:50.3704991Z [36;1mexport GH_AW_PR_HEAD_BASE_REPO="${GH_AW_PR_HEAD_BASE_REPO:-}"[0m
+2026-10-28T21:29:50.3705813Z [36;1mexport GH_AW_PR_HEAD_BASE_PR_NUMBER="${GH_AW_PR_HEAD_BASE_PR_NUMBER:-}"[0m
+2026-10-28T21:29:50.3706644Z [36;1mexport GH_AW_PR_HEAD_BASE_REF="${GH_AW_PR_HEAD_BASE_REF:-}"[0m
+2026-10-28T21:29:50.3707362Z [36;1mexport GH_AW_PR_HEAD_REPO="${GH_AW_PR_HEAD_REPO:-}"[0m
+2026-10-28T21:29:50.3708081Z [36;1mexport GH_AW_TARGET_REPO_SLUG="${GH_AW_TARGET_REPO_SLUG:-}"[0m
+2026-10-28T21:29:50.3708719Z [36;1mexport GH_AW_ENGINE="copilot"[0m
+2026-10-28T21:29:50.3709466Z [36;1mMCP_GATEWAY_UID=$(id -u 2>/dev/null || echo '0')[0m
+2026-10-28T21:29:50.3710123Z [36;1mMCP_GATEWAY_GID=$(id -g 2>/dev/null || echo '0')[0m
+2026-10-28T21:29:50.3710870Z [36;1msource "${RUNNER_TEMP}/gh-aw/actions/resolve_docker_socket_gid.sh"[0m
+2026-10-28T21:29:50.3722960Z [36;1mexport MCP_GATEWAY_DOCKER_COMMAND='docker run -i --rm --network bridge -p 127.0.0.1:'"${MCP_GATEWAY_PORT}"':'"${MCP_GATEWAY_PORT}"' --name awmg-mcpg --add-host host.docker.internal:host-gateway --user '"${MCP_GATEWAY_UID}"':'"${MCP_GATEWAY_GID}"' --group-add '"${DOCKER_SOCK_GID}"' -v '"${DOCKER_SOCK_PATH}"':/var/run/docker.sock -e MCP_GATEWAY_PORT -e MCP_GATEWAY_DOMAIN -e MCP_GATEWAY_AGENT_ID -e MCP_GATEWAY_PAYLOAD_DIR -e MCP_GATEWAY_PAYLOAD_SIZE_THRESHOLD -e DOCKER_HOST=unix:///var/run/docker.sock -e DEBUG -e MCP_GATEWAY_LOG_DIR -e GH_AW_MCP_LOG_DIR -e GH_AW_SAFE_OUTPUTS -e GH_AW_SAFE_OUTPUTS_CONFIG_PATH -e GH_AW_SAFE_OUTPUTS_TOOLS_PATH -e GH_AW_TARGET_REPO_SLUG -e GH_AW_PR_HEAD_BASE_BRANCH -e GH_AW_PR_HEAD_BASE_SHA -e GH_AW_PR_HEAD_BASE_REPO -e GH_AW_PR_HEAD_BASE_PR_NUMBER -e GH_AW_PR_HEAD_BASE_REF -e GH_AW_PR_HEAD_REPO -e GH_AW_POLICY_ALLOW_CREATE_PULL_REQUEST -e GH_AW_ASSETS_BRANCH -e GH_AW_ASSETS_MAX_SIZE_KB -e GH_AW_ASSETS_ALLOWED_EXTS -e DEFAULT_BRANCH -e GITHUB_MCP_SERVER_TOKEN -e GITHUB_MCP_GUARD_MIN_INTEGRITY -e GITHUB_MCP_GUARD_REPOS -e GH_AW_SINK_VISIBILITY -e GITHUB_REPOSITORY -e GITHUB_SERVER_URL -e GITHUB_SHA -e GITHUB_WORKSPACE -e GITHUB_TOKEN -e GITHUB_RUN_ID -e GITHUB_RUN_NUMBER -e GITHUB_RUN_ATTEMPT -e GITHUB_JOB -e GITHUB_ACTION -e GITHUB_EVENT_NAME -e GITHUB_EVENT_PATH -e GITHUB_ACTOR -e GITHUB_ACTOR_ID -e GITHUB_TRIGGERING_ACTOR -e GITHUB_WORKFLOW -e GITHUB_WORKFLOW_REF -e GITHUB_WORKFLOW_SHA -e GITHUB_REF -e GITHUB_REF_NAME -e GITHUB_REF_TYPE -e GITHUB_HEAD_REF -e GITHUB_BASE_REF -e RUNNER_TEMP -e RUNNER_TOOL_CACHE -e MCP_GATEWAY_ALLOWED_MOUNT_ROOTS -e GITHUB_AW_OTEL_TRACE_ID -e GITHUB_AW_OTEL_PARENT_SPAN_ID -e OTEL_EXPORTER_OTLP_HEADERS -v /tmp/gh-aw/mcp-payloads:/tmp/gh-aw/mcp-payloads:rw -v /opt:/opt:ro -v /tmp:/tmp:rw -v '"${GITHUB_WORKSPACE}"':'"${GITHUB_WORKSPACE}"':rw -v '"${RUNNER_TEMP}"'/gh-aw/safeoutputs:'"${RUNNER_TEMP}"'/gh-aw/safeoutputs:rw ghcr.io/github/gh-aw-mcpg:v0.4.37@sha256:9c7f242f6dec2d7d7b55d4c9e07872d59b85377c6cb3de46c915a5d1ffb91442'[0m
+2026-10-28T21:29:50.3735592Z [36;1m[0m
+2026-10-28T21:29:50.3735945Z [36;1mmkdir -p "$HOME/.copilot"[0m
+2026-10-28T21:29:50.3736638Z [36;1mGH_AW_NODE=$(which node 2>/dev/null || command -v node 2>/dev/null || echo node)[0m
+2026-10-28T21:29:50.3737808Z [36;1mcat << GH_AW_MCP_CONFIG_eab8891622e24212_EOF | "$GH_AW_NODE" "${RUNNER_TEMP}/gh-aw/actions/start_mcp_gateway.cjs"[0m
+2026-10-28T21:29:50.3738713Z [36;1m{[0m
+2026-10-28T21:29:50.3739051Z [36;1m  "mcpServers": {[0m
+2026-10-28T21:29:50.3739710Z [36;1m    "safeoutputs": {[0m
+2026-10-28T21:29:50.3740135Z [36;1m      "type": "stdio",[0m
+2026-10-28T21:29:50.3741065Z [36;1m      "container": "ghcr.io/github/gh-aw-node@sha256:41835613992df88f51e923bad486f96dfb2e6cda29f13e217df41833284ae382",[0m
+2026-10-28T21:29:50.3742753Z [36;1m      "mounts": ["\${GITHUB_WORKSPACE}:\${GITHUB_WORKSPACE}:rw", "${RUNNER_TEMP}/gh-aw/safeoutputs:${RUNNER_TEMP}/gh-aw/safeoutputs:rw", "/tmp/gh-aw:/tmp/gh-aw:rw"],[0m
+2026-10-28T21:29:50.3744018Z [36;1m      "args": ["-w", "\${GITHUB_WORKSPACE}"],[0m
+2026-10-28T21:29:50.3744541Z [36;1m      "entrypoint": "sh",[0m
+2026-10-28T21:29:50.3745384Z [36;1m      "entrypointArgs": ["-c", "sh ${RUNNER_TEMP}/gh-aw/safeoutputs/start_safe_outputs_mcp.sh"],[0m
+2026-10-28T21:29:50.3746186Z [36;1m      "env": {[0m
+2026-10-28T21:29:50.3746574Z [36;1m        "DEBUG": "\${DEBUG}",[0m
+2026-10-28T21:29:50.3747083Z [36;1m        "DEFAULT_BRANCH": "\${DEFAULT_BRANCH}",[0m
+2026-10-28T21:29:50.3747781Z [36;1m        "GH_AW_ASSETS_ALLOWED_EXTS": "\${GH_AW_ASSETS_ALLOWED_EXTS}",[0m
+2026-10-28T21:29:50.3748511Z [36;1m        "GH_AW_ASSETS_BRANCH": "\${GH_AW_ASSETS_BRANCH}",[0m
+2026-10-28T21:29:50.3749438Z [36;1m        "GH_AW_ASSETS_MAX_SIZE_KB": "\${GH_AW_ASSETS_MAX_SIZE_KB}",[0m
+2026-10-28T21:29:50.3750133Z [36;1m        "GH_AW_MCP_LOG_DIR": "\${GH_AW_MCP_LOG_DIR}",[0m
+2026-10-28T21:29:50.3750771Z [36;1m        "GH_AW_SAFE_OUTPUTS": "\${GH_AW_SAFE_OUTPUTS}",[0m
+2026-10-28T21:29:50.3751537Z [36;1m        "GH_AW_SAFE_OUTPUTS_CONFIG_PATH": "\${GH_AW_SAFE_OUTPUTS_CONFIG_PATH}",[0m
+2026-10-28T21:29:50.3752435Z [36;1m        "GH_AW_SAFE_OUTPUTS_TOOLS_PATH": "\${GH_AW_SAFE_OUTPUTS_TOOLS_PATH}",[0m
+2026-10-28T21:29:50.3753239Z [36;1m        "GH_AW_TARGET_REPO_SLUG": "\${GH_AW_TARGET_REPO_SLUG}",[0m
+2026-10-28T21:29:50.3754157Z [36;1m        "GH_AW_POLICY_ALLOW_CREATE_PULL_REQUEST": "\${GH_AW_POLICY_ALLOW_CREATE_PULL_REQUEST}",[0m
+2026-10-28T21:29:50.3755112Z [36;1m        "GH_AW_PR_HEAD_BASE_BRANCH": "\${GH_AW_PR_HEAD_BASE_BRANCH}",[0m
+2026-10-28T21:29:50.3755864Z [36;1m        "GH_AW_PR_HEAD_BASE_SHA": "\${GH_AW_PR_HEAD_BASE_SHA}",[0m
+2026-10-28T21:29:50.3756591Z [36;1m        "GH_AW_PR_HEAD_BASE_REPO": "\${GH_AW_PR_HEAD_BASE_REPO}",[0m
+2026-10-28T21:29:50.3757383Z [36;1m        "GH_AW_PR_HEAD_BASE_PR_NUMBER": "\${GH_AW_PR_HEAD_BASE_PR_NUMBER}",[0m
+2026-10-28T21:29:50.3758337Z [36;1m        "GH_AW_PR_HEAD_BASE_REF": "\${GH_AW_PR_HEAD_BASE_REF}",[0m
+2026-10-28T21:29:50.3759015Z [36;1m        "GH_AW_PR_HEAD_REPO": "\${GH_AW_PR_HEAD_REPO}",[0m
+2026-10-28T21:29:50.3759830Z [36;1m        "GITHUB_EVENT_NAME": "\${GITHUB_EVENT_NAME}",[0m
+2026-10-28T21:29:50.3760470Z [36;1m        "GITHUB_EVENT_PATH": "\${GITHUB_EVENT_PATH}",[0m
+2026-10-28T21:29:50.3761133Z [36;1m        "GITHUB_REPOSITORY": "\${GITHUB_REPOSITORY}",[0m
+2026-10-28T21:29:50.3761905Z [36;1m        "GITHUB_SHA": "\${GITHUB_SHA}",[0m
+2026-10-28T21:29:50.3762447Z [36;1m        "GITHUB_TOKEN": "\${GITHUB_TOKEN}",[0m
+2026-10-28T21:29:50.3763033Z [36;1m        "GITHUB_WORKSPACE": "\${GITHUB_WORKSPACE}",[0m
+2026-10-28T21:29:50.3763617Z [36;1m        "RUNNER_TEMP": "\${RUNNER_TEMP}"[0m
+2026-10-28T21:29:50.3764100Z [36;1m      }[0m
+2026-10-28T21:29:50.3764430Z [36;1m    }[0m
+2026-10-28T21:29:50.3764747Z [36;1m  },[0m
+2026-10-28T21:29:50.3765085Z [36;1m  "gateway": {[0m
+2026-10-28T21:29:50.3765498Z [36;1m    "port": $MCP_GATEWAY_PORT,[0m
+2026-10-28T21:29:50.3766001Z [36;1m    "domain": "${MCP_GATEWAY_DOMAIN}",[0m
+2026-10-28T21:29:50.3766553Z [36;1m    "agentId": "${MCP_GATEWAY_AGENT_ID}",[0m
+2026-10-28T21:29:50.3767145Z [36;1m    "payloadDir": "${MCP_GATEWAY_PAYLOAD_DIR}",[0m
+2026-10-28T21:29:50.3767699Z [36;1m    "startupTimeout": 120,[0m
+2026-10-28T21:29:50.3768159Z [36;1m    "opentelemetry": {[0m
+2026-10-28T21:29:50.3768679Z [36;1m      "endpoint": "${OTEL_EXPORTER_OTLP_ENDPOINT}",[0m
+2026-10-28T21:29:50.3769479Z [36;1m      "traceId": "${GITHUB_AW_OTEL_TRACE_ID}",[0m
+2026-10-28T21:29:50.3770077Z [36;1m      "spanId": "${GITHUB_AW_OTEL_PARENT_SPAN_ID}"[0m
+2026-10-28T21:29:50.3770594Z [36;1m    }[0m
+2026-10-28T21:29:50.3770914Z [36;1m  }[0m
+2026-10-28T21:29:50.3771227Z [36;1m}[0m
+2026-10-28T21:29:50.3771596Z [36;1mGH_AW_MCP_CONFIG_eab8891622e24212_EOF[0m
+2026-10-28T21:29:50.3809464Z shell: /usr/bin/bash -e {0}
+2026-10-28T21:29:50.3809888Z env:
+2026-10-28T21:29:50.3810211Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-28T21:29:50.3810658Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-28T21:29:50.3812157Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40772245072,github.run_id=40772245072,gh-aw.engine.id=copilot
+2026-10-28T21:29:50.3813649Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-28T21:29:50.3814114Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-28T21:29:50.3814622Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-28T21:29:50.3815025Z   DEFAULT_BRANCH: main
+2026-10-28T21:29:50.3815390Z   GH_AW_ASSETS_ALLOWED_EXTS: 
+2026-10-28T21:29:50.3815785Z   GH_AW_ASSETS_BRANCH: 
+2026-10-28T21:29:50.3816160Z   GH_AW_ASSETS_MAX_SIZE_KB: 0
+2026-10-28T21:29:50.3816556Z   GH_AW_ENGINE_VERSION: 1.0.101
+2026-10-28T21:29:50.3817021Z   GH_AW_MCP_LOG_DIR: /tmp/gh-aw/mcp-logs/safeoutputs
+2026-10-28T21:29:50.3817550Z   GH_AW_PR_HEAD_BASE_BRANCH: 
+2026-10-28T21:29:50.3817960Z   GH_AW_PR_HEAD_BASE_PR_NUMBER: 
+2026-10-28T21:29:50.3818368Z   GH_AW_PR_HEAD_BASE_REF: 
+2026-10-28T21:29:50.3818755Z   GH_AW_PR_HEAD_BASE_REPO: 
+2026-10-28T21:29:50.3819316Z   GH_AW_PR_HEAD_BASE_SHA: 
+2026-10-28T21:29:50.3819698Z   GH_AW_PR_HEAD_REPO: 
+2026-10-28T21:29:50.3820063Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-28T21:29:50.3820439Z   GH_AW_TARGET_REPO_SLUG: 
+2026-10-28T21:29:50.3820843Z   GH_AW_WORKFLOW_ID_SANITIZED: issuetriage
+2026-10-28T21:29:50.3821410Z   GITHUB_AW_OTEL_TRACE_ID: 9bdad9a792b4259d03a9b2e4646aee9b
+2026-10-28T21:29:50.3822016Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 043c583ec2b0657a
+2026-10-28T21:29:50.3822540Z   GITHUB_AW_OTEL_JOB_START_MS: 1793222965468
+2026-10-28T21:29:50.3822982Z   DEBUG: 
+2026-10-28T21:29:50.3823339Z   GH_AW_POLICY_ALLOW_CREATE_PULL_REQUEST: true
+2026-10-28T21:29:50.3824018Z   GH_AW_SAFE_OUTPUTS: /home/runner/work/_temp/gh-aw/safeoutputs/outputs.jsonl
+2026-10-28T21:29:50.3824927Z   GH_AW_SAFE_OUTPUTS_CONFIG_PATH: /home/runner/work/_temp/gh-aw/safeoutputs/config.json
+2026-10-28T21:29:50.3826107Z   GH_AW_SAFE_OUTPUTS_TOOLS_PATH: /home/runner/work/_temp/gh-aw/safeoutputs/tools.json
+2026-10-28T21:29:50.3831754Z   GITHUB_TOKEN: ***
+2026-10-28T21:29:50.3832117Z ##[endgroup]
+2026-10-28T21:29:50.4661998Z [info] === MCP Gateway Startup ===
+2026-10-28T21:29:50.4664187Z [info] Engine: copilot
+2026-10-28T21:29:50.4664715Z [info] Runner temp: /home/runner/work/_temp
+2026-10-28T21:29:50.4665300Z [info] Gateway port: 8080
+2026-10-28T21:29:50.4666164Z [info] Gateway domain: awmg-mcpg
+2026-10-28T21:29:50.4666645Z [info] 
+2026-10-28T21:29:50.4671095Z [info] Reading MCP configuration from stdin...
+2026-10-28T21:29:50.4673218Z [info] ⏱️  TIMING: Configuration read from stdin took 0ms
+2026-10-28T21:29:50.4673853Z [info] 
+2026-10-28T21:29:50.4674405Z [info] Validating gateway configuration...
+2026-10-28T21:29:50.4747503Z [info] Configuration validated successfully
+2026-10-28T21:29:50.4748839Z [info] ⏱️  TIMING: Configuration validation took 7ms
+2026-10-28T21:29:50.4750221Z [info] 
+2026-10-28T21:29:50.4750944Z [info] Cleaning up any stale awmg-mcpg container from a previous run...
+2026-10-28T21:29:50.4936759Z Removed stale awmg-mcpg container
+2026-10-28T21:29:50.4943408Z [info] 
+2026-10-28T21:29:50.4943829Z [info] Starting gateway container...
+2026-10-28T21:29:50.4944298Z [info] 
+2026-10-28T21:29:50.4978657Z [info] Gateway started with PID: 5156
+2026-10-28T21:29:50.4980341Z [info] ⏱️  TIMING: Gateway container launch took 3ms
+2026-10-28T21:29:50.4981339Z [info] Verifying gateway process is running...
+2026-10-28T21:29:50.4982205Z [info] Gateway process confirmed running (PID: 5156)
+2026-10-28T21:29:50.4982812Z [info] 
+2026-10-28T21:29:50.4983205Z [info] Waiting for gateway to initialize...
+2026-10-28T21:29:55.5033672Z [info] Checking if gateway process is still alive after initialization...
+2026-10-28T21:29:55.5034740Z [info] Gateway process is still running (PID: 5156)
+2026-10-28T21:29:55.5035416Z [info] 
+2026-10-28T21:29:55.5035899Z [info] Waiting for gateway to be ready...
+2026-10-28T21:29:55.5038811Z [info] Health endpoint: http://localhost:8080/health
+2026-10-28T21:29:55.5039938Z [info] (Note: MCP_GATEWAY_DOMAIN is 'awmg-mcpg' for container access)
+2026-10-28T21:29:55.5041495Z [info] Retrying up to 150 times with exponential backoff (250ms initial delay, capped at 1000ms, ~149s cumulative retry delay excluding request time)
+2026-10-28T21:29:55.5042876Z [info] 
+2026-10-28T21:29:55.5043335Z [info] === Health Check Progress ===
+2026-10-28T21:29:55.5043963Z [info] Attempt 1/150 (0s elapsed)...
+2026-10-28T21:29:55.5191879Z [warning] MCP gateway health check: retrying after attempt 1 in 500ms
+2026-10-28T21:29:56.0224039Z [warning] MCP gateway health check: retrying after attempt 2 in 1000ms
+2026-10-28T21:29:58.0278089Z [warning] MCP gateway health check: retrying after attempt 4 in 1000ms
+2026-10-28T21:30:02.0364271Z [warning] MCP gateway health check: retrying after attempt 8 in 1000ms
+2026-10-28T21:30:03.0409954Z [info] ✓ Health check succeeded on attempt 9 (7s elapsed)
+2026-10-28T21:30:03.0410539Z [info] === End Health Check Progress ===
+2026-10-28T21:30:03.0410825Z [info] 
+2026-10-28T21:30:03.0411106Z [info] Final HTTP code: 200
+2026-10-28T21:30:03.0411542Z [info] Total attempts: 9
+2026-10-28T21:30:03.0412256Z [info] Health response body: {"status":"healthy","specVersion":"1.18.0","gatewayVersion":"v0.4.37","servers":{"safeoutputs":{"status":"running","uptime":0}}}
+2026-10-28T21:30:03.0413011Z [info] ⏱️  TIMING: Health check wait took 7537ms
+2026-10-28T21:30:03.0413422Z [info] Waiting for MCP gateway safeoutputs tool registration...
+2026-10-28T21:30:03.0622647Z [info] MCP gateway safeoutputs is ready with 6 tool(s) after 1 attempt(s)
+2026-10-28T21:30:03.0623683Z [info] ⏱️  TIMING: Safe outputs readiness wait took 22ms
+2026-10-28T21:30:03.0624326Z [info] Gateway is ready!
+2026-10-28T21:30:03.0624787Z [info] 
+2026-10-28T21:30:03.0625220Z [info] Reading gateway output configuration...
+2026-10-28T21:30:03.0625801Z [info] Gateway output received!
+2026-10-28T21:30:03.0626471Z [info] ⏱️  TIMING: Gateway output wait took 0ms
+2026-10-28T21:30:03.0627428Z [info] 
+2026-10-28T21:30:03.0629550Z [info] Converting gateway configuration to agent format...
+2026-10-28T21:30:03.0630191Z [info] Detected engine type: copilot
+2026-10-28T21:30:03.0630603Z [info] Using copilot converter...
+2026-10-28T21:30:03.0951987Z [info] Converting gateway configuration to Copilot format...
+2026-10-28T21:30:03.0980789Z [info] Input: /home/runner/work/_temp/gh-aw/mcp-config/gateway-output.json
+2026-10-28T21:30:03.0982214Z [info] Target domain: awmg-mcpg:8080
+2026-10-28T21:30:03.0982818Z [info] Servers: 1 included, 0 filtered (CLI-mounted)
+2026-10-28T21:30:03.0983711Z [info] Copilot configuration written to /home/runner/.copilot/mcp-config.json
+2026-10-28T21:30:03.0984601Z [info] Converted servers: safeoutputs
+2026-10-28T21:30:03.1016206Z [info] ⏱️  TIMING: Configuration conversion took 39ms
+2026-10-28T21:30:03.1016809Z [info] 
+2026-10-28T21:30:03.1017199Z [info] Checking MCP server functionality...
+2026-10-28T21:30:03.1017734Z [info] Running MCP server checks...
+2026-10-28T21:30:03.1086445Z Checking MCP servers...
+2026-10-28T21:30:03.1086764Z 
+2026-10-28T21:30:03.1220364Z ⏱️  TIMING: Configuration validation took 9ms
+2026-10-28T21:30:03.1220770Z 
+2026-10-28T21:30:03.1408476Z   Attempting connection (timeout: 10s)...
+2026-10-28T21:30:03.1956101Z ✓ safeoutputs: connected
+2026-10-28T21:30:03.1992301Z ⏱️  TIMING: Server check for safeoutputs took 74ms
+2026-10-28T21:30:03.1992582Z 
+2026-10-28T21:30:03.2029527Z ⏱️  TIMING: Overall MCP server checks took 94ms
+2026-10-28T21:30:03.2029815Z 
+2026-10-28T21:30:03.2030882Z ✓ All checks passed (1 succeeded, 0 skipped, 0 deferred)
+2026-10-28T21:30:03.2035545Z [info] ⏱️  TIMING: MCP server connectivity checks took 102ms
+2026-10-28T21:30:03.2036140Z [info] 
+2026-10-28T21:30:03.2036379Z [info] Saving MCP CLI manifest...
+2026-10-28T21:30:03.2041076Z [info] CLI manifest saved with 1 server(s): safeoutputs
+2026-10-28T21:30:03.2041654Z [info] 
+2026-10-28T21:30:03.2042051Z [info] Cleaning up gateway configuration file...
+2026-10-28T21:30:03.2042638Z [info] Gateway configuration file deleted
+2026-10-28T21:30:03.2042979Z [info] 
+2026-10-28T21:30:03.2043194Z [info] MCP gateway is running:
+2026-10-28T21:30:03.2043517Z [info]   - From host: http://localhost:8080
+2026-10-28T21:30:03.2043874Z [info]   - From containers: http://awmg-mcpg:8080
+2026-10-28T21:30:03.2044203Z [info] Gateway PID: 5156
+2026-10-28T21:30:03.2044574Z [info] ⏱️  TIMING: Overall gateway startup took 12738ms
+2026-10-28T21:30:03.2044898Z [info] 

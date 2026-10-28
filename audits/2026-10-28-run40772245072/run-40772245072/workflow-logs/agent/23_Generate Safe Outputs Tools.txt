@@ -1,0 +1,186 @@
+﻿2026-10-28T21:29:50.2387467Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-28T21:29:50.2388187Z with:
+2026-10-28T21:29:50.2390629Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'generate_safe_outputs_tools.cjs'));
+await main();
+
+2026-10-28T21:29:50.2397685Z   github-token: ***
+2026-10-28T21:29:50.2398057Z   debug: false
+2026-10-28T21:29:50.2398447Z   user-agent: actions/github-script
+2026-10-28T21:29:50.2398917Z   result-encoding: json
+2026-10-28T21:29:50.2399485Z   retries: 0
+2026-10-28T21:29:50.2399911Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-28T21:29:50.2400432Z env:
+2026-10-28T21:29:50.2400770Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-28T21:29:50.2401224Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-28T21:29:50.2402753Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40772245072,github.run_id=40772245072,gh-aw.engine.id=copilot
+2026-10-28T21:29:50.2404328Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-28T21:29:50.2404801Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-28T21:29:50.2405335Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-28T21:29:50.2405760Z   DEFAULT_BRANCH: main
+2026-10-28T21:29:50.2406138Z   GH_AW_ASSETS_ALLOWED_EXTS: 
+2026-10-28T21:29:50.2406554Z   GH_AW_ASSETS_BRANCH: 
+2026-10-28T21:29:50.2406936Z   GH_AW_ASSETS_MAX_SIZE_KB: 0
+2026-10-28T21:29:50.2407589Z   GH_AW_ENGINE_VERSION: 1.0.101
+2026-10-28T21:29:50.2408098Z   GH_AW_MCP_LOG_DIR: /tmp/gh-aw/mcp-logs/safeoutputs
+2026-10-28T21:29:50.2408631Z   GH_AW_PR_HEAD_BASE_BRANCH: 
+2026-10-28T21:29:50.2409064Z   GH_AW_PR_HEAD_BASE_PR_NUMBER: 
+2026-10-28T21:29:50.2409710Z   GH_AW_PR_HEAD_BASE_REF: 
+2026-10-28T21:29:50.2410108Z   GH_AW_PR_HEAD_BASE_REPO: 
+2026-10-28T21:29:50.2410533Z   GH_AW_PR_HEAD_BASE_SHA: 
+2026-10-28T21:29:50.2410928Z   GH_AW_PR_HEAD_REPO: 
+2026-10-28T21:29:50.2411313Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-28T21:29:50.2411719Z   GH_AW_TARGET_REPO_SLUG: 
+2026-10-28T21:29:50.2412145Z   GH_AW_WORKFLOW_ID_SANITIZED: issuetriage
+2026-10-28T21:29:50.2412724Z   GITHUB_AW_OTEL_TRACE_ID: 9bdad9a792b4259d03a9b2e4646aee9b
+2026-10-28T21:29:50.2413352Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 043c583ec2b0657a
+2026-10-28T21:29:50.2413892Z   GITHUB_AW_OTEL_JOB_START_MS: 1793222965468
+2026-10-28T21:29:50.2419514Z   GH_AW_TOOLS_META_JSON: {
+  "description_suffixes": {
+    "add_comment": " CONSTRAINTS: Maximum 1 comment(s) can be added. Target: triggering. Supports reply_to_id for discussion threading.",
+    "add_labels": " CONSTRAINTS: Maximum 1 add_labels call(s) allowed. Maximum 2 label(s) per call. Only these labels are allowed: [\"component/agent\" \"component/api\" \"component/config\" \"component/documentation\" \"component/mixin\" \"component/notify\" \"component/otlp\" \"component/promql\" \"component/promtool\" \"component/remote storage\" \"component/rules\" \"component/scraping\" \"component/service discovery\" \"component/service discovery/kubernetes\" \"component/tests\" \"component/tsdb\" \"component/ui\" \"component/wal\" \"component/web\" \"kind/enhancement\" \"kind/feature\" \"kind/more-info-needed\" \"kind/question\"]. Target: triggering."
+  },
+  "repo_params": {},
+  "dynamic_tools": []
+}
+
+2026-10-28T21:29:50.2435764Z   GH_AW_VALIDATION_JSON: {
+  "add_comment": {
+    "defaultMax": 1,
+    "fields": {
+      "body": {
+        "required": true,
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 65000
+      },
+      "comment_id": {
+        "optionalPositiveInteger": true
+      },
+      "item_number": {
+        "issueOrPRNumber": true
+      },
+      "pr": {
+        "issueOrPRNumber": true
+      },
+      "pr_number": {
+        "issueOrPRNumber": true
+      },
+      "reply_to_id": {
+        "type": "string",
+        "maxLength": 256
+      },
+      "repo": {
+        "type": "string",
+        "maxLength": 256
+      },
+      "target": {
+        "type": "string",
+        "enum": [
+          "status"
+        ]
+      },
+      "temporary_id": {
+        "type": "string",
+        "pattern": "^#?aw_[A-Za-z0-9_]{3,12}$"
+      }
+    }
+  },
+  "add_labels": {
+    "defaultMax": 5,
+    "fields": {
+      "item_number": {
+        "issueNumberOrTemporaryId": true
+      },
+      "labels": {
+        "required": true,
+        "type": "array"
+      },
+      "repo": {
+        "type": "string",
+        "maxLength": 256
+      }
+    }
+  },
+  "mentions": {
+    "enabled": false
+  },
+  "noop": {
+    "defaultMax": 2,
+    "fields": {
+      "message": {
+        "required": true,
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 65000
+      }
+    }
+  },
+  "report_incomplete": {
+    "defaultMax": 5,
+    "fields": {
+      "details": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 65000
+      },
+      "reason": {
+        "required": true,
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 1024
+      }
+    }
+  },
+  "report_missing_data": {
+    "defaultMax": 20,
+    "fields": {
+      "alternatives": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 256
+      },
+      "context": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 256
+      },
+      "data_type": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 128
+      },
+      "reason": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 256
+      }
+    }
+  },
+  "report_missing_tool": {
+    "defaultMax": 20,
+    "fields": {
+      "alternatives": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 512
+      },
+      "reason": {
+        "required": true,
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 256
+      },
+      "tool": {
+        "type": "string",
+        "sanitize": true,
+        "maxLength": 128
+      }
+    }
+  }
+}
+
+2026-10-28T21:29:50.2447764Z ##[endgroup]
