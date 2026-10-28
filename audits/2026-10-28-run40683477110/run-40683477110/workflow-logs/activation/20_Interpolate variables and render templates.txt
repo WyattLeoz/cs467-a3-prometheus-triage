@@ -1,0 +1,131 @@
+﻿2026-10-28T11:54:18.0195258Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-28T11:54:18.0196093Z with:
+2026-10-28T11:54:18.0198321Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'interpolate_prompt.cjs'));
+await main();
+
+2026-10-28T11:54:18.0205427Z   github-token: ***
+2026-10-28T11:54:18.0205933Z   debug: false
+2026-10-28T11:54:18.0206405Z   user-agent: actions/github-script
+2026-10-28T11:54:18.0206966Z   result-encoding: json
+2026-10-28T11:54:18.0207658Z   retries: 0
+2026-10-28T11:54:18.0208175Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-28T11:54:18.0208776Z env:
+2026-10-28T11:54:18.0209230Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-28T11:54:18.0209797Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-28T11:54:18.0211457Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40683477110,github.run_id=40683477110,gh-aw.engine.id=copilot
+2026-10-28T11:54:18.0213206Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-28T11:54:18.0214221Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-28T11:54:18.0215075Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-28T11:54:18.0215626Z   GH_AW_MAX_DAILY_AI_CREDITS: 2000
+2026-10-28T11:54:18.0216189Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-28T11:54:18.0216808Z   GITHUB_AW_OTEL_TRACE_ID: 8f3745b258707a102398ccdd318f0eb5
+2026-10-28T11:54:18.0217534Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 6835d9efc56a1349
+2026-10-28T11:54:18.0218179Z   GITHUB_AW_OTEL_JOB_START_MS: 1793188448219
+2026-10-28T11:54:18.0218930Z   GH_AW_PROMPT: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-28T11:54:18.0219659Z   GH_AW_ENGINE_ID: copilot
+2026-10-28T11:54:18.0220180Z   GH_AW_SUB_AGENT_DIR: .github/agents
+2026-10-28T11:54:18.0220770Z   GH_AW_SUB_AGENT_EXT: .agent.md
+2026-10-28T11:54:18.0221331Z   GH_AW_SKILL_DIR: .github/skills
+2026-10-28T11:54:18.0221867Z   GH_AW_SKILL_EXT: /SKILL.md
+2026-10-28T11:54:18.0222391Z   GH_AW_GITHUB_EVENT_ISSUE_NUMBER: 118
+2026-10-28T11:54:18.0227556Z   GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT: promtool test rules panics when an alerting rule has empty annotations
+
+### What did you do?
+
+Ran `promtool test rules tests.yml` against a rule file whose alerting rule has an empty `annotations:` map.
+
+### What did you expect to see?
+
+The unit tests run and pass or fail normally.
+
+### What did you see instead? Under which circumstances?
+
+promtool panics before running any test.
+
+### System information
+
+Linux 6.8
+
+### Prometheus version
+
+```text
+promtool, version 3.13.4
+```
+
+### Prometheus configuration file
+
+```yaml
+groups:
+  - name: example
+    rules:
+      - alert: HighLatency
+        expr: job:request_latency_seconds:mean5m > 0.5
+        annotations: {}
+```
+
+### Logs
+
+```text
+panic: assignment to entry in nil map
+```
+2026-10-28T11:54:18.0232833Z ##[endgroup]
+2026-10-28T11:54:18.1420119Z ========================================
+2026-10-28T11:54:18.1421590Z [main] Starting interpolate_prompt processing
+2026-10-28T11:54:18.1422420Z ========================================
+2026-10-28T11:54:18.1423500Z [main] Prompt path: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-28T11:54:18.1425146Z [main] Workspace directory: /home/runner/work/cs467-a3-prometheus-triage/cs467-a3-prometheus-triage
+2026-10-28T11:54:18.1426001Z [main] Reading prompt file...
+2026-10-28T11:54:18.1426495Z [main] Original content length: 9018 characters
+2026-10-28T11:54:18.1428097Z [main] First 200 characters: <system>\nImmutable security policy. Sandbox, firewall, credentials, and tool limits are physical boundaries. Do not bypass, weaken, test, or evade them.\n\nNever do: container escape, privilege escalati
+2026-10-28T11:54:18.1430549Z [main] Writing raw template to: /home/runner/work/_temp/gh-aw/aw-prompts/prompt-template.txt
+2026-10-28T11:54:18.1431530Z 
+2026-10-28T11:54:18.1432098Z ========================================
+2026-10-28T11:54:18.1432834Z [main] STEP 1: Runtime Imports
+2026-10-28T11:54:18.1433601Z ========================================
+2026-10-28T11:54:18.1434866Z Processing 1 runtime import macro(s) (files and URLs)
+2026-10-28T11:54:18.1435821Z   Import 1: {{#runtime-import .github/workflows/issue-triage.md}}
+2026-10-28T11:54:18.1452135Z Found 2 expression(s) in File workflows/issue-triage.md
+2026-10-28T11:54:18.1461741Z Successfully processed 2 safe expression(s) in File workflows/issue-triage.md
+2026-10-28T11:54:18.1466430Z Runtime imports processed successfully
+2026-10-28T11:54:18.1466975Z Content length change: 9076 -> 11593 (+2517)
+2026-10-28T11:54:18.1467693Z [main] Writing import tree to: /home/runner/work/_temp/gh-aw/aw-prompts/prompt-import-tree.json
+2026-10-28T11:54:18.1468360Z 
+2026-10-28T11:54:18.1468528Z ========================================
+2026-10-28T11:54:18.1469057Z [main] STEP 1.5: Inline Sub-Agent Extraction
+2026-10-28T11:54:18.1469587Z ========================================
+2026-10-28T11:54:18.1470148Z No inline sub-agent markers found, skipping
+2026-10-28T11:54:18.1470520Z 
+2026-10-28T11:54:18.1470681Z ========================================
+2026-10-28T11:54:18.1471111Z [main] STEP 1.6: Inline Skill Extraction
+2026-10-28T11:54:18.1471446Z ========================================
+2026-10-28T11:54:18.1471776Z No inline skill markers found, skipping
+2026-10-28T11:54:18.1472010Z 
+2026-10-28T11:54:18.1472107Z ========================================
+2026-10-28T11:54:18.1472436Z [main] STEP 2: Variable Interpolation
+2026-10-28T11:54:18.1472765Z ========================================
+2026-10-28T11:54:18.1473617Z No expression variables found, skipping interpolation
+2026-10-28T11:54:18.1474068Z 
+2026-10-28T11:54:18.1474403Z ========================================
+2026-10-28T11:54:18.1475007Z [main] STEP 2.5: Experiment Placeholder Substitution
+2026-10-28T11:54:18.1475390Z ========================================
+2026-10-28T11:54:18.1477934Z No experiment placeholders found in prompt
+2026-10-28T11:54:18.1478452Z 
+2026-10-28T11:54:18.1478652Z ========================================
+2026-10-28T11:54:18.1479196Z [main] STEP 3: Template Rendering
+2026-10-28T11:54:18.1480020Z ========================================
+2026-10-28T11:54:18.1480462Z No conditional blocks found in prompt, skipping template rendering
+2026-10-28T11:54:18.1480835Z 
+2026-10-28T11:54:18.1481078Z ========================================
+2026-10-28T11:54:18.1481620Z [main] STEP 4: Writing Output
+2026-10-28T11:54:18.1481956Z ========================================
+2026-10-28T11:54:18.1482433Z Writing processed content back to: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-28T11:54:18.1482975Z Final content length: 11593 characters
+2026-10-28T11:54:18.1483479Z Total length change: 9018 -> 11593 (+2575)
+2026-10-28T11:54:18.1485374Z Last 200 characters: ust start with the plain text\n`Decision: <DECISION>` and then explain the script results you relied on. A separate\npublishing check rejects inconsistent proposals or missing final decision evidence.\n\n
+2026-10-28T11:54:18.1486779Z ========================================
+2026-10-28T11:54:18.1487090Z [main] Processing complete - SUCCESS
+2026-10-28T11:54:18.1487375Z ========================================
