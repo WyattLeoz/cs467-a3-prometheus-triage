@@ -1,0 +1,49 @@
+﻿2026-10-28T12:21:39.7533678Z ##[group]Run git sparse-checkout set --no-cone '/.claude/' '!/.claude/skills/prometheus-issue-triage/tests/' '/AGENTS.md' '/data/'
+2026-10-28T12:21:39.7534664Z [36;1mgit sparse-checkout set --no-cone '/.claude/' '!/.claude/skills/prometheus-issue-triage/tests/' '/AGENTS.md' '/data/'[0m
+2026-10-28T12:21:39.7535440Z [36;1mecho "files visible to the agent:"; find . -path ./.git -prune -o -type f -print | sort[0m
+2026-10-28T12:21:39.7535914Z [36;1mmkdir -p /tmp/gh-aw/agent[0m
+2026-10-28T12:21:39.7536312Z [36;1mjq '{issue: .issue}' "$GITHUB_EVENT_PATH" > /tmp/gh-aw/agent/issue.json[0m
+2026-10-28T12:21:39.7536813Z [36;1ms=.claude/skills/prometheus-issue-triage/scripts/triage.py[0m
+2026-10-28T12:21:39.7537568Z [36;1m"$s" precheck /tmp/gh-aw/agent/issue.json > /tmp/gh-aw/agent/precheck.json[0m
+2026-10-28T12:21:39.7538128Z [36;1m"$s" duplicates /tmp/gh-aw/agent/issue.json > /tmp/gh-aw/agent/duplicates.json[0m
+2026-10-28T12:21:39.7538859Z [36;1mjq -c '{skill, maintainer_authored, missing_bug_template_sections, other_project_mentions}' /tmp/gh-aw/agent/precheck.json[0m
+2026-10-28T12:21:39.7539593Z [36;1mjq -c '[.candidates[] | {ref, score}]' /tmp/gh-aw/agent/duplicates.json[0m
+2026-10-28T12:21:39.7559514Z shell: /usr/bin/bash -e {0}
+2026-10-28T12:21:39.7559783Z env:
+2026-10-28T12:21:39.7560008Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-28T12:21:39.7560301Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-28T12:21:39.7561600Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40687034649,github.run_id=40687034649,gh-aw.engine.id=copilot
+2026-10-28T12:21:39.7562517Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-28T12:21:39.7562831Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-28T12:21:39.7563148Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-28T12:21:39.7563402Z   DEFAULT_BRANCH: main
+2026-10-28T12:21:39.7563642Z   GH_AW_ASSETS_ALLOWED_EXTS: 
+2026-10-28T12:21:39.7563890Z   GH_AW_ASSETS_BRANCH: 
+2026-10-28T12:21:39.7564123Z   GH_AW_ASSETS_MAX_SIZE_KB: 0
+2026-10-28T12:21:39.7564367Z   GH_AW_ENGINE_VERSION: 1.0.101
+2026-10-28T12:21:39.7564659Z   GH_AW_MCP_LOG_DIR: /tmp/gh-aw/mcp-logs/safeoutputs
+2026-10-28T12:21:39.7564979Z   GH_AW_PR_HEAD_BASE_BRANCH: 
+2026-10-28T12:21:39.7565236Z   GH_AW_PR_HEAD_BASE_PR_NUMBER: 
+2026-10-28T12:21:39.7565493Z   GH_AW_PR_HEAD_BASE_REF: 
+2026-10-28T12:21:39.7565728Z   GH_AW_PR_HEAD_BASE_REPO: 
+2026-10-28T12:21:39.7565965Z   GH_AW_PR_HEAD_BASE_SHA: 
+2026-10-28T12:21:39.7566199Z   GH_AW_PR_HEAD_REPO: 
+2026-10-28T12:21:39.7566421Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-28T12:21:39.7566650Z   GH_AW_TARGET_REPO_SLUG: 
+2026-10-28T12:21:39.7566908Z   GH_AW_WORKFLOW_ID_SANITIZED: issuetriage
+2026-10-28T12:21:39.7567254Z   GITHUB_AW_OTEL_TRACE_ID: 152c8bce415b5f2f95e604f7103d1f12
+2026-10-28T12:21:39.7567625Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 87a5c0cdffac6443
+2026-10-28T12:21:39.7567959Z   GITHUB_AW_OTEL_JOB_START_MS: 1793190097072
+2026-10-28T12:21:39.7568237Z ##[endgroup]
+2026-10-28T12:21:39.7724247Z files visible to the agent:
+2026-10-28T12:21:39.7740430Z ./.claude/skills/prometheus-issue-triage/SKILL.md
+2026-10-28T12:21:39.7741198Z ./.claude/skills/prometheus-issue-triage/references/component-map.md
+2026-10-28T12:21:39.7741725Z ./.claude/skills/prometheus-issue-triage/references/label-policy.json
+2026-10-28T12:21:39.7742208Z ./.claude/skills/prometheus-issue-triage/references/labels.json
+2026-10-28T12:21:39.7742702Z ./.claude/skills/prometheus-issue-triage/references/other-projects.json
+2026-10-28T12:21:39.7743203Z ./.claude/skills/prometheus-issue-triage/scripts/output_policy.py
+2026-10-28T12:21:39.7743635Z ./.claude/skills/prometheus-issue-triage/scripts/triage.py
+2026-10-28T12:21:39.7743962Z ./AGENTS.md
+2026-10-28T12:21:39.7744191Z ./data/upstream-issues.jsonl
+2026-10-28T12:21:39.8957041Z {"skill":"prometheus-issue-triage/1.1","maintainer_authored":false,"missing_bug_template_sections":["System information","Prometheus version","Prometheus configuration file","Logs"],"other_project_mentions":[{"project":"postgres_exporter","where":"https://github.com/prometheus-community/postgres_exporter"}]}
+2026-10-28T12:21:39.8982051Z []
