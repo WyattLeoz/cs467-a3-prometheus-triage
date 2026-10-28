@@ -1,0 +1,70 @@
+﻿2026-10-28T12:04:21.0592993Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-28T12:04:21.0593361Z with:
+2026-10-28T12:04:21.0595702Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+
+const substitutePlaceholders = require(path.join(actionsDir, 'substitute_placeholders.cjs'));
+
+// Call the substitution function
+return await substitutePlaceholders({
+  file: process.env.GH_AW_PROMPT,
+  substitutions: {
+    GH_AW_GITHUB_EVENT_ISSUE_NUMBER: process.env.GH_AW_GITHUB_EVENT_ISSUE_NUMBER,
+    GH_AW_MCP_CLI_SERVERS_LIST: process.env.GH_AW_MCP_CLI_SERVERS_LIST,
+    GH_AW_NEEDS_PRE_ACTIVATION_OUTPUTS_ACTIVATED: process.env.GH_AW_NEEDS_PRE_ACTIVATION_OUTPUTS_ACTIVATED,
+    GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT: process.env.GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT
+  }
+});
+
+2026-10-28T12:04:21.0599450Z   github-token: ***
+2026-10-28T12:04:21.0599679Z   debug: false
+2026-10-28T12:04:21.0599867Z   user-agent: actions/github-script
+2026-10-28T12:04:21.0600109Z   result-encoding: json
+2026-10-28T12:04:21.0600300Z   retries: 0
+2026-10-28T12:04:21.0600496Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-28T12:04:21.0600743Z env:
+2026-10-28T12:04:21.0600919Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-28T12:04:21.0601155Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-28T12:04:21.0601825Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40684755231,github.run_id=40684755231,gh-aw.engine.id=copilot
+2026-10-28T12:04:21.0602478Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-28T12:04:21.0602708Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-28T12:04:21.0602954Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-28T12:04:21.0603185Z   GH_AW_MAX_DAILY_AI_CREDITS: 2000
+2026-10-28T12:04:21.0603403Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-28T12:04:21.0603857Z   GITHUB_AW_OTEL_TRACE_ID: 4381d2f175d4a6c244dca10d9b915401
+2026-10-28T12:04:21.0604320Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: c4946dc2ff7019c1
+2026-10-28T12:04:21.0604575Z   GITHUB_AW_OTEL_JOB_START_MS: 1793189048438
+2026-10-28T12:04:21.0604882Z   GH_AW_PROMPT: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-28T12:04:21.0605178Z   GH_AW_GITHUB_EVENT_ISSUE_NUMBER: 120
+2026-10-28T12:04:21.0605553Z   GH_AW_MCP_CLI_SERVERS_LIST: - `safeoutputs` — run `safeoutputs --help` to see available tools
+2026-10-28T12:04:21.0605961Z   GH_AW_NEEDS_PRE_ACTIVATION_OUTPUTS_ACTIVATED: true
+2026-10-28T12:04:21.0607544Z   GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT: 💡 Bounty Platform for Prometheus
+
+Hi Prometheus team! 👋
+
+I wanted to share **Roxonn** - a decentralized bounty platform to help accelerate development.
+
+**What is Roxonn?**
+✅ Fund GitHub issues with crypto bounties (XDC, USDC, ROXN)
+✅ Notify 300+ developers
+✅ Auto-pay when PRs merge
+✅ Zero crypto setup needed
+
+**Flow:**
+1. Register repo (GitHub App)
+2. Fund pool with USDC
+3. Assign bounties
+4. PR → payment automatic
+
+**Benefits:**
+- Developer network
+- **0.5% platform fee**
+- Transparent blockchain
+
+Learn: **(roxonn.com/redacted)**
+
+*Sharing a resource!*
+2026-10-28T12:04:21.0609062Z ##[endgroup]
+2026-10-28T12:04:21.1499173Z [substitutePlaceholders] /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt (4 substitution(s))
