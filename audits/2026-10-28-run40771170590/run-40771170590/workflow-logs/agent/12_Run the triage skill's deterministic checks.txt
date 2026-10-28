@@ -1,0 +1,49 @@
+﻿2026-10-28T21:21:49.6996561Z ##[group]Run git sparse-checkout set --no-cone '/.claude/' '!/.claude/skills/prometheus-issue-triage/tests/' '/AGENTS.md' '/data/'
+2026-10-28T21:21:49.6997068Z [36;1mgit sparse-checkout set --no-cone '/.claude/' '!/.claude/skills/prometheus-issue-triage/tests/' '/AGENTS.md' '/data/'[0m
+2026-10-28T21:21:49.6997457Z [36;1mecho "files visible to the agent:"; find . -path ./.git -prune -o -type f -print | sort[0m
+2026-10-28T21:21:49.6997715Z [36;1mmkdir -p /tmp/gh-aw/agent[0m
+2026-10-28T21:21:49.6997932Z [36;1mjq '{issue: .issue}' "$GITHUB_EVENT_PATH" > /tmp/gh-aw/agent/issue.json[0m
+2026-10-28T21:21:49.6998200Z [36;1ms=.claude/skills/prometheus-issue-triage/scripts/triage.py[0m
+2026-10-28T21:21:49.6998617Z [36;1m"$s" precheck /tmp/gh-aw/agent/issue.json > /tmp/gh-aw/agent/precheck.json[0m
+2026-10-28T21:21:49.6998915Z [36;1m"$s" duplicates /tmp/gh-aw/agent/issue.json > /tmp/gh-aw/agent/duplicates.json[0m
+2026-10-28T21:21:49.6999295Z [36;1mjq -c '{skill, maintainer_authored, missing_bug_template_sections, other_project_mentions}' /tmp/gh-aw/agent/precheck.json[0m
+2026-10-28T21:21:49.6999701Z [36;1mjq -c '[.candidates[] | {ref, score}]' /tmp/gh-aw/agent/duplicates.json[0m
+2026-10-28T21:21:49.7049796Z shell: /usr/bin/bash -e {0}
+2026-10-28T21:21:49.7050075Z env:
+2026-10-28T21:21:49.7050230Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-28T21:21:49.7050389Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-28T21:21:49.7050857Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40771170590,github.run_id=40771170590,gh-aw.engine.id=copilot
+2026-10-28T21:21:49.7051306Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-28T21:21:49.7051472Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-28T21:21:49.7051649Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-28T21:21:49.7051787Z   DEFAULT_BRANCH: main
+2026-10-28T21:21:49.7051918Z   GH_AW_ASSETS_ALLOWED_EXTS: 
+2026-10-28T21:21:49.7052061Z   GH_AW_ASSETS_BRANCH: 
+2026-10-28T21:21:49.7052197Z   GH_AW_ASSETS_MAX_SIZE_KB: 0
+2026-10-28T21:21:49.7052339Z   GH_AW_ENGINE_VERSION: 1.0.101
+2026-10-28T21:21:49.7052503Z   GH_AW_MCP_LOG_DIR: /tmp/gh-aw/mcp-logs/safeoutputs
+2026-10-28T21:21:49.7052680Z   GH_AW_PR_HEAD_BASE_BRANCH: 
+2026-10-28T21:21:49.7052824Z   GH_AW_PR_HEAD_BASE_PR_NUMBER: 
+2026-10-28T21:21:49.7052967Z   GH_AW_PR_HEAD_BASE_REF: 
+2026-10-28T21:21:49.7053110Z   GH_AW_PR_HEAD_BASE_REPO: 
+2026-10-28T21:21:49.7053246Z   GH_AW_PR_HEAD_BASE_SHA: 
+2026-10-28T21:21:49.7053373Z   GH_AW_PR_HEAD_REPO: 
+2026-10-28T21:21:49.7053505Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-28T21:21:49.7053638Z   GH_AW_TARGET_REPO_SLUG: 
+2026-10-28T21:21:49.7053781Z   GH_AW_WORKFLOW_ID_SANITIZED: issuetriage
+2026-10-28T21:21:49.7053973Z   GITHUB_AW_OTEL_TRACE_ID: c43b9b9f697dc924408d3475a42cd463
+2026-10-28T21:21:49.7054176Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: f21409488c300aeb
+2026-10-28T21:21:49.7054353Z   GITHUB_AW_OTEL_JOB_START_MS: 1793222503984
+2026-10-28T21:21:49.7054513Z ##[endgroup]
+2026-10-28T21:21:49.7212204Z files visible to the agent:
+2026-10-28T21:21:49.7240493Z ./.claude/skills/prometheus-issue-triage/SKILL.md
+2026-10-28T21:21:49.7240883Z ./.claude/skills/prometheus-issue-triage/references/component-map.md
+2026-10-28T21:21:49.7241158Z ./.claude/skills/prometheus-issue-triage/references/label-policy.json
+2026-10-28T21:21:49.7241418Z ./.claude/skills/prometheus-issue-triage/references/labels.json
+2026-10-28T21:21:49.7241674Z ./.claude/skills/prometheus-issue-triage/references/other-projects.json
+2026-10-28T21:21:49.7241932Z ./.claude/skills/prometheus-issue-triage/scripts/output_policy.py
+2026-10-28T21:21:49.7242175Z ./.claude/skills/prometheus-issue-triage/scripts/triage.py
+2026-10-28T21:21:49.7242358Z ./AGENTS.md
+2026-10-28T21:21:49.7242493Z ./data/upstream-issues.jsonl
+2026-10-28T21:21:49.8279621Z {"skill":"prometheus-issue-triage/1.1","maintainer_authored":false,"missing_bug_template_sections":[],"other_project_mentions":[{"project":"kube-prometheus-stack Helm chart","where":"https://github.com/prometheus-community/helm-charts"}]}
+2026-10-28T21:21:49.8297333Z []
