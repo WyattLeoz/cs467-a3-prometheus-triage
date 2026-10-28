@@ -1,0 +1,41 @@
+# Deterministic checks on every change to the agent configuration (no model call).
+# Required status check of the protect-main ruleset: a PR cannot merge if the skill/scorer tests
+# fail, a workflow no longer compiles in strict mode, or a committed .lock.yml is stale.
+name: Config check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: config-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Skill script tests
+        run: python3 -m unittest discover -s .claude/skills/prometheus-issue-triage/tests -v
+      - name: Scorer, publishing-guard, archive and golden-input tests
+        run: python3 -m unittest discover -s evals/golden -p 'test_*.py' -v
+      - name: Install gh-aw v0.93.1 (the compiler version in the lock files)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh extension install github/gh-aw --pin v0.93.1 && gh aw version
+      - name: Strict compile; committed lock files must be current
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh aw compile --strict
+          git status --short .github/workflows
+          git diff --exit-code -- '.github/workflows/*.lock.yml'

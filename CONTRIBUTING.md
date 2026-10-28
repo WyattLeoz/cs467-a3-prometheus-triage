@@ -46,8 +46,9 @@ Configuration lives in `.github/workflows/issue-triage.md` (hard limits),
 `.claude/skills/prometheus-issue-triage/` (procedure) and `AGENTS.md` (repository facts).
 
 1. Open a pull request; changes to these paths need review by the CODEOWNER (`.github/CODEOWNERS`).
-   GitHub enforces this only with branch protection, which this private repo's plan does not offer,
-   so here it is a rule the owner follows, not a technical gate (DESIGN.md, Human approval).
+   The `protect-main` ruleset blocks direct pushes, force-pushes and deletion of `main` and requires
+   CODEOWNER review. With one maintainer, the owner may bypass review only by merging the PR, which
+   GitHub records; a second maintainer should remove that bypass (DESIGN.md, Human approval).
 2. Recompile with `gh aw compile issue-triage` and commit the regenerated `.lock.yml` in the same PR.
 3. Run the unit tests and the golden set (`evals/golden/README.md`) and attach the score table.
    The same rerun is required when the drift alert opens a `[drift]` issue (only then may the owner
