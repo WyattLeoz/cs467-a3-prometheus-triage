@@ -1,0 +1,36 @@
+﻿2026-10-28T05:13:01.2492642Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-28T05:13:01.2493996Z with:
+2026-10-28T05:13:01.2495457Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'compute_text.cjs'));
+await main();
+
+2026-10-28T05:13:01.2499322Z   github-token: ***
+2026-10-28T05:13:01.2499552Z   debug: false
+2026-10-28T05:13:01.2499786Z   user-agent: actions/github-script
+2026-10-28T05:13:01.2500064Z   result-encoding: json
+2026-10-28T05:13:01.2500293Z   retries: 0
+2026-10-28T05:13:01.2500543Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-28T05:13:01.2500849Z env:
+2026-10-28T05:13:01.2501051Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-28T05:13:01.2501339Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-28T05:13:01.2502208Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40636629239,github.run_id=40636629239,gh-aw.engine.id=copilot
+2026-10-28T05:13:01.2503117Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-28T05:13:01.2503397Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-28T05:13:01.2503713Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-28T05:13:01.2503972Z   GH_AW_MAX_DAILY_AI_CREDITS: 2000
+2026-10-28T05:13:01.2504231Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-28T05:13:01.2504531Z   GITHUB_AW_OTEL_TRACE_ID: 676ecca3b6469db45ea7ed230da36ac9
+2026-10-28T05:13:01.2504894Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: e1a9bc8baf2d8aa6
+2026-10-28T05:13:01.2505210Z   GITHUB_AW_OTEL_JOB_START_MS: 1793164373811
+2026-10-28T05:13:01.2505894Z   GH_AW_ALLOWED_DOMAINS: github.com,groups.google.com,localhost,prometheus.io
+2026-10-28T05:13:01.2506319Z ##[endgroup]
+2026-10-28T05:13:01.5913097Z Repository permission level: admin
+2026-10-28T05:13:01.5951751Z Redacted URL: mimir.exampl...
+2026-10-28T05:13:01.5983142Z Redacted URL: mimir.exampl...
+2026-10-28T05:13:01.5993027Z text: remote_write retries hammer the receiver after 429 responses\n\n### What did you do?\n\nOur remote write receiver (Mimir) started returning HTTP 429 during an ingestion spike.\n\n### What did you expect to see?\n\nPrometheus backs off and retries gradually.\n\n### What did you see instead? Under which circumstances?\n\nAll shards retry immediately and the receiver never recovers; we had to restart Prometheus.\n\n### System information\n\nLinux 6.8\n\n### Prometheus version\n\n```text\nprometheus, version 3.13.4\n```\n\n### Prometheus configuration file\n\n```yaml\nremote_write:\n  - url: (mimir.example.internal/redacted)\n```\n\n### Logs\n\n```text\nlevel=WARN msg="Failed to send batch, retrying" err="server returned HTTP status 429 Too Many Requests"\n```
+2026-10-28T05:13:01.5998780Z title: remote_write retries hammer the receiver after 429 responses
+2026-10-28T05:13:01.6003664Z body: ### What did you do?\n\nOur remote write receiver (Mimir) started returning HTTP 429 during an ingestion spike.\n\n### What did you expect to see?\n\nPrometheus backs off and retries gradually.\n\n### What did you see instead? Under which circumstances?\n\nAll shards retry immediately and the receiver never recovers; we had to restart Prometheus.\n\n### System information\n\nLinux 6.8\n\n### Prometheus version\n\n```text\nprometheus, version 3.13.4\n```\n\n### Prometheus configuration file\n\n```yaml\nremote_write:\n  - url: (mimir.example.internal/redacted)\n```\n\n### Logs\n\n```text\nlevel=WARN msg="Failed to send batch, retrying" err="server returned HTTP status 429 Too Many Requests"\n```
+2026-10-28T05:13:01.6009130Z Redacted URL domains written to: /tmp/gh-aw/redacted-urls.log

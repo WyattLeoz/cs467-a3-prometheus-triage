@@ -1,0 +1,80 @@
+﻿2026-10-28T05:13:02.5401299Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-28T05:13:02.5401935Z with:
+2026-10-28T05:13:02.5404810Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+
+const substitutePlaceholders = require(path.join(actionsDir, 'substitute_placeholders.cjs'));
+
+// Call the substitution function
+return await substitutePlaceholders({
+  file: process.env.GH_AW_PROMPT,
+  substitutions: {
+    GH_AW_GITHUB_EVENT_ISSUE_NUMBER: process.env.GH_AW_GITHUB_EVENT_ISSUE_NUMBER,
+    GH_AW_MCP_CLI_SERVERS_LIST: process.env.GH_AW_MCP_CLI_SERVERS_LIST,
+    GH_AW_NEEDS_PRE_ACTIVATION_OUTPUTS_ACTIVATED: process.env.GH_AW_NEEDS_PRE_ACTIVATION_OUTPUTS_ACTIVATED,
+    GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT: process.env.GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT
+  }
+});
+
+2026-10-28T05:13:02.5410440Z   github-token: ***
+2026-10-28T05:13:02.5410742Z   debug: false
+2026-10-28T05:13:02.5410973Z   user-agent: actions/github-script
+2026-10-28T05:13:02.5411268Z   result-encoding: json
+2026-10-28T05:13:02.5411491Z   retries: 0
+2026-10-28T05:13:02.5411731Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-28T05:13:02.5412036Z env:
+2026-10-28T05:13:02.5412239Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-28T05:13:02.5412516Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-28T05:13:02.5413393Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40636629239,github.run_id=40636629239,gh-aw.engine.id=copilot
+2026-10-28T05:13:02.5414515Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-28T05:13:02.5414816Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-28T05:13:02.5415131Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-28T05:13:02.5415399Z   GH_AW_MAX_DAILY_AI_CREDITS: 2000
+2026-10-28T05:13:02.5415927Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-28T05:13:02.5416250Z   GITHUB_AW_OTEL_TRACE_ID: 676ecca3b6469db45ea7ed230da36ac9
+2026-10-28T05:13:02.5416646Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: e1a9bc8baf2d8aa6
+2026-10-28T05:13:02.5416970Z   GITHUB_AW_OTEL_JOB_START_MS: 1793164373811
+2026-10-28T05:13:02.5417351Z   GH_AW_PROMPT: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-28T05:13:02.5417736Z   GH_AW_GITHUB_EVENT_ISSUE_NUMBER: 116
+2026-10-28T05:13:02.5418203Z   GH_AW_MCP_CLI_SERVERS_LIST: - `safeoutputs` — run `safeoutputs --help` to see available tools
+2026-10-28T05:13:02.5418723Z   GH_AW_NEEDS_PRE_ACTIVATION_OUTPUTS_ACTIVATED: true
+2026-10-28T05:13:02.5421380Z   GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT: remote_write retries hammer the receiver after 429 responses
+
+### What did you do?
+
+Our remote write receiver (Mimir) started returning HTTP 429 during an ingestion spike.
+
+### What did you expect to see?
+
+Prometheus backs off and retries gradually.
+
+### What did you see instead? Under which circumstances?
+
+All shards retry immediately and the receiver never recovers; we had to restart Prometheus.
+
+### System information
+
+Linux 6.8
+
+### Prometheus version
+
+```text
+prometheus, version 3.13.4
+```
+
+### Prometheus configuration file
+
+```yaml
+remote_write:
+  - url: (mimir.example.internal/redacted)
+```
+
+### Logs
+
+```text
+level=WARN msg="Failed to send batch, retrying" err="server returned HTTP status 429 Too Many Requests"
+```
+2026-10-28T05:13:02.5423993Z ##[endgroup]
+2026-10-28T05:13:02.6549573Z [substitutePlaceholders] /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt (4 substitution(s))

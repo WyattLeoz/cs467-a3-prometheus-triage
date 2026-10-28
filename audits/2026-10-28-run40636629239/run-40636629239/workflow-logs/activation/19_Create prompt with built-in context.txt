@@ -1,0 +1,79 @@
+﻿2026-10-28T05:13:02.2670731Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-28T05:13:02.2671487Z with:
+2026-10-28T05:13:02.2673082Z   script: const { setupGlobals } = require(process.env.GH_AW_ACTIONS_DIR + '/setup_globals.cjs');
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(process.env.GH_AW_ACTIONS_DIR + '/create_prompt.cjs');
+await main(core);
+
+2026-10-28T05:13:02.2679461Z   github-token: ***
+2026-10-28T05:13:02.2679856Z   debug: false
+2026-10-28T05:13:02.2680242Z   user-agent: actions/github-script
+2026-10-28T05:13:02.2680724Z   result-encoding: json
+2026-10-28T05:13:02.2681155Z   retries: 0
+2026-10-28T05:13:02.2681679Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-28T05:13:02.2682352Z env:
+2026-10-28T05:13:02.2682834Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-28T05:13:02.2683468Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-28T05:13:02.2685135Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40636629239,github.run_id=40636629239,gh-aw.engine.id=copilot
+2026-10-28T05:13:02.2687035Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-28T05:13:02.2687643Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-28T05:13:02.2688232Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-28T05:13:02.2688711Z   GH_AW_MAX_DAILY_AI_CREDITS: 2000
+2026-10-28T05:13:02.2689198Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-28T05:13:02.2689740Z   GITHUB_AW_OTEL_TRACE_ID: 676ecca3b6469db45ea7ed230da36ac9
+2026-10-28T05:13:02.2690467Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: e1a9bc8baf2d8aa6
+2026-10-28T05:13:02.2691048Z   GITHUB_AW_OTEL_JOB_START_MS: 1793164373811
+2026-10-28T05:13:02.2691687Z   GH_AW_ACTIONS_DIR: /home/runner/work/_temp/gh-aw/actions
+2026-10-28T05:13:02.2692532Z   GH_AW_PROMPT: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-28T05:13:02.2693504Z   GH_AW_SAFE_OUTPUTS: /home/runner/work/_temp/gh-aw/safeoutputs/outputs.jsonl
+2026-10-28T05:13:02.2696771Z   GH_AW_PROMPT_CONFIG: {"items":[{"content_env":"GH_AW_PROMPT_CONTENT_0000"},{"file":"xpia.md"},{"file":"temp_folder_prompt.md"},{"file":"markdown.md"},{"file":"safe_outputs_mcp_transport_prompt.md"},{"file":"safe_outputs_prompt.md"},{"content_env":"GH_AW_PROMPT_CONTENT_0001"},{"content_env":"GH_AW_PROMPT_CONTENT_0002"},{"file":"mcp_cli_tools_with_safeoutputs_prompt.md"},{"content_env":"GH_AW_PROMPT_CONTENT_0003"},{"content_env":"GH_AW_PROMPT_CONTENT_0004"}],"system_item_count":10}
+2026-10-28T05:13:02.2699864Z   GH_AW_GITHUB_EVENT_ISSUE_NUMBER: 116
+2026-10-28T05:13:02.2704892Z   GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT: remote_write retries hammer the receiver after 429 responses
+
+### What did you do?
+
+Our remote write receiver (Mimir) started returning HTTP 429 during an ingestion spike.
+
+### What did you expect to see?
+
+Prometheus backs off and retries gradually.
+
+### What did you see instead? Under which circumstances?
+
+All shards retry immediately and the receiver never recovers; we had to restart Prometheus.
+
+### System information
+
+Linux 6.8
+
+### Prometheus version
+
+```text
+prometheus, version 3.13.4
+```
+
+### Prometheus configuration file
+
+```yaml
+remote_write:
+  - url: (mimir.example.internal/redacted)
+```
+
+### Logs
+
+```text
+level=WARN msg="Failed to send batch, retrying" err="server returned HTTP status 429 Too Many Requests"
+```
+2026-10-28T05:13:02.2708985Z   GH_AW_PROMPT_CONTENT_0000: <system>
+
+2026-10-28T05:13:02.2710745Z   GH_AW_PROMPT_CONTENT_0001: <safe-output-tools>
+Tools: add_comment, add_labels, report_missing_tool, report_missing_data, noop(max:2)
+
+2026-10-28T05:13:02.2712021Z   GH_AW_PROMPT_CONTENT_0002: </safe-output-tools>
+
+2026-10-28T05:13:02.2712706Z   GH_AW_PROMPT_CONTENT_0003: </system>
+
+2026-10-28T05:13:02.2713674Z   GH_AW_PROMPT_CONTENT_0004: {{#runtime-import .github/workflows/issue-triage.md}}
+
+2026-10-28T05:13:02.2714569Z ##[endgroup]
+2026-10-28T05:13:02.3829835Z Created prompt at /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt (9028 bytes)
