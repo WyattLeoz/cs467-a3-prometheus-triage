@@ -42,6 +42,17 @@ class OutputPolicy(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "do not match"):
             validate_proposal(proposal, "ROUTE")
 
+
+    def test_all_compiled_installers_pin_the_reviewed_cli(self):
+        root = Path(__file__).resolve().parents[2]
+        version = json.loads((root / ".github/agent-baseline.json").read_text())["copilot_cli"]
+        for workflow in ("issue-triage", "safe-output-limits-test"):
+            lines = (root / f".github/workflows/{workflow}.lock.yml").read_text(encoding="utf-8").splitlines()
+            installers = [line for line in lines if "run: bash" in line and "install_copilot_cli.sh" in line]
+            with self.subTest(workflow=workflow):
+                self.assertEqual(len(installers), 2 if workflow == "issue-triage" else 1)
+                self.assertTrue(all(line.endswith(f'install_copilot_cli.sh" {version}') for line in installers))
+
     def test_missing_unknown_repeated_and_error_outputs_fail(self):
         for proposal in [None, [], {}, {"items": [], "errors": ["failed"]},
                          {"items": [{"type": "close_issue"}]},

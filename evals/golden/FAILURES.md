@@ -84,6 +84,15 @@ The new guard rejects inconsistent proposed outputs before publishing. It does n
 answer into a passing golden result. Generic procedure clarifications address ownership/precedence,
 and a new complete replay is required to measure their effect.
 
+## run7-hardened — startup failure, 0/1
+
+A01 run 40635327422 on `0c854f5e` failed before inference. The installer's mutable compatibility
+matrix selected CLI 1.0.103, while the pinned setup action trusts checksums only through 1.0.101.
+The expired runner cache could not satisfy that choice; checksum verification correctly refused it.
+Nothing was published. This is an availability/configuration failure, not a successful A01 refusal.
+Both workflows now explicitly pin CLI 1.0.101 (including detection); its reviewed checksum remains enforced.
+The failed attempt is preserved, and the corrected configuration needs a new frozen replay tag.
+
 ## Earlier incomplete runs and targeted retry failures
 
 These runs remain part of the record. Every failed case is listed here; their full check tables and

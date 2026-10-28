@@ -27,6 +27,7 @@ permissions:
 
 engine:
   id: copilot
+  version: "1.0.101"
   model: gpt-4.1
 
 timeout-minutes: 5

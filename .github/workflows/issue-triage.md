@@ -46,6 +46,7 @@ permissions:
 
 engine:
   id: copilot
+  version: "1.0.101"  # reviewed checksum in the pinned setup action; bypass mutable compatibility lookup
   model: gpt-4.1
   # One agent job at a time across the repository; later issues wait in order instead of
   # running in parallel against the same Copilot quota (v0.93.1 does not add this by default).

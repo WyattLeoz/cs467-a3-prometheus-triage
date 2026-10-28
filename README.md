@@ -3,7 +3,7 @@
 A governed AI agent that attempts first-response triage for newly opened issues: it routes the issue to a
 component, asks for missing information, points usage questions and other-project reports to the
 right place, or flags a likely duplicate. It runs as a
-[GitHub Agentic Workflow](https://github.com/github/gh-aw) (gh-aw v0.93.1, Copilot CLI engine) in a
+[GitHub Agentic Workflow](https://github.com/github/gh-aw) (gh-aw v0.93.1, Copilot CLI 1.0.101 pinned) in a
 private sandbox that mirrors the issue intake of
 [`prometheus/prometheus`](https://github.com/prometheus/prometheus), and is replayed on real
 historical issues.
@@ -86,7 +86,7 @@ acceptable declared decision, outputs that decision allows, and audit evidence t
 loaded. A green workflow run alone never counts.
 
 - **Current candidate:** publishing guard, generic procedure clarification and replay safeguards are
-  locally validated (28 tests); its full frozen 20-case replay is pending. This is not a claim of improved accuracy.
+  locally validated (29 tests); its full frozen 20-case replay is pending. This is not a claim of improved accuracy.
 - **Recovered Claude run ([`run6-interrupted`](evals/golden/results/run6-interrupted/summary.md)): 4/10 completed cases pass**,
   plus two preserved quota attempts, all on `087bc648`. No outcome was discarded or expectation changed.
 - **Historical full run on all 19 original cases ([`run4-final`](evals/golden/results/run4-final/summary.md)): 9/19 pass.**

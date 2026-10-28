@@ -77,7 +77,7 @@ A pass requires expected outputs, accepted decision, matching actions, skill evi
 **Historical full baseline:** `run4-final` 9/19; two infrastructure retries pass, but 11/19 mixes attempts.
 **Later adversarial run:** `run5-adversarial` 3/4. **Recovered interrupted run:** `run6-interrupted` 4/10
 completed cases on `087bc648`, plus two quota attempts; it is not a completed 20-case evaluation.
-The hardened candidate's full replay is pending. Local tests do not replace it.
+The first hardened run failed CLI installation (run7: 0/1); CLI 1.0.101 is now pinned. Full replay is pending.
 `evals/golden/FAILURES.md` explains failures; results link exact runs and configurations.
 
 - Early prompts allowed skipped skills; requiring the skill first fixed the observed omission.
@@ -89,7 +89,7 @@ The hardened candidate's full replay is pending. Local tests do not replace it.
 - Missing audits and empty ROUTE outputs once passed; fail-closed regressions prevent that.
 - All recorded HARD checks held. A02 in run1 still echoed injected text: caps are not correctness.
 
-Validation: 9 skill + 19 evaluation tests, strict compilation of both workflows, syntax/diff checks,
+Validation: 9 skill + 20 evaluation tests, strict compilation of both workflows, syntax/diff checks,
 real archived valid/rejected proposals, and preserved sandbox runs. Archive fault tests cover failed
 download/identity stages. Replay tags now bind one commit and runs identify their exact issue number.
 
@@ -124,19 +124,19 @@ correction. Phone-browser steps are documented, not tested on physical phone har
 
 | Item | Value |
 |------|-------|
-| Engine/model | gh-aw v0.93.1; Copilot CLI compiler range 1.0.35–1.0.101; `gpt-4.1` alias fixed, served snapshot unpinned (`gpt-4.1-2025-04-14` observed); same model for detection |
+| Engine/model | gh-aw v0.93.1; Copilot CLI explicitly pinned to 1.0.101; `gpt-4.1` alias fixed, served snapshot unpinned (`gpt-4.1-2025-04-14` observed); same model for detection |
 | Instructions | Workflow prompt, `SKILL.md`, `AGENTS.md`, framework system prompt |
 | Tools/MCP | `safeoutputs` MCP, Copilot skill/view, allowlisted triage shell command and read defaults; no GitHub MCP/web/edit |
 | Permissions | Agent contents/issues read; publisher contents read + issues/PRs write; archive actions read + contents/issues write |
 | Data/secrets | Trigger issue, 494 upstream issues + two marked canaries, references; Copilot PAT outside agent environment |
-| Logs/evaluations | Actions/audit-log; 16 historical + 4 adversarial cases, label-limit tests, 28 unit tests, need metric |
+| Logs/evaluations | Actions/audit-log; 16 historical + 4 adversarial cases, label-limit tests, 29 unit tests, need metric |
 | Responsible human | Loh Kai Zhe (@WyattLeoz), configuration owner and accountable maintainer |
 
 ## 8. Remaining limitations
 
 Judgement errors and quotas remain; suggestions need review. Repeated trials are limited.
-The frozen candidate replay is pending; prompt changes do not prove improvement. Runtime versions
-are monitored rather than pinned, and branch protection remains proposed. No upstream deployment is claimed.
+The frozen candidate replay is pending; prompt changes do not prove improvement. The served model snapshot
+is monitored rather than pinned, and branch protection remains proposed. No upstream deployment is claimed.
 
 ## 9. AI-use statement
 

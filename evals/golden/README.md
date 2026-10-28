@@ -120,8 +120,10 @@ Drift detection reuses steps 3–5 unchanged; see DESIGN.md.
 
 | `run6-interrupted` | `087bc648`, bounded duplicate symptom/version evidence | 10 completed cases + two quota attempts | **4/10 pass**, 11 unique cases attempted; paused before the full 20-case evaluation. Recovered from GitHub and archived logs on 2026-10-28; see `_provenance.json`. |
 
+| `run7-hardened` | `0c854f5e` | A01 only | **0/1**: CLI installation refused unreviewed 1.0.103 chosen by mutable compatibility metadata. No inference/publication. Stopped and pinned CLI 1.0.101; next replay uses a new tag. |
+
 Current hardening adds a trusted decision/output guard and generic procedure clarifications. Its full
-20-case replay is pending; 28 local tests and archived-proposal checks are not an end-to-end substitute.
+20-case replay is pending; 29 local tests and archived-proposal checks are not an end-to-end substitute.
 
 Expected outcomes were not changed between runs. After `run1-v1` the scorer gained two checks (skill
 tool call; no republished injected instruction) and its footer check looks for gh-aw's enforced footer;
