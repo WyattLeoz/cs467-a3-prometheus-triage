@@ -102,10 +102,13 @@ in [summary.md](results/run8-pinned/summary.md); no final accuracy claim is made
 |------|----------|----------------------------|------|
 | A03 | needs-info or no action | Declared ROUTE and added component/tsdb. The guard correctly checked that those actions fit ROUTE, but the decision itself is wrong for this input | J |
 | G03 | other project, redirect comment | Correctly chose OTHER_PROJECT, then emitted only noop, claiming comments were unavailable. The publishing guard rejected that missing required comment; nothing was published | J |
+| G06 attempt 40689461183 | completion | Copilot returned HTTP 429 during detection; nothing was published. Preserved separately from decision accuracy; its 11,766-second retry interval expired before resuming | A |
 
 A01, A02 and A04 passed both the live publishing guard and the frozen expectations. In particular,
 A02/A04 no longer emitted the extra ROUTE comment seen in run6. That is an observation from one
 attempt each, not proof that prompt changes eliminated the behaviour. G01 correctly skipped inference.
+G04 and G05 correctly redirected to postgres_exporter and Blackbox Exporter with no component labels,
+passing cases that failed in run6. The G06 quota attempt is retained with its audit; its retry is in progress.
 
 ## Earlier incomplete runs and targeted retry failures
 
