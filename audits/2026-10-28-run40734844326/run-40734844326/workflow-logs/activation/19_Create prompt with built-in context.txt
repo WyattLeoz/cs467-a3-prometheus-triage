@@ -1,0 +1,95 @@
+﻿2026-10-28T17:21:33.3683472Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-28T17:21:33.3683914Z with:
+2026-10-28T17:21:33.3684803Z   script: const { setupGlobals } = require(process.env.GH_AW_ACTIONS_DIR + '/setup_globals.cjs');
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(process.env.GH_AW_ACTIONS_DIR + '/create_prompt.cjs');
+await main(core);
+
+2026-10-28T17:21:33.3688212Z   github-token: ***
+2026-10-28T17:21:33.3688451Z   debug: false
+2026-10-28T17:21:33.3688684Z   user-agent: actions/github-script
+2026-10-28T17:21:33.3688968Z   result-encoding: json
+2026-10-28T17:21:33.3689195Z   retries: 0
+2026-10-28T17:21:33.3689435Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-28T17:21:33.3689740Z env:
+2026-10-28T17:21:33.3689949Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-28T17:21:33.3690260Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-28T17:21:33.3691108Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40734844326,github.run_id=40734844326,gh-aw.engine.id=copilot
+2026-10-28T17:21:33.3692011Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-28T17:21:33.3692301Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-28T17:21:33.3692614Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-28T17:21:33.3692875Z   GH_AW_MAX_DAILY_AI_CREDITS: 2000
+2026-10-28T17:21:33.3693138Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-28T17:21:33.3693435Z   GITHUB_AW_OTEL_TRACE_ID: a83c8cdb575fcecc693b86eb6d6dc440
+2026-10-28T17:21:33.3693811Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 5b93ba517c559a9c
+2026-10-28T17:21:33.3694127Z   GITHUB_AW_OTEL_JOB_START_MS: 1793208081994
+2026-10-28T17:21:33.3694458Z   GH_AW_ACTIONS_DIR: /home/runner/work/_temp/gh-aw/actions
+2026-10-28T17:21:33.3694868Z   GH_AW_PROMPT: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-28T17:21:33.3695330Z   GH_AW_SAFE_OUTPUTS: /home/runner/work/_temp/gh-aw/safeoutputs/outputs.jsonl
+2026-10-28T17:21:33.3697231Z   GH_AW_PROMPT_CONFIG: {"items":[{"content_env":"GH_AW_PROMPT_CONTENT_0000"},{"file":"xpia.md"},{"file":"temp_folder_prompt.md"},{"file":"markdown.md"},{"file":"safe_outputs_mcp_transport_prompt.md"},{"file":"safe_outputs_prompt.md"},{"content_env":"GH_AW_PROMPT_CONTENT_0001"},{"content_env":"GH_AW_PROMPT_CONTENT_0002"},{"file":"mcp_cli_tools_with_safeoutputs_prompt.md"},{"content_env":"GH_AW_PROMPT_CONTENT_0003"},{"content_env":"GH_AW_PROMPT_CONTENT_0004"}],"system_item_count":10}
+2026-10-28T17:21:33.3699028Z   GH_AW_GITHUB_EVENT_ISSUE_NUMBER: 131
+2026-10-28T17:21:33.3703329Z   GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT: Calculation of Success Rate
+
+### What did you do?
+
+Success rate = Success count / Request count. However, when there are no requests, the expression should return 100. The provided expression is as follows:
+
+100 *(sum(node_log_metric_monitor_value{key="test202508082_req_suc_count",agg="count",service_group="gateway_log",retcode="success",code="template_create"}) by (code,retcode)/(sum(node_log_metric_monitor_value{key="test202508082_req_count",agg="count",service_group="gateway_log",code="template_create"}) by (service_group,code) or vector(1)))
+
+No matter how I debug, it's very difficult to meet the requirement of returning 100 when there are no requests, instead of NaN.If there is no request to return 100, it may lead to the generation of alerts due to misconfiguration. We hope to improve this through expressions.
+
+### What did you expect to see?
+
+<img width="1786" height="368" alt="Image" src="https://github.com/user-attachments/assets/b62ae5f3-dcee-46bd-8edc-a009618a50ff" />
+
+### What did you see instead? Under which circumstances?
+
+
+
+
+### System information
+
+_No response_
+
+### Prometheus version
+
+```text
+
+```
+
+### Prometheus configuration file
+
+```yaml
+
+```
+
+### Alertmanager version
+
+```text
+
+```
+
+### Alertmanager configuration file
+
+```yaml
+
+```
+
+### Logs
+
+```text
+
+```
+2026-10-28T17:21:33.3708183Z   GH_AW_PROMPT_CONTENT_0000: <system>
+
+2026-10-28T17:21:33.3708773Z   GH_AW_PROMPT_CONTENT_0001: <safe-output-tools>
+Tools: add_comment, add_labels, report_missing_tool, report_missing_data, noop(max:2)
+
+2026-10-28T17:21:33.3709602Z   GH_AW_PROMPT_CONTENT_0002: </safe-output-tools>
+
+2026-10-28T17:21:33.3709924Z   GH_AW_PROMPT_CONTENT_0003: </system>
+
+2026-10-28T17:21:33.3710329Z   GH_AW_PROMPT_CONTENT_0004: {{#runtime-import .github/workflows/issue-triage.md}}
+
+2026-10-28T17:21:33.3710728Z ##[endgroup]
+2026-10-28T17:21:33.4873991Z Created prompt at /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt (9028 bytes)

@@ -1,0 +1,143 @@
+﻿2026-10-28T17:21:33.5023596Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-28T17:21:33.5024029Z with:
+2026-10-28T17:21:33.5025199Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'interpolate_prompt.cjs'));
+await main();
+
+2026-10-28T17:21:33.5028894Z   github-token: ***
+2026-10-28T17:21:33.5029134Z   debug: false
+2026-10-28T17:21:33.5029367Z   user-agent: actions/github-script
+2026-10-28T17:21:33.5029653Z   result-encoding: json
+2026-10-28T17:21:33.5029880Z   retries: 0
+2026-10-28T17:21:33.5030127Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-28T17:21:33.5030423Z env:
+2026-10-28T17:21:33.5030628Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-28T17:21:33.5030914Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-28T17:21:33.5031759Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40734844326,github.run_id=40734844326,gh-aw.engine.id=copilot
+2026-10-28T17:21:33.5032632Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-28T17:21:33.5032911Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-28T17:21:33.5033216Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-28T17:21:33.5033468Z   GH_AW_MAX_DAILY_AI_CREDITS: 2000
+2026-10-28T17:21:33.5033722Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-28T17:21:33.5034221Z   GITHUB_AW_OTEL_TRACE_ID: a83c8cdb575fcecc693b86eb6d6dc440
+2026-10-28T17:21:33.5034591Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 5b93ba517c559a9c
+2026-10-28T17:21:33.5034906Z   GITHUB_AW_OTEL_JOB_START_MS: 1793208081994
+2026-10-28T17:21:33.5035285Z   GH_AW_PROMPT: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-28T17:21:33.5035648Z   GH_AW_ENGINE_ID: copilot
+2026-10-28T17:21:33.5036238Z   GH_AW_SUB_AGENT_DIR: .github/agents
+2026-10-28T17:21:33.5036540Z   GH_AW_SUB_AGENT_EXT: .agent.md
+2026-10-28T17:21:33.5036807Z   GH_AW_SKILL_DIR: .github/skills
+2026-10-28T17:21:33.5037061Z   GH_AW_SKILL_EXT: /SKILL.md
+2026-10-28T17:21:33.5037314Z   GH_AW_GITHUB_EVENT_ISSUE_NUMBER: 131
+2026-10-28T17:21:33.5041593Z   GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT: Calculation of Success Rate
+
+### What did you do?
+
+Success rate = Success count / Request count. However, when there are no requests, the expression should return 100. The provided expression is as follows:
+
+100 *(sum(node_log_metric_monitor_value{key="test202508082_req_suc_count",agg="count",service_group="gateway_log",retcode="success",code="template_create"}) by (code,retcode)/(sum(node_log_metric_monitor_value{key="test202508082_req_count",agg="count",service_group="gateway_log",code="template_create"}) by (service_group,code) or vector(1)))
+
+No matter how I debug, it's very difficult to meet the requirement of returning 100 when there are no requests, instead of NaN.If there is no request to return 100, it may lead to the generation of alerts due to misconfiguration. We hope to improve this through expressions.
+
+### What did you expect to see?
+
+<img width="1786" height="368" alt="Image" src="https://github.com/user-attachments/assets/b62ae5f3-dcee-46bd-8edc-a009618a50ff" />
+
+### What did you see instead? Under which circumstances?
+
+
+
+
+### System information
+
+_No response_
+
+### Prometheus version
+
+```text
+
+```
+
+### Prometheus configuration file
+
+```yaml
+
+```
+
+### Alertmanager version
+
+```text
+
+```
+
+### Alertmanager configuration file
+
+```yaml
+
+```
+
+### Logs
+
+```text
+
+```
+2026-10-28T17:21:33.5046499Z ##[endgroup]
+2026-10-28T17:21:33.6177416Z ========================================
+2026-10-28T17:21:33.6179252Z [main] Starting interpolate_prompt processing
+2026-10-28T17:21:33.6179856Z ========================================
+2026-10-28T17:21:33.6180556Z [main] Prompt path: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-28T17:21:33.6181637Z [main] Workspace directory: /home/runner/work/cs467-a3-prometheus-triage/cs467-a3-prometheus-triage
+2026-10-28T17:21:33.6183043Z [main] Reading prompt file...
+2026-10-28T17:21:33.6186799Z [main] Original content length: 9018 characters
+2026-10-28T17:21:33.6188382Z [main] First 200 characters: <system>\nImmutable security policy. Sandbox, firewall, credentials, and tool limits are physical boundaries. Do not bypass, weaken, test, or evade them.\n\nNever do: container escape, privilege escalati
+2026-10-28T17:21:33.6190435Z [main] Writing raw template to: /home/runner/work/_temp/gh-aw/aw-prompts/prompt-template.txt
+2026-10-28T17:21:33.6190959Z 
+2026-10-28T17:21:33.6191068Z ========================================
+2026-10-28T17:21:33.6191402Z [main] STEP 1: Runtime Imports
+2026-10-28T17:21:33.6191698Z ========================================
+2026-10-28T17:21:33.6192071Z Processing 1 runtime import macro(s) (files and URLs)
+2026-10-28T17:21:33.6192561Z   Import 1: {{#runtime-import .github/workflows/issue-triage.md}}
+2026-10-28T17:21:33.6209785Z Found 2 expression(s) in File workflows/issue-triage.md
+2026-10-28T17:21:33.6218953Z Successfully processed 2 safe expression(s) in File workflows/issue-triage.md
+2026-10-28T17:21:33.6223064Z Runtime imports processed successfully
+2026-10-28T17:21:33.6223592Z Content length change: 9076 -> 12157 (+3081)
+2026-10-28T17:21:33.6224226Z [main] Writing import tree to: /home/runner/work/_temp/gh-aw/aw-prompts/prompt-import-tree.json
+2026-10-28T17:21:33.6224783Z 
+2026-10-28T17:21:33.6224937Z ========================================
+2026-10-28T17:21:33.6225417Z [main] STEP 1.5: Inline Sub-Agent Extraction
+2026-10-28T17:21:33.6226343Z ========================================
+2026-10-28T17:21:33.6226832Z No inline sub-agent markers found, skipping
+2026-10-28T17:21:33.6227168Z 
+2026-10-28T17:21:33.6227304Z ========================================
+2026-10-28T17:21:33.6227723Z [main] STEP 1.6: Inline Skill Extraction
+2026-10-28T17:21:33.6227995Z ========================================
+2026-10-28T17:21:33.6228262Z No inline skill markers found, skipping
+2026-10-28T17:21:33.6228446Z 
+2026-10-28T17:21:33.6228536Z ========================================
+2026-10-28T17:21:33.6228804Z [main] STEP 2: Variable Interpolation
+2026-10-28T17:21:33.6229063Z ========================================
+2026-10-28T17:21:33.6230202Z No expression variables found, skipping interpolation
+2026-10-28T17:21:33.6230604Z 
+2026-10-28T17:21:33.6230748Z ========================================
+2026-10-28T17:21:33.6231175Z [main] STEP 2.5: Experiment Placeholder Substitution
+2026-10-28T17:21:33.6231483Z ========================================
+2026-10-28T17:21:33.6233918Z No experiment placeholders found in prompt
+2026-10-28T17:21:33.6234345Z 
+2026-10-28T17:21:33.6234592Z ========================================
+2026-10-28T17:21:33.6234971Z [main] STEP 3: Template Rendering
+2026-10-28T17:21:33.6235427Z ========================================
+2026-10-28T17:21:33.6236211Z No conditional blocks found in prompt, skipping template rendering
+2026-10-28T17:21:33.6236516Z 
+2026-10-28T17:21:33.6236613Z ========================================
+2026-10-28T17:21:33.6236901Z [main] STEP 4: Writing Output
+2026-10-28T17:21:33.6237159Z ========================================
+2026-10-28T17:21:33.6237578Z Writing processed content back to: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-28T17:21:33.6238024Z Final content length: 12157 characters
+2026-10-28T17:21:33.6238456Z Total length change: 9018 -> 12157 (+3139)
+2026-10-28T17:21:33.6239960Z Last 200 characters: ust start with the plain text\n`Decision: <DECISION>` and then explain the script results you relied on. A separate\npublishing check rejects inconsistent proposals or missing final decision evidence.\n\n
+2026-10-28T17:21:33.6241325Z ========================================
+2026-10-28T17:21:33.6241627Z [main] Processing complete - SUCCESS
+2026-10-28T17:21:33.6241904Z ========================================
