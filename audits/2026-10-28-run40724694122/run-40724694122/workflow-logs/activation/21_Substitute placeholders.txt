@@ -1,0 +1,158 @@
+﻿2026-10-28T16:19:13.6643721Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-28T16:19:13.6644407Z with:
+2026-10-28T16:19:13.6649065Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+
+const substitutePlaceholders = require(path.join(actionsDir, 'substitute_placeholders.cjs'));
+
+// Call the substitution function
+return await substitutePlaceholders({
+  file: process.env.GH_AW_PROMPT,
+  substitutions: {
+    GH_AW_GITHUB_EVENT_ISSUE_NUMBER: process.env.GH_AW_GITHUB_EVENT_ISSUE_NUMBER,
+    GH_AW_MCP_CLI_SERVERS_LIST: process.env.GH_AW_MCP_CLI_SERVERS_LIST,
+    GH_AW_NEEDS_PRE_ACTIVATION_OUTPUTS_ACTIVATED: process.env.GH_AW_NEEDS_PRE_ACTIVATION_OUTPUTS_ACTIVATED,
+    GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT: process.env.GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT
+  }
+});
+
+2026-10-28T16:19:13.6658868Z   github-token: ***
+2026-10-28T16:19:13.6659281Z   debug: false
+2026-10-28T16:19:13.6659630Z   user-agent: actions/github-script
+2026-10-28T16:19:13.6660076Z   result-encoding: json
+2026-10-28T16:19:13.6660428Z   retries: 0
+2026-10-28T16:19:13.6660799Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-28T16:19:13.6661281Z env:
+2026-10-28T16:19:13.6661601Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-28T16:19:13.6662035Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-28T16:19:13.6663618Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40724694122,github.run_id=40724694122,gh-aw.engine.id=copilot
+2026-10-28T16:19:13.6665054Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-28T16:19:13.6665503Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-28T16:19:13.6665996Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-28T16:19:13.6666407Z   GH_AW_MAX_DAILY_AI_CREDITS: 2000
+2026-10-28T16:19:13.6666825Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-28T16:19:13.6667301Z   GITHUB_AW_OTEL_TRACE_ID: 67462e26afa2105b6e0c68a6a4707f7f
+2026-10-28T16:19:13.6667895Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: f0de5e8fcaaf552d
+2026-10-28T16:19:13.6668406Z   GITHUB_AW_OTEL_JOB_START_MS: 1793204342026
+2026-10-28T16:19:13.6668996Z   GH_AW_PROMPT: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-28T16:19:13.6669629Z   GH_AW_GITHUB_EVENT_ISSUE_NUMBER: 128
+2026-10-28T16:19:13.6670388Z   GH_AW_MCP_CLI_SERVERS_LIST: - `safeoutputs` — run `safeoutputs --help` to see available tools
+2026-10-28T16:19:13.6671253Z   GH_AW_NEEDS_PRE_ACTIVATION_OUTPUTS_ACTIVATED: true
+2026-10-28T16:19:13.6685314Z   GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT: Prom-remote-write not working properly
+
+### What did you do?
+
+Hi ,
+
+I am using the prom-remotewrite-20251030.1 version, and I’ve noticed that it is not functioning correctly when sending data to Azure Monitor for Prometheus. Initially, some data is transmitted, but afterward it fails to send records for new pods and events.
+When I check the Prometheus UI locally, I can see the required data, but it does not appear in Azure Monitor.
+Below is the Jinja configuration I am using:
+
+`
+
+    server:
+      global:
+        external_labels:
+          dataplane_id: {{cluster_name}}
+          region:  {{region}}
+          mcsp_tenant_id: {{prometheus_tenant_id}}
+          dataplane_tenant_id: {{azure_tenant_id}}    
+      remoteWrite:
+        - url: (localhost/redacted)
+
+      podLabels:
+        azure.workload.identity/use: "true"
+      persistentVolume:
+        enabled: false
+
+      retention: "7d"
+      retentionSize: "3.5GB"   
+      sidecarContainers:
+        prom-remote-writer:
+          image: {{registry_namespace}}/azure-prom-remotewrite:{{ image_tags.azure_prom_remotewrite }}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: LISTENING_PORT
+              value: "8089"
+            - name: INGESTION_URL
+              value: {{prometheus_azure_monitor}}
+            - name: IDENTITY_TYPE
+              value: workloadIdentity
+            - name: AZURE_CLIENT_ID
+              value: {{prometheus_client_id}}
+            - name: AZURE_TENANT_ID
+              value: {{prometheus_tenant_id}}
+            - name: AZURE_FEDERATED_TOKEN_FILE
+              value: /var/run/secrets/azure/tokens/azure-identity-token
+      
+          ports:
+            - containerPort: 8089         
+
+      extraVolumeMounts:
+        - name: azure-identity-token
+          mountPath: /var/run/secrets/azure/tokens
+          readOnly: true    
+                
+      extraVolumes:
+        - name: azure-identity-token
+          projected:
+            defaultMode: 420
+            sources:
+              - serviceAccountToken:
+                  audience: (azureadtokenexchange/redacted)
+                  expirationSeconds: 3600
+                  path: azure-identity-token
+`
+
+Prometheus helm charts version used was :- 27.47.0 and 27.20.0
+
+### What did you expect to see?
+
+_No response_
+
+### What did you see instead? Under which circumstances?
+
+.
+
+### System information
+
+_No response_
+
+### Prometheus version
+
+```text
+
+```
+
+### Prometheus configuration file
+
+```yaml
+
+```
+
+### Alertmanager version
+
+```text
+
+```
+
+### Alertmanager configuration file
+
+```yaml
+
+```
+
+### Logs
+
+```text
+
+```
+
+
+
+---
+_Generated by [Claude Code]((claude.ai/redacted)
+2026-10-28T16:19:13.6712045Z ##[endgroup]
+2026-10-28T16:19:13.7847307Z [substitutePlaceholders] /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt (4 substitution(s))

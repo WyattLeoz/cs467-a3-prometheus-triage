@@ -1,0 +1,40 @@
+﻿2026-10-28T16:19:12.3058365Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-28T16:19:12.3058796Z with:
+2026-10-28T16:19:12.3059897Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'compute_text.cjs'));
+await main();
+
+2026-10-28T16:19:12.3063860Z   github-token: ***
+2026-10-28T16:19:12.3064100Z   debug: false
+2026-10-28T16:19:12.3064343Z   user-agent: actions/github-script
+2026-10-28T16:19:12.3064634Z   result-encoding: json
+2026-10-28T16:19:12.3064901Z   retries: 0
+2026-10-28T16:19:12.3065158Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-28T16:19:12.3065467Z env:
+2026-10-28T16:19:12.3065685Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-28T16:19:12.3065975Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-28T16:19:12.3066818Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40724694122,github.run_id=40724694122,gh-aw.engine.id=copilot
+2026-10-28T16:19:12.3067674Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-28T16:19:12.3067966Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-28T16:19:12.3068285Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-28T16:19:12.3068554Z   GH_AW_MAX_DAILY_AI_CREDITS: 2000
+2026-10-28T16:19:12.3068824Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-28T16:19:12.3069157Z   GITHUB_AW_OTEL_TRACE_ID: 67462e26afa2105b6e0c68a6a4707f7f
+2026-10-28T16:19:12.3069536Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: f0de5e8fcaaf552d
+2026-10-28T16:19:12.3069885Z   GITHUB_AW_OTEL_JOB_START_MS: 1793204342026
+2026-10-28T16:19:12.3070335Z   GH_AW_ALLOWED_DOMAINS: github.com,groups.google.com,localhost,prometheus.io
+2026-10-28T16:19:12.3070762Z ##[endgroup]
+2026-10-28T16:19:12.7302250Z Repository permission level: admin
+2026-10-28T16:19:12.7349253Z Redacted URL: localhost
+2026-10-28T16:19:12.7349927Z Redacted URL: azureadtoken...
+2026-10-28T16:19:12.7354743Z Redacted URL: claude.ai
+2026-10-28T16:19:12.7397467Z Redacted URL: localhost
+2026-10-28T16:19:12.7398103Z Redacted URL: azureadtoken...
+2026-10-28T16:19:12.7398544Z Redacted URL: claude.ai
+2026-10-28T16:19:12.7424086Z text: Prom-remote-write not working properly\n\n### What did you do?\n\nHi ,\n\nI am using the prom-remotewrite-20251030.1 version, and I’ve noticed that it is not functioning correctly when sending data to Azure Monitor for Prometheus. Initially, some data is transmitted, but afterward it fails to send records for new pods and events.\nWhen I check the Prometheus UI locally, I can see the required data, but it does not appear in Azure Monitor.\nBelow is the Jinja configuration I am using:\n\n`\n\n    server:\n      global:\n        external_labels:\n          dataplane_id: {{cluster_name}}\n          region:  {{region}}\n          mcsp_tenant_id: {{prometheus_tenant_id}}\n          dataplane_tenant_id: {{azure_tenant_id}}    \n      remoteWrite:\n        - url: (localhost/redacted)\n\n      podLabels:\n        azure.workload.identity/use: "true"\n      persistentVolume:\n        enabled: false\n\n      retention: "7d"\n      retentionSize: "3.5GB"   \n      sidecarContainers:\n        prom-remote-writer:\n          image: {{registry_namespace}}/azure-prom-remotewrite:{{ image_tags.azure_prom_remotewrite }}\n          imagePullPolicy: IfNotPresent\n          env:\n            - name: LISTENING_PORT\n              value: "8089"\n            - name: INGESTION_URL\n              value: {{prometheus_azure_monitor}}\n            - name: IDENTITY_TYPE\n              value: workloadIdentity\n            - name: AZURE_CLIENT_ID\n              value: {{prometheus_client_id}}\n            - name: AZURE_TENANT_ID\n              value: {{prometheus_tenant_id}}\n            - name: AZURE_FEDERATED_TOKEN_FILE\n              value: /var/run/secrets/azure/tokens/azure-identity-token\n      \n          ports:\n            - containerPort: 8089         \n\n      extraVolumeMounts:\n        - name: azure-identity-token\n          mountPath: /var/run/secrets/azure/tokens\n          readOnly: true    \n                \n      extraVolumes:\n        - name: azure-identity-token\n          projected:\n            defaultMode: 420\n            sources:\n              - serviceAccountToken:\n                  audience: (azureadtokenexchange/redacted)\n                  expirationSeconds: 3600\n                  path: azure-identity-token\n`\n\nPrometheus helm charts version used was :- 27.47.0 and 27.20.0\n\n### What did you expect to see?\n\n_No response_\n\n### What did you see instead? Under which circumstances?\n\n.\n\n### System information\n\n_No response_\n\n### Prometheus version\n\n```text\n\n```\n\n### Prometheus configuration file\n\n```yaml\n\n```\n\n### Alertmanager version\n\n```text\n\n```\n\n### Alertmanager configuration file\n\n```yaml\n\n```\n\n### Logs\n\n```text\n\n```\n\n\n\n---\n_Generated by [Claude Code]((claude.ai/redacted)
+2026-10-28T16:19:12.7440119Z title: Prom-remote-write not working properly
+2026-10-28T16:19:12.7458016Z body: ### What did you do?\n\nHi ,\n\nI am using the prom-remotewrite-20251030.1 version, and I’ve noticed that it is not functioning correctly when sending data to Azure Monitor for Prometheus. Initially, some data is transmitted, but afterward it fails to send records for new pods and events.\nWhen I check the Prometheus UI locally, I can see the required data, but it does not appear in Azure Monitor.\nBelow is the Jinja configuration I am using:\n\n`\n\n    server:\n      global:\n        external_labels:\n          dataplane_id: {{cluster_name}}\n          region:  {{region}}\n          mcsp_tenant_id: {{prometheus_tenant_id}}\n          dataplane_tenant_id: {{azure_tenant_id}}    \n      remoteWrite:\n        - url: (localhost/redacted)\n\n      podLabels:\n        azure.workload.identity/use: "true"\n      persistentVolume:\n        enabled: false\n\n      retention: "7d"\n      retentionSize: "3.5GB"   \n      sidecarContainers:\n        prom-remote-writer:\n          image: {{registry_namespace}}/azure-prom-remotewrite:{{ image_tags.azure_prom_remotewrite }}\n          imagePullPolicy: IfNotPresent\n          env:\n            - name: LISTENING_PORT\n              value: "8089"\n            - name: INGESTION_URL\n              value: {{prometheus_azure_monitor}}\n            - name: IDENTITY_TYPE\n              value: workloadIdentity\n            - name: AZURE_CLIENT_ID\n              value: {{prometheus_client_id}}\n            - name: AZURE_TENANT_ID\n              value: {{prometheus_tenant_id}}\n            - name: AZURE_FEDERATED_TOKEN_FILE\n              value: /var/run/secrets/azure/tokens/azure-identity-token\n      \n          ports:\n            - containerPort: 8089         \n\n      extraVolumeMounts:\n        - name: azure-identity-token\n          mountPath: /var/run/secrets/azure/tokens\n          readOnly: true    \n                \n      extraVolumes:\n        - name: azure-identity-token\n          projected:\n            defaultMode: 420\n            sources:\n              - serviceAccountToken:\n                  audience: (azureadtokenexchange/redacted)\n                  expirationSeconds: 3600\n                  path: azure-identity-token\n`\n\nPrometheus helm charts version used was :- 27.47.0 and 27.20.0\n\n### What did you expect to see?\n\n_No response_\n\n### What did you see instead? Under which circumstances?\n\n.\n\n### System information\n\n_No response_\n\n### Prometheus version\n\n```text\n\n```\n\n### Prometheus configuration file\n\n```yaml\n\n```\n\n### Alertmanager version\n\n```text\n\n```\n\n### Alertmanager configuration file\n\n```yaml\n\n```\n\n### Logs\n\n```text\n\n```\n\n\n\n---\n_Generated by [Claude Code]((claude.ai/redacted)
+2026-10-28T16:19:12.7472436Z Redacted URL domains written to: /tmp/gh-aw/redacted-urls.log
