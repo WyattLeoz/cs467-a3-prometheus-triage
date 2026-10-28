@@ -46,8 +46,8 @@ while retaining the original-time cutoff. Golden expectations have not changed.
 | Identity | Tested: `safe_outputs` writes as `github-actions[bot]`; comments link to their run |
 | Least privilege | Tested: read-only agent; isolated publisher has issue/PR write scope but only configured handlers |
 | Safe outputs | Caps/allowlist tested by negative dispatches; decision guard passes valid live run8 outputs and rejects G03's invalid noop; full replay pending |
-| Human approval | Owner reviews PR/CODEOWNERS (advisory on this private plan). No per-comment approval: small, reversible suggestions |
-| Budgets | 10-minute agent step, 20 turns, 200 AIC/run, 2000 AIC/day; detection 100 AIC; 3 runs/hour per reporter; one active agent job; stop date |
+| Human approval | Ruleset `protect-main`: PR + CODEOWNER review + `Config check` CI; no direct/force push. Sole owner bypasses review only via a logged PR merge. No per-comment approval: small, reversible outputs |
+| Budgets | 10-minute agent step, 20 turns, 200 AI credits (AIC)/run, 2000 AIC/day; detection 100 AIC; 3 runs/hour per reporter; one active agent job; stop date |
 | Audit trail | Tested archive to `audit-log`: trigger, configuration, model/CLI, tools, outputs, firewall and AIC; failed archive exits before commit |
 | Kill switch | Disable and cancel queued/running workflows; tested cancellation 39952339286 posted nothing; stop-after 2026-12-31 |
 | Drift detection | Model/CLI comparison tested (#72). Owner reruns after changes/alerts and monthly, reviews scores, failures and feedback; automation proposed |

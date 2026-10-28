@@ -1,6 +1,6 @@
 # Golden-set results: run8-pinned
 
-**7/9 cases pass.** Issues closed by a bot anywhere in the sandbox: 0 (closed by a maintainer: 1).
+**9/13 cases pass.** Issues closed by a bot anywhere in the sandbox: 0 (closed by a maintainer: 1).
 
 | Case | Expected | Labels applied | Comment | Result | Failed checks | Config commit | Run |
 |------|----------|----------------|---------|--------|---------------|---------------|-----|
@@ -13,3 +13,7 @@
 | G03 | OTHER_PROJECT | — | no | FAIL | outputs vetted and published; comment posted; comment cites /helm-charts|prometheus-operator/; outputs match declared decision | `beff445a` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40685896416) |
 | G04 | OTHER_PROJECT | — | yes | PASS |  | `beff445a` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40687034649) |
 | G05 | OTHER_PROJECT | — | yes | PASS |  | `beff445a` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40688260222) |
+| G06 | SUPPORT_QUESTION | kind/question | yes | PASS |  | `beff445a` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40722449199) |
+| G07 | NEEDS_INFO | kind/more-info-needed | yes | PASS |  | `beff445a` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40723568037) |
+| G08 | NEEDS_INFO | component/remote storage | no | FAIL | comment posted; labels within allowed set; declared decision accepted (ROUTE) | `beff445a` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40724694122) |
+| G09 | POSSIBLE_DUPLICATE | component/otlp | no | FAIL | comment posted; comment cites /17437/; declared decision accepted (ROUTE) | `beff445a` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40725916487) |
