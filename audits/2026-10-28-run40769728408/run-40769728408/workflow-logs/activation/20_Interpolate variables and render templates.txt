@@ -1,0 +1,232 @@
+﻿2026-10-28T21:11:15.8933806Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-28T21:11:15.8934509Z with:
+2026-10-28T21:11:15.8936623Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'interpolate_prompt.cjs'));
+await main();
+
+2026-10-28T21:11:15.8943369Z   github-token: ***
+2026-10-28T21:11:15.8943741Z   debug: false
+2026-10-28T21:11:15.8944110Z   user-agent: actions/github-script
+2026-10-28T21:11:15.8944568Z   result-encoding: json
+2026-10-28T21:11:15.8944944Z   retries: 0
+2026-10-28T21:11:15.8945335Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-28T21:11:15.8945825Z env:
+2026-10-28T21:11:15.8946159Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-28T21:11:15.8946845Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-28T21:11:15.8948348Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40769728408,github.run_id=40769728408,gh-aw.engine.id=copilot
+2026-10-28T21:11:15.8949911Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-28T21:11:15.8950392Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-28T21:11:15.8950916Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-28T21:11:15.8951575Z   GH_AW_MAX_DAILY_AI_CREDITS: 2000
+2026-10-28T21:11:15.8952025Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-28T21:11:15.8952515Z   GITHUB_AW_OTEL_TRACE_ID: a45147223939085d85556fd1669983bd
+2026-10-28T21:11:15.8953118Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 3de51388f8c9a623
+2026-10-28T21:11:15.8953648Z   GITHUB_AW_OTEL_JOB_START_MS: 1793221858024
+2026-10-28T21:11:15.8954283Z   GH_AW_PROMPT: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-28T21:11:15.8954909Z   GH_AW_ENGINE_ID: copilot
+2026-10-28T21:11:15.8955331Z   GH_AW_SUB_AGENT_DIR: .github/agents
+2026-10-28T21:11:15.8955793Z   GH_AW_SUB_AGENT_EXT: .agent.md
+2026-10-28T21:11:15.8956238Z   GH_AW_SKILL_DIR: .github/skills
+2026-10-28T21:11:15.8956669Z   GH_AW_SKILL_EXT: /SKILL.md
+2026-10-28T21:11:15.8957092Z   GH_AW_GITHUB_EVENT_ISSUE_NUMBER: 133
+2026-10-28T21:11:15.9036154Z   GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT: /healthy endpoint hangs
+
+### What did you do?
+
+```bash
+date;while curl 127.0.0.1:9090/-/healthy; do date; done
+```
+```
+Mon Nov 10 18:10:47 CST 2025
+Prometheus Server is Healthy.
+Mon Nov 10 18:10:47 CST 2025
+Prometheus Server is Healthy.
+Mon Nov 10 18:10:57 CST 2025
+Prometheus Server is Healthy.
+Mon Nov 10 18:11:20 CST 2025
+Prometheus Server is Healthy.
+Mon Nov 10 18:11:26 CST 2025
+
+Prometheus Server is Healthy.
+Mon Nov 10 18:13:46 CST 2025
+Prometheus Server is Healthy.
+Mon Nov 10 18:13:46 CST 2025
+Prometheus Server is Healthy.
+```
+
+### What did you expect to see?
+
+_No response_
+
+### What did you see instead? Under which circumstances?
+
+web api hang,no response
+
+### System information
+
+CentOS Linux release 7.9.2009 (Core) 3.10.0-1160.119.1.el7.x86_64
+
+### Prometheus version
+
+```text
+version	3.7.3
+revision	0a41f0000705c69ab8e0f9a723fc73e39ed62b07
+branch	HEAD
+buildUser	root@08c890a84441
+buildDate	20251030-07:26:10
+goVersion	go1.25.3
+Runtime information
+Start time	2025-11-10T10:03:29Z
+Working directory	/data1/app/prometheus/prometheus-2.17.1.linux-amd64
+Hostname	TX-ap-beijing-7-10-34-84-170
+Server Time	2025-11-10T10:15:06Z
+Configuration reload	Successful
+Last successful configuration reload	2025-11-10T10:04:43Z
+WAL corruptions	0
+Goroutines	1852
+GOMAXPROCS	16
+GOMEMLIMIT	120958164172
+GOGC	75
+GODEBUG	madvdontneed=1
+Storage retention	366d or 1TiB476GiB
+```
+
+### Prometheus configuration file
+
+```yaml
+
+```
+
+### Alertmanager version
+
+```text
+
+```
+
+### Alertmanager configuration file
+
+```yaml
+
+```
+
+### Logs
+
+```text
+time=2025-11-10T18:11:15.017+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series=jmx_scrape_cached_beans
+time=2025-11-10T18:11:15.017+08:00 level=WARN source=scrape.go:1923 msg="Error on ingesting samples with different value but same timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) num_dropped=12
+time=2025-11-10T18:11:23.449+08:00 level=DEBUG source=reflector.go:979 msg="Watch close" component=k8s_client_runtime reflector=pkg/mod/k8s.io/client-go@v0.34.1/tools/cache/reflector.go:290 type=*v1.Node totalItems=21
+time=2025-11-10T18:11:35.842+08:00 level=DEBUG source=reflector.go:979 msg="Watch close" component=k8s_client_runtime reflector=pkg/mod/k8s.io/client-go@v0.34.1/tools/cache/reflector.go:290 type=*v1.Node totalItems=239
+time=2025-11-10T18:11:42.446+08:00 level=DEBUG source=reflector.go:979 msg="Watch close" component=k8s_client_runtime reflector=pkg/mod/k8s.io/client-go@v0.34.1/tools/cache/reflector.go:290 type=*v1.Node totalItems=21
+time=2025-11-10T18:12:05.021+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.132.3:7017\"}"
+time=2025-11-10T18:12:05.021+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_duration_seconds{jmxUrl=\"10.5.132.8:7017\"}"
+time=2025-11-10T18:12:05.021+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.132.8:7017\"}"
+time=2025-11-10T18:12:05.021+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_duration_seconds{jmxUrl=\"10.5.132.6:7017\"}"
+time=2025-11-10T18:12:05.021+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.132.6:7017\"}"
+time=2025-11-10T18:12:05.021+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_duration_seconds{jmxUrl=\"10.5.133.159:7017\"}"
+time=2025-11-10T18:12:05.021+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.133.159:7017\"}"
+time=2025-11-10T18:12:05.021+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_duration_seconds{jmxUrl=\"10.5.132.229:7017\"}"
+time=2025-11-10T18:12:05.021+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.132.229:7017\"}"
+time=2025-11-10T18:12:05.021+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_duration_seconds{jmxUrl=\"10.5.133.75:7017\"}"
+time=2025-11-10T18:12:05.021+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.133.75:7017\"}"
+time=2025-11-10T18:12:05.021+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series=jmx_scrape_cached_beans
+time=2025-11-10T18:12:05.021+08:00 level=WARN source=scrape.go:1923 msg="Error on ingesting samples with different value but same timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) num_dropped=12
+time=2025-11-10T18:12:55.147+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.132.3:7017\"}"
+time=2025-11-10T18:12:55.147+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_duration_seconds{jmxUrl=\"10.5.132.8:7017\"}"
+time=2025-11-10T18:12:55.147+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.132.8:7017\"}"
+time=2025-11-10T18:12:55.147+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_duration_seconds{jmxUrl=\"10.5.132.6:7017\"}"
+time=2025-11-10T18:12:55.147+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.132.6:7017\"}"
+time=2025-11-10T18:12:55.147+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_duration_seconds{jmxUrl=\"10.5.133.159:7017\"}"
+time=2025-11-10T18:12:55.147+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.133.159:7017\"}"
+time=2025-11-10T18:12:55.147+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_duration_seconds{jmxUrl=\"10.5.132.229:7017\"}"
+time=2025-11-10T18:12:55.147+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.132.229:7017\"}"
+time=2025-11-10T18:12:55.147+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_duration_seconds{jmxUrl=\"10.5.133.75:7017\"}"
+time=2025-11-10T18:12:55.147+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.133.75:7017\"}"
+time=2025-11-10T18:12:55.147+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series=jmx_scrape_cached_beans
+time=2025-11-10T18:12:55.148+08:00 level=WARN source=scrape.go:1923 msg="Error on ingesting samples with different value but same timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) num_dropped=12
+time=2025-11-10T18:13:05.462+08:00 level=DEBUG source=reflector.go:979 msg="Watch close" component=k8s_client_runtime reflector=pkg/mod/k8s.io/client-go@v0.34.1/tools/cache/reflector.go:290 type=*v1.Node totalItems=111
+time=2025-11-10T18:13:13.963+08:00 level=DEBUG source=reflector.go:979 msg="Watch close" component=k8s_client_runtime reflector=pkg/mod/k8s.io/client-go@v0.34.1/tools/cache/reflector.go:290 type=*v1.Pod totalItems=148
+time=2025-11-10T18:13:45.022+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.132.3:7017\"}"
+time=2025-11-10T18:13:45.022+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_duration_seconds{jmxUrl=\"10.5.132.8:7017\"}"
+time=2025-11-10T18:13:45.022+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.132.8:7017\"}"
+time=2025-11-10T18:13:45.022+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_duration_seconds{jmxUrl=\"10.5.132.6:7017\"}"
+time=2025-11-10T18:13:45.022+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.132.6:7017\"}"
+time=2025-11-10T18:13:45.022+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_duration_seconds{jmxUrl=\"10.5.133.159:7017\"}"
+time=2025-11-10T18:13:45.023+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.133.159:7017\"}"
+time=2025-11-10T18:13:45.023+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_duration_seconds{jmxUrl=\"10.5.132.229:7017\"}"
+time=2025-11-10T18:13:45.023+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.132.229:7017\"}"
+time=2025-11-10T18:13:45.023+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_duration_seconds{jmxUrl=\"10.5.133.75:7017\"}"
+time=2025-11-10T18:13:45.023+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.133.75:7017\"}"
+time=2025-11-10T18:13:45.023+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series=jmx_scrape_cached_beans
+time=2025-11-10T18:13:45.023+08:00 level=WARN source=scrape.go:1923 msg="Error on ingesting samples with different value but same timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) num_dropped=12
+time=2025-11-10T18:14:35.014+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.132.3:7017\"}"
+time=2025-11-10T18:14:35.014+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_duration_seconds{jmxUrl=\"10.5.132.8:7017\"}"
+time=2025-11-10T18:14:35.014+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.132.8:7017\"}"
+time=2025-11-10T18:14:35.014+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_duration_seconds{jmxUrl=\"10.5.132.6:7017\"}"
+time=2025-11-10T18:14:35.014+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_error{jmxUrl=\"10.5.132.6:7017\"}"
+time=2025-11-10T18:14:35.014+08:00 level=DEBUG source=scrape.go:2029 msg="Duplicate sample for timestamp" component="scrape manager" scrape_pool=hive-jmx target=(10.5.132.192/redacted) series="jmx_scrape_duration_seconds{jmxUrl=\"10.5.133.159:7017\"}"
+```
+
+
+
+---
+_Generated by [Claude Code]((claude.ai/redacted)
+2026-10-28T21:11:15.9117848Z ##[endgroup]
+2026-10-28T21:11:16.0196049Z ========================================
+2026-10-28T21:11:16.0197921Z [main] Starting interpolate_prompt processing
+2026-10-28T21:11:16.0198539Z ========================================
+2026-10-28T21:11:16.0199260Z [main] Prompt path: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-28T21:11:16.0200377Z [main] Workspace directory: /home/runner/work/cs467-a3-prometheus-triage/cs467-a3-prometheus-triage
+2026-10-28T21:11:16.0201239Z [main] Reading prompt file...
+2026-10-28T21:11:16.0202095Z [main] Original content length: 9018 characters
+2026-10-28T21:11:16.0223850Z [main] First 200 characters: <system>\nImmutable security policy. Sandbox, firewall, credentials, and tool limits are physical boundaries. Do not bypass, weaken, test, or evade them.\n\nNever do: container escape, privilege escalati
+2026-10-28T21:11:16.0232884Z [main] Writing raw template to: /home/runner/work/_temp/gh-aw/aw-prompts/prompt-template.txt
+2026-10-28T21:11:16.0233866Z 
+2026-10-28T21:11:16.0234021Z ========================================
+2026-10-28T21:11:16.0234417Z [main] STEP 1: Runtime Imports
+2026-10-28T21:11:16.0234776Z ========================================
+2026-10-28T21:11:16.0235233Z Processing 1 runtime import macro(s) (files and URLs)
+2026-10-28T21:11:16.0235815Z   Import 1: {{#runtime-import .github/workflows/issue-triage.md}}
+2026-10-28T21:11:16.0236707Z Found 2 expression(s) in File workflows/issue-triage.md
+2026-10-28T21:11:16.0237823Z Successfully processed 2 safe expression(s) in File workflows/issue-triage.md
+2026-10-28T21:11:16.0241816Z Runtime imports processed successfully
+2026-10-28T21:11:16.0242530Z Content length change: 9076 -> 24898 (+15822)
+2026-10-28T21:11:16.0243332Z [main] Writing import tree to: /home/runner/work/_temp/gh-aw/aw-prompts/prompt-import-tree.json
+2026-10-28T21:11:16.0243963Z 
+2026-10-28T21:11:16.0244160Z ========================================
+2026-10-28T21:11:16.0244821Z [main] STEP 1.5: Inline Sub-Agent Extraction
+2026-10-28T21:11:16.0245476Z ========================================
+2026-10-28T21:11:16.0246126Z No inline sub-agent markers found, skipping
+2026-10-28T21:11:16.0246593Z 
+2026-10-28T21:11:16.0246780Z ========================================
+2026-10-28T21:11:16.0247289Z [main] STEP 1.6: Inline Skill Extraction
+2026-10-28T21:11:16.0247679Z ========================================
+2026-10-28T21:11:16.0248003Z No inline skill markers found, skipping
+2026-10-28T21:11:16.0248215Z 
+2026-10-28T21:11:16.0248308Z ========================================
+2026-10-28T21:11:16.0248609Z [main] STEP 2: Variable Interpolation
+2026-10-28T21:11:16.0248905Z ========================================
+2026-10-28T21:11:16.0249759Z No expression variables found, skipping interpolation
+2026-10-28T21:11:16.0250167Z 
+2026-10-28T21:11:16.0250311Z ========================================
+2026-10-28T21:11:16.0250755Z [main] STEP 2.5: Experiment Placeholder Substitution
+2026-10-28T21:11:16.0251113Z ========================================
+2026-10-28T21:11:16.0254057Z No experiment placeholders found in prompt
+2026-10-28T21:11:16.0254395Z 
+2026-10-28T21:11:16.0254495Z ========================================
+2026-10-28T21:11:16.0255009Z [main] STEP 3: Template Rendering
+2026-10-28T21:11:16.0255541Z ========================================
+2026-10-28T21:11:16.0256249Z No conditional blocks found in prompt, skipping template rendering
+2026-10-28T21:11:16.0256702Z 
+2026-10-28T21:11:16.0256938Z ========================================
+2026-10-28T21:11:16.0257316Z [main] STEP 4: Writing Output
+2026-10-28T21:11:16.0257598Z ========================================
+2026-10-28T21:11:16.0258333Z Writing processed content back to: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-28T21:11:16.0259110Z Final content length: 24898 characters
+2026-10-28T21:11:16.0259600Z Total length change: 9018 -> 24898 (+15880)
+2026-10-28T21:11:16.0260736Z Last 200 characters: ust start with the plain text\n`Decision: <DECISION>` and then explain the script results you relied on. A separate\npublishing check rejects inconsistent proposals or missing final decision evidence.\n\n
+2026-10-28T21:11:16.0262486Z ========================================
+2026-10-28T21:11:16.0262968Z [main] Processing complete - SUCCESS
+2026-10-28T21:11:16.0263250Z ========================================
