@@ -9,8 +9,7 @@ set -euo pipefail
 tag="$1"; here="$(cd "$(dirname "$0")" && pwd)"; root="$(cd "$here/../.." && pwd)"
 git -C "$root" fetch -q origin +audit-log:refs/remotes/origin/audit-log
 for f in "$here"/results/"$tag"/[AG]*.json; do
-  case "$f" in *ratelimited*) continue ;; esac
-  id=$(basename "$f" .json); run=$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["run_id"])' "$f")
+  id=$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["case"])' "$f"); run=$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["run_id"])' "$f")
   dir=$(git -C "$root" ls-tree -d --name-only origin/audit-log:audits | grep "run$run\$" || true)
   [ -n "$dir" ] || { echo "no audit for $id (run $run)" >&2; continue; }
   out="$here/logs/$tag/$id-run$run"; mkdir -p "$out"

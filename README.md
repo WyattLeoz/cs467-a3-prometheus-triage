@@ -1,6 +1,6 @@
 # Prometheus Issue Triage Agent
 
-A governed AI agent that gives every newly opened issue a first response: it routes the issue to a
+A governed AI agent that attempts first-response triage for newly opened issues: it routes the issue to a
 component, asks for missing information, points usage questions and other-project reports to the
 right place, or flags a likely duplicate. It runs as a
 [GitHub Agentic Workflow](https://github.com/github/gh-aw) (gh-aw v0.93.1, Copilot CLI engine) in a
@@ -33,7 +33,9 @@ flowchart TD
   C --> D["Agent job (gpt-4.1, read-only token,<br/>no network, triage skill)"]
   D --> E{Threat detection}
   E -- "flagged or no verdict" --> N[Nothing published]
-  E -- clean --> F["safe_outputs job:<br/>≤ 1 comment, ≤ 2 allow-listed labels"]
+  E -- clean --> V{Decision matches proposed outputs?}
+  V -- no --> N
+  V -- yes --> F["safe_outputs job:<br/>≤ 1 comment, ≤ 2 allow-listed labels"]
   F --> G["Audit archive: gh aw audit → audit-log branch,<br/>model/CLI drift check"]
   N --> G
 ```
@@ -47,8 +49,10 @@ flowchart TD
    `OTHER_PROJECT`, `POSSIBLE_DUPLICATE`, `SECURITY` or `NO_ACTION`. It validates its labels with the
    script and states its reasoning in the run log.
 4. **Publish.** gh-aw's detection job checks the proposed outputs for obeyed injections, leaked
-   secrets and blocked labels. A separate job then applies them under fixed limits, as
-   `github-actions[bot]`.
+   secrets and blocked labels. The publishing job checks the final declared decision against the actual
+   proposed outputs with [`output_policy.py`](.claude/skills/prometheus-issue-triage/scripts/output_policy.py).
+   Missing evidence or inconsistent actions stop publication. Built-in handlers then apply valid proposals
+   under fixed limits as `github-actions[bot]`. A consistent but wrong decision can still pass this guard.
 5. **Archive.** Every run's audit (trigger, model, tool calls, firewall decisions, outputs, AI
    credits) is committed to the `audit-log` branch. A drift check compares the model snapshot and
    CLI version against a reviewed baseline.
@@ -81,7 +85,11 @@ available when it was first filed. Expected outcomes were committed before any a
 acceptable declared decision, outputs that decision allows, and audit evidence that the skill was
 loaded. A green workflow run alone never counts.
 
-- **Full run on all 19 original cases ([`run4-final`](evals/golden/results/run4-final/summary.md)): 9/19 pass.**
+- **Current candidate:** publishing guard, generic procedure clarification and replay safeguards are
+  locally validated (28 tests); its full frozen 20-case replay is pending. This is not a claim of improved accuracy.
+- **Recovered Claude run ([`run6-interrupted`](evals/golden/results/run6-interrupted/summary.md)): 4/10 completed cases pass**,
+  plus two preserved quota attempts, all on `087bc648`. No outcome was discarded or expectation changed.
+- **Historical full run on all 19 original cases ([`run4-final`](evals/golden/results/run4-final/summary.md)): 9/19 pass.**
   Two failures came from infrastructure (a runner download 404 and a detection timeout), and both
   passed on re-run. The other eight are model-judgement errors by gpt-4.1: missed duplicates and
   other-project reports, public CVEs treated as an undisclosed vulnerability, and labels the
@@ -147,10 +155,10 @@ upstream/                                 upstream files used as context
 - Accuracy is not good enough to act without review. That is why the agent only suggests. The only
   model this Copilot Free account can use is `gpt-4.1`, and its quota (about 1–4 runs per ~4.5 hours)
   caps throughput at roughly 5–20 issues a day.
-- Duplicate candidates reach the model as a title plus 300 characters, which can hide the evidence
-  needed to confirm a duplicate.
-- Each case was run once, and the full run spans several commits. There is no clean single-commit
-  rerun of all cases.
+- Duplicate candidates now include bounded symptom/version fields beyond the 300-character excerpt;
+  this addresses missing evidence but does not guarantee the model recognizes duplicates.
+- Earlier full evaluations span commits; the recovered later run is incomplete. New result tags are
+  bound to one commit, and the latest full replay is still pending.
 - The served model snapshot is not pinned. Version drift is detected, not prevented.
 
 ## Documentation

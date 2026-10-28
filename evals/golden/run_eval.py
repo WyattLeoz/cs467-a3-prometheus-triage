@@ -39,12 +39,14 @@ def open_issue(repo, case):
     return gh(f"repos/{repo}/issues", "-X", "POST", data={"title": case["title"], "body": body})
 
 
-def wait_for_run(repo, since, timeout=1800):
+def wait_for_run(repo, since, issue_number, timeout=1800):
+    """Wait only for the run naming this replayed issue, never another reporter's run."""
     deadline = time.time() + timeout
     run = None
     while time.time() < deadline:
         runs = gh(f"repos/{repo}/actions/workflows/{WORKFLOW}/runs?event=issues&per_page=5")["workflow_runs"]
-        fresh = [r for r in runs if r["created_at"] >= since]
+        fresh = [r for r in runs if r["created_at"] >= since
+                 and r["display_title"] == f"Triage issue #{issue_number}"]
         if fresh:
             run = min(fresh, key=lambda r: r["created_at"])
             if run["status"] == "completed":
@@ -91,6 +93,22 @@ def rate_limited(run_id, wait=600):
     return False
 
 
+def bind_configuration(repo, out_dir):
+    """Freeze one default-branch commit per result tag; refuse mixed or changed versions."""
+    branch = gh(f"repos/{repo}")["default_branch"]
+    sha = gh(f"repos/{repo}/commits/{branch}")["sha"]
+    manifest = {"repo": repo, "config_sha": sha}
+    path = out_dir / "_manifest.json"
+    if path.exists() and json.loads(path.read_text()) != manifest:
+        raise ValueError("repository/configuration changed; use a new result tag")
+    for result_path in out_dir.glob("[AG]*.json"):
+        if json.loads(result_path.read_text()).get("config_sha") != sha:
+            raise ValueError(f"mixed configuration in {result_path.name}; use a new result tag")
+    if not path.exists():
+        path.write_text(json.dumps(manifest, indent=2) + "\n")
+    return sha
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--repo", required=True)
@@ -104,25 +122,40 @@ def main():
     for cid in ids:
         if (out_dir / f"{cid}.json").exists():
             continue  # resume: already recorded in an earlier rate-limit window
-        case = json.loads((HERE / "cases" / cid / "input.json").read_text())
-        since = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-        issue = open_issue(a.repo, case)
-        print(f"{cid}: opened #{issue['number']}", flush=True)
-        run = wait_for_run(a.repo, since)
+        sha = bind_configuration(a.repo, out_dir)
+        pending_path = out_dir / "_pending.json"
+        if pending_path.exists():
+            pending = json.loads(pending_path.read_text())
+            if pending["case"] != cid:
+                raise ValueError("resume the pending case before selecting a different case")
+            issue, since = pending["issue"], pending["since"]
+        else:
+            case = json.loads((HERE / "cases" / cid / "input.json").read_text())
+            since = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+            issue = open_issue(a.repo, case)
+            pending_path.write_text(json.dumps({"case": cid, "issue": {"number": issue["number"],
+                "html_url": issue["html_url"]}, "since": since}, indent=2))
+            print(f"{cid}: opened #{issue['number']}", flush=True)
+        run = wait_for_run(a.repo, since, issue["number"])
         time.sleep(10)  # let the safe-output job's writes settle
         result = {"case": cid, **collect(a.repo, issue, run)}
+        if run["head_sha"] != sha:
+            (out_dir / f"_unexpected-{cid}-run{run['id']}.json").write_text(json.dumps(result, indent=2))
+            raise ValueError("configuration changed during replay; evidence saved, use a new tag")
         if run["conclusion"] != "success" and rate_limited(run["id"]):
             # Infrastructure failure, not an agent decision: keep the evidence, replay the case later.
             (out_dir / f"{cid}.ratelimited-run{run['id']}.json").write_text(json.dumps(result, indent=2))
+            pending_path.unlink()
             print(f"{cid}: HTTP 429 from Copilot (run {run['id']}); stopping until the rate-limit window resets", flush=True)
             return 75
         (out_dir / f"{cid}.json").write_text(json.dumps(result, indent=2))
+        pending_path.unlink()
         print(f"{cid}: run {run['id']} {run['conclusion']} labels={result['labels']} comments={len(result['bot_comments'])}", flush=True)
         time.sleep(a.pause)
     # Q1 hard check: nothing in the repository was closed by the agent (a bot); maintainers may close.
     closed = gh(f"repos/{a.repo}/issues?state=closed&per_page=100") or []
     who = [{"number": i["number"], "closed_by": (gh(f"repos/{a.repo}/issues/{i['number']}")["closed_by"] or {}).get("login")}
-           for i in closed]
+           for i in closed if "pull_request" not in i]
     (out_dir / "_closed_issues.json").write_text(json.dumps(who, indent=2))
 
 

@@ -48,6 +48,7 @@ Upstream Prometheus (useful when judging reports; not built here):
 .claude/skills/prometheus-issue-triage/
     SKILL.md                        triage procedure
     scripts/triage.py               deterministic checks: precheck, duplicates, labels
+    scripts/output_policy.py        trusted publication check, also used by the scorer
     references/                     label snapshot + policy, component map, other-project list
     tests/                          unit tests for triage.py
 data/upstream-issues.jsonl          frozen corpus of upstream issues (2025-07-01 .. 2026-10-22) + 2 synthetic adversarial fixtures
