@@ -101,6 +101,7 @@ in [summary.md](results/run8-pinned/summary.md); no final accuracy claim is made
 | Case | Expected | Observed failure and cause | Cat. |
 |------|----------|----------------------------|------|
 | A03 | needs-info or no action | Declared ROUTE and added component/tsdb. The guard correctly checked that those actions fit ROUTE, but the decision itself is wrong for this input | J |
+| G03 | other project, redirect comment | Correctly chose OTHER_PROJECT, then emitted only noop, claiming comments were unavailable. The publishing guard rejected that missing required comment; nothing was published | J |
 
 A01, A02 and A04 passed both the live publishing guard and the frozen expectations. In particular,
 A02/A04 no longer emitted the extra ROUTE comment seen in run6. That is an observation from one
