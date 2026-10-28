@@ -1,0 +1,33 @@
+﻿2026-10-28T12:30:15.4545335Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-28T12:30:15.4545589Z with:
+2026-10-28T12:30:15.4546231Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'compute_text.cjs'));
+await main();
+
+2026-10-28T12:30:15.4548166Z   github-token: ***
+2026-10-28T12:30:15.4548299Z   debug: false
+2026-10-28T12:30:15.4548433Z   user-agent: actions/github-script
+2026-10-28T12:30:15.4548597Z   result-encoding: json
+2026-10-28T12:30:15.4548729Z   retries: 0
+2026-10-28T12:30:15.4548872Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-28T12:30:15.4549259Z env:
+2026-10-28T12:30:15.4549382Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-28T12:30:15.4549544Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-28T12:30:15.4550020Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40688260222,github.run_id=40688260222,gh-aw.engine.id=copilot
+2026-10-28T12:30:15.4550524Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-28T12:30:15.4550689Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-28T12:30:15.4550873Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-28T12:30:15.4551026Z   GH_AW_MAX_DAILY_AI_CREDITS: 2000
+2026-10-28T12:30:15.4551180Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-28T12:30:15.4551355Z   GITHUB_AW_OTEL_TRACE_ID: 844d8ad3f998195e563da5670a912095
+2026-10-28T12:30:15.4551565Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: a3be47ac0e5a415e
+2026-10-28T12:30:15.4551747Z   GITHUB_AW_OTEL_JOB_START_MS: 1793190605630
+2026-10-28T12:30:15.4551996Z   GH_AW_ALLOWED_DOMAINS: github.com,groups.google.com,localhost,prometheus.io
+2026-10-28T12:30:15.4552234Z ##[endgroup]
+2026-10-28T12:30:15.8724157Z Repository permission level: admin
+2026-10-28T12:30:15.8788321Z text: Blackbox Exporter not recording data for the DOWN machines.\n\nHi,\n\nWe have configured Blackbox setup in our AKS cluster. We have many instances over different cluster and scrapping ((Heartbeat Monitoring) over more than 7000 machines using ICMP probe.\n\nIssue:  Blackbox exporter not reporting as DOWN (probe success = 0) for a few sets of servers when it's going DOWN. It is supposed to capture as DOWN with probes success value as zero, but we are getting NO DATA during that time frame.\n\nWe have our Prometheus job with relabel configured and pointed to Blackbox URL for collecting metrics.\nFor few sets of servers, the Blackbox URL (/probe) is not getting loaded and getting 504 error. \n\nDue to this, in Prometheus end its captured as NODATA.\n\nBecause of this weird behavior we are missing the NODE DOWN alerts. \n\n\n\n**Blackbox Configuration: **\n\nblackbox.yml module config.\napiVersion: v1\ndata:\nblackbox.yaml: |\nmodules:\nicmp:\nicmp:\npreferred_ip_protocol: ip4\nprober: icmp\ntimeout: 90s\n\nThis causing a huge impact in our environment.
+2026-10-28T12:30:15.8790866Z title: Blackbox Exporter not recording data for the DOWN machines.
+2026-10-28T12:30:15.8793266Z body: Hi,\n\nWe have configured Blackbox setup in our AKS cluster. We have many instances over different cluster and scrapping ((Heartbeat Monitoring) over more than 7000 machines using ICMP probe.\n\nIssue:  Blackbox exporter not reporting as DOWN (probe success = 0) for a few sets of servers when it's going DOWN. It is supposed to capture as DOWN with probes success value as zero, but we are getting NO DATA during that time frame.\n\nWe have our Prometheus job with relabel configured and pointed to Blackbox URL for collecting metrics.\nFor few sets of servers, the Blackbox URL (/probe) is not getting loaded and getting 504 error. \n\nDue to this, in Prometheus end its captured as NODATA.\n\nBecause of this weird behavior we are missing the NODE DOWN alerts. \n\n\n\n**Blackbox Configuration: **\n\nblackbox.yml module config.\napiVersion: v1\ndata:\nblackbox.yaml: |\nmodules:\nicmp:\nicmp:\npreferred_ip_protocol: ip4\nprober: icmp\ntimeout: 90s\n\nThis causing a huge impact in our environment.
