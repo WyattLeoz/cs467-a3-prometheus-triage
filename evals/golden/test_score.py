@@ -1,7 +1,10 @@
 """Regression tests for score.py: missing evidence and wrong outputs must never score as a pass.
 Run: python3 -m unittest discover -s evals/golden -p 'test_*.py' -v
 """
+import contextlib
+import io
 import json
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -52,6 +55,21 @@ class ScorerFailsClosed(unittest.TestCase):
 
     def test_last_declared_decision_wins(self):
         self.assertEqual(score.declared_decision("◆ Decision: ROUTE\n...\n◆ Decision: NO_ACTION"), "NO_ACTION")
+
+    def test_failure_regex_stays_in_one_markdown_cell(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary) / "run8-pinned"
+            directory.mkdir()
+            record = result("run8-pinned", "G03")
+            (directory / "G03.json").write_text(json.dumps(record))
+            with contextlib.redirect_stdout(io.StringIO()):
+                score.main(directory)
+            row = next(line for line in (directory / "summary.md").read_text().splitlines()
+                       if line.startswith("| G03 |"))
+            self.assertIn(r"/helm-charts\|prometheus-operator/", row)
+            self.assertEqual(row.count("|") - row.count(r"\|"), 9)
+            checks = json.loads((directory / "scores.json").read_text())["G03"]["checks"]
+            self.assertFalse(checks["comment cites /helm-charts|prometheus-operator/"])
 
 
 if __name__ == "__main__":

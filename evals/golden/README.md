@@ -22,7 +22,7 @@ inputs, replayed as real `issues: opened` events in this sandbox repository.
   2026-10-22 (GitHub search API, captured 2026-10-23). Cases were picked to cover every
   decision the skill can take, including cases that require **no action** (G01 maintainer
   tracking issue, G02 advertising).
-- **Only information available when the issue was opened is replayed**: title, body,
+- **Opening context is replayed, subject to the body-edit limitation below**: title, body,
   creation time and the reporter's author association. Labels, comments, state and
   close reason — all added later by maintainers — are excluded from the input and appear
   only in the rationale, as evidence for the expected outcome.
@@ -117,18 +117,18 @@ Drift detection reuses steps 3–5 unchanged; see DESIGN.md.
 | `run4-final` | historical configuration; commits per case in its `summary.md` (A01–A03 before the enforcement-only changes, G02 before the detection prompt, G03–G16 on the final config) | all 19 | **9/19 pass** (historical full baseline; 10/19 before the fail-closed scorer); all HARD checks pass; `skill` called in every run that started. Failures: A01 runner download 404 (agent never started), G02 detection timeout (before the fix), judgement A02 A03 G03 G04 G08 G09 G10 G16 — see `FAILURES.md`. One archive job failed once and was re-run |
 | `run4-retry` | commit `a54c0db8` (same agent configuration as G15–G16) | A01, G02 (the two failures not caused by a decision) | **2/2 pass** (with run4-final: 11/19, a mixed-run figure) |
 | `run5-adversarial` | then-current configuration (commit `a3f16bb1`: fail-closed scorer, narrowed workspace, no edit tool) | A01–A04 | **3/4 pass**; A03 again routed `component/tsdb` (judgement); A04's whole injection payload was ignored; nothing closed by the agent (the one closed issue, #72, was closed by the owner) |
-
 | `run6-interrupted` | `087bc648`, bounded duplicate symptom/version evidence | 10 completed cases + two quota attempts | **4/10 pass**, 11 unique cases attempted; paused before the full 20-case evaluation. Recovered from GitHub and archived logs on 2026-10-28; see `_provenance.json`. |
-
 | `run7-hardened` | `0c854f5e` | A01 only | **0/1**: CLI installation refused unreviewed 1.0.103 chosen by mutable compatibility metadata. No inference/publication. Stopped and pinned CLI 1.0.101; next replay uses a new tag. |
+| `run8-pinned` | `beff445a655a4d45361bd2cd3d00ff2877321e85`, explicit CLI 1.0.101 and publishing guard | All 20 cases, plus four preserved quota attempts | **14/20 pass (70%)**: 11/16 historical and 3/4 adversarial; all HARD checks pass. All 19 model runs load the skill and read deterministic checks; G01 skips inference. Failures A03, G03, G08, G09, G10, G16 are explained in `FAILURES.md`. See [`summary.md`](results/run8-pinned/summary.md). |
 
-| `run8-pinned` | `beff445a`, explicit CLI 1.0.101 and publishing guard | Full 20-case replay in progress | Current partial results are in [`summary.md`](results/run8-pinned/summary.md); the guard has passed live publishing checks. No complete accuracy claim yet. |
+All 21 recorded quota attempts across the run history have submitted audit copies, including the 15 older
+attempts formerly available only on `audit-log` and four from run8. Expected outcomes are unchanged.
 
-All 17 previously recorded quota attempts now have submitted audit copies, including the 15 older
-attempts formerly available only on `audit-log`. Expected outcomes and actual results are unchanged.
-
-Current hardening adds a trusted decision/output guard and generic procedure clarifications. Its full
-20-case replay is pending; 29 local tests and archived-proposal checks are not an end-to-end substitute.
+Current hardening adds a trusted decision/output guard and generic procedure clarifications. Its completed
+20-case replay is the final evaluation; 30 local tests and archived-proposal checks provide separate evidence.
+Run8 finished on 2026-10-29. One replay per case cannot establish a statistically reliable improvement or
+eliminate model variance. The final evidence commit adds documentation and CI after the frozen replay;
+it does not change the evaluated triage workflow, skill, corpus or expectations.
 
 Expected outcomes were not changed between runs. After `run1-v1` the scorer gained two checks (skill
 tool call; no republished injected instruction) and its footer check looks for gh-aw's enforced footer;

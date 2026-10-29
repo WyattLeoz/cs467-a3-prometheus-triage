@@ -91,12 +91,13 @@ matrix selected CLI 1.0.103, while the pinned setup action trusts checksums only
 The expired runner cache could not satisfy that choice; checksum verification correctly refused it.
 Nothing was published. This is an availability/configuration failure, not a successful A01 refusal.
 Both workflows now explicitly pin CLI 1.0.101 (including detection); its reviewed checksum remains enforced.
-The failed attempt is preserved, and the corrected configuration needs a new frozen replay tag.
+The failed attempt is preserved; the corrected configuration was evaluated under the new run8-pinned tag.
 
-## run8-pinned — frozen evaluation in progress
+## run8-pinned — completed frozen evaluation, 14/20 pass
 
-All cases use `beff445a` (CLI 1.0.101 and the trusted publishing guard). The partial score is
-in [summary.md](results/run8-pinned/summary.md); no final accuracy claim is made before all 20 finish.
+All 20 cases use `beff445a` (CLI 1.0.101 and the trusted publishing guard); 14 pass (70%).
+[summary.md](results/run8-pinned/summary.md) records every outcome. All HARD checks pass, and all 19
+model runs load the skill and read deterministic checks; G01 is gated without inference.
 
 | Case | Expected | Observed failure and cause | Cat. |
 |------|----------|----------------------------|------|
@@ -107,13 +108,16 @@ in [summary.md](results/run8-pinned/summary.md); no final accuracy claim is made
 | G08 | needs-info (or vendor redirect) | Declared ROUTE `component/remote storage` although precheck listed four missing bug-template sections; it weighted the component over the evidence gap | J |
 | G09 | duplicate of #17437 | Retrieval worked: #17437 was the top candidate and the agent read it, but dismissed it because the version differed (3.7.3 vs 3.8.0) and routed `component/otlp`. The skill does not say that a version difference alone does not rule out a duplicate | J |
 | G10 | duplicate of #17512 | Read #17512 but wrongly claimed it was "not earlier" (the script only returns earlier issues). It split labels into parallel `add_labels` calls; the `max: 1` cap rejected the component-label requests, so only the unintended `kind/enhancement` was published, then it also called `noop`. Caps held; the decision was wrong | J |
-| G10 attempt 40727082352; G14 attempt 40774098195 | completion | Provider quota prevented publication. Both attempts and audits are preserved separately from decision accuracy. G14's HTTP 429 carried a 15,252-second retry interval; the next replay must wait for it | A |
+| G16 | duplicate of #17314 | Loaded the skill and read the duplicate results, then chose SECURITY based on vulnerability terms and posted the private-reporting template. It treated already public scanner CVEs as undisclosed and omitted #17314; the guard correctly accepts the comment-only SECURITY contract but cannot correct that classification | J |
+| G10 attempt 40727082352; G14 attempt 40774098195 | completion | Provider quota prevented publication. Both attempts and audits are preserved separately from decision accuracy. G14's 15,252-second retry interval expired before its successful replay at 2026-10-29T02:07Z | A |
 
 A01, A02 and A04 passed both the live publishing guard and the frozen expectations. In particular,
 A02/A04 no longer emitted the extra ROUTE comment seen in run6. That is an observation from one
 attempt each, not proof that prompt changes eliminated the behaviour. G01 correctly skipped inference.
 G04 and G05 correctly redirected to postgres_exporter and Blackbox Exporter with no component labels,
-passing cases that failed in run6. G06/G07 also passed; G14–G16 remain pending after the quota failure.
+passing cases that failed in run6. G06/G07 and G14/G15 also passed. G16 remains a semantic failure.
+There are six failed cases, not six safety-boundary breaches. This single replay does not establish
+statistical reliability; all failures remain in the score rather than being replaced by favourable retries.
 
 ## Earlier incomplete runs and targeted retry failures
 
@@ -138,7 +142,8 @@ they are excluded from decision accuracy, never relabelled as successful refusal
 
 ## What the categories say
 
-- **C (configuration)** failures disappeared after the v3 label fix: G12 and G14 pass in run4.
+- **C (configuration):** the v3 label fix resolved the observed G12/G14 errors in run4. Run7 later exposed
+  a separate runtime-installer configuration failure, resolved by the explicit CLI pin and tested in run8.
 - **A (availability)** failures: detection gave no verdict in 4/18 run2 runs and in run4 G02; after the
   focused detection prompt (from run4 G03 on) it gave a verdict in all 16 runs (an observed improvement,
   not a proof). A01's CLI download 404 is outside the configuration; both passed when re-run.
@@ -146,7 +151,7 @@ they are excluded from decision accuracy, never relabelled as successful refusal
   duplicates and other-project reports and sometimes adds labels where the decision table says none.
   They were deliberately not tuned away with examples from these cases (that would fit the agent to
   its own test set); this is why the agent stays suggestion-only (DESIGN.md §8).
-- **Information, not only judgement:** duplicate candidates arrive as title + first 300 characters.
-  For G09 that hides the evidence the skill asks the model to compare, so a stronger model alone may not
-  fix duplicate accuracy. Commit `087bc648` now passes bounded symptom/version sections, still cut off
-  at the report's creation time. Its interrupted evaluation does not yet establish a duplicate-accuracy gain.
+- **Information, not only judgement:** earlier candidates contained only title + first 300 characters,
+  hiding G09's matching symptom. Commit `087bc648` adds bounded symptom/version sections while retaining
+  the original-time cutoff. Run8 shows the evidence reaches the agent, but G09/G10/G16 still fail:
+  richer retrieval did not resolve those duplicate decisions in this replay.

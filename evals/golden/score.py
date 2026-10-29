@@ -102,7 +102,7 @@ def main(result_dir):
         cs = checks(exp[r["case"]], r, audit_log(rdir.name, r["case"], r["run_id"]))
         ok = all(cs.values())
         scores[r["case"]] = {"pass": ok, "checks": cs, "run_url": r["run_url"], "issue_url": r["issue_url"]}
-        failed = [k for k, v in cs.items() if not v]
+        failed = [k.replace("|", r"\|") for k, v in cs.items() if not v]
         rows.append(f"| {r['case']} | {exp[r['case']]['decision']} | {', '.join(r['labels']) or '—'} | "
                     f"{'yes' if r['bot_comments'] else 'no'} | {'PASS' if ok else 'FAIL'} | {'; '.join(failed) or ''} | "
                     f"`{r.get('config_sha', '')[:8]}` | [run]({r['run_url']}) |")
