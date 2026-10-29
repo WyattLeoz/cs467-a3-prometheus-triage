@@ -1,0 +1,55 @@
+﻿2026-10-29T02:17:24.3461330Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-29T02:17:24.3461810Z with:
+2026-10-29T02:17:24.3463321Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'parse_token_usage.cjs'));
+await main();
+
+2026-10-29T02:17:24.3468268Z   github-token: ***
+2026-10-29T02:17:24.3468727Z   debug: false
+2026-10-29T02:17:24.3469203Z   user-agent: actions/github-script
+2026-10-29T02:17:24.3469518Z   result-encoding: json
+2026-10-29T02:17:24.3469755Z   retries: 0
+2026-10-29T02:17:24.3470014Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-29T02:17:24.3470338Z env:
+2026-10-29T02:17:24.3470554Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-29T02:17:24.3470878Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-29T02:17:24.3471760Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=40805110751,github.run_id=40805110751,gh-aw.engine.id=copilot
+2026-10-29T02:17:24.3472669Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-29T02:17:24.3472966Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-29T02:17:24.3473915Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-29T02:17:24.3474214Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-29T02:17:24.3474535Z   GITHUB_AW_OTEL_TRACE_ID: 200d9f0d89e6e76e794033802a833d47
+2026-10-29T02:17:24.3474916Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 3ac263541deedc89
+2026-10-29T02:17:24.3475256Z   GITHUB_AW_OTEL_JOB_START_MS: 1793240187121
+2026-10-29T02:17:24.3475605Z   GH_AW_PROMPT: /tmp/gh-aw/aw-prompts/prompt.txt
+2026-10-29T02:17:24.3476109Z   AWF_TOKEN_USAGE_LOG: /tmp/gh-aw/sandbox/firewall/logs/api-proxy-logs/token-usage.jsonl
+2026-10-29T02:17:24.3476649Z   GH_AW_TOKEN_USAGE_SUMMARY_TITLE: Threat Detection Token Usage
+2026-10-29T02:17:24.3477008Z   GH_AW_PHASE: detection
+2026-10-29T02:17:24.3477379Z   GH_AW_AGENT_USAGE_PATH: /tmp/gh-aw/threat-detection/detection_usage.json
+2026-10-29T02:17:24.3478133Z   GH_AW_AGENT_USAGE_JSONL_PATH: /tmp/gh-aw/threat-detection/detection_usage.jsonl
+2026-10-29T02:17:24.3478894Z   GH_AW_WRITE_EMPTY_USAGE: true
+2026-10-29T02:17:24.3479324Z ##[endgroup]
+2026-10-29T02:17:24.4814015Z Parsing token usage from 1 file(s): /tmp/gh-aw/sandbox/firewall/logs/api-proxy-logs/token-usage.jsonl (5647 bytes)
+2026-10-29T02:17:24.6920298Z Threat Detection Token Usage
+2026-10-29T02:17:24.6920733Z 
+2026-10-29T02:17:24.6921771Z # | Alias | Input | Output | Cache Read | Cache Write | ΔAI Credits | AI Credits | Duration 
+2026-10-29T02:17:24.6922450Z 
+2026-10-29T02:17:24.6922795Z  1 | gpt41 | 19,465 | 25 | 0 | 0 | 3.913 | 3.913 | 2.8s 
+2026-10-29T02:17:24.6923847Z  2 | gpt41 | 234 | 28 | 19,328 | 0 | 1.0356 | 4.9486 | 738ms 
+2026-10-29T02:17:24.6924669Z  3 | gpt41 | 652 | 25 | 19,456 | 0 | 1.1232 | 6.0718 | 752ms 
+2026-10-29T02:17:24.6925451Z  4 | gpt41 | 237 | 25 | 19,968 | 0 | 1.0658 | 7.1376 | 602ms 
+2026-10-29T02:17:24.6926264Z  5 | gpt41 | 206 | 28 | 20,096 | 0 | 1.0684 | 8.206 | 571ms 
+2026-10-29T02:17:24.6927005Z  6 | gpt41 | 624 | 25 | 20,224 | 0 | 1.156 | 9.362 | 703ms 
+2026-10-29T02:17:24.6927758Z  7 | gpt41 | 209 | 35 | 20,736 | 0 | 1.1066 | 10.4686 | 777ms 
+2026-10-29T02:17:24.6928499Z  8 | gpt41 | 145 | 26 | 20,864 | 0 | 1.093 | 11.5616 | 761ms 
+2026-10-29T02:17:24.6929294Z  9 | gpt41 | 193 | 45 | 20,864 | 0 | 1.1178 | 12.6794 | 891ms 
+2026-10-29T02:17:24.6930041Z  Total |  | 21,965 | 262 | 161,536 | 0 |  | 12.6794 | 8.6s 
+2026-10-29T02:17:24.6930467Z 
+2026-10-29T02:17:24.6932087Z Legend: `Alias` shows the model shorthand used in the table. `ΔAI Credits` is the per-request cost, and `AI Credits` is the running total mirrored from AWF fields for reporting.
+2026-10-29T02:17:24.6933863Z Token usage summary appended to step summary
+2026-10-29T02:17:24.6945894Z Primary model: gpt-4.1-2025-04-14
+2026-10-29T02:17:24.6946765Z AI Credits: 12.6794
+2026-10-29T02:17:24.6948057Z Ambient context: 19465
