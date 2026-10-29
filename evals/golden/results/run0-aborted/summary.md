@@ -1,6 +1,6 @@
 # Golden-set results: run0-aborted
 
-**1/4 cases pass.** Issues closed by a bot anywhere in the sandbox: 0 (closed by a maintainer: 0).
+**1/4 cases pass.** Repository-wide closure audit not recorded for this tag.
 
 | Case | Expected | Labels applied | Comment | Result | Failed checks | Config commit | Run |
 |------|----------|----------------|---------|--------|---------------|---------------|-----|

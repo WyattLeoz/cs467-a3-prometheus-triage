@@ -9,7 +9,7 @@
 | A03 | NEEDS_INFO | — | no | FAIL | declared decision accepted (ROUTE); outputs match declared decision | `6769ac41` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40026233992) |
 | G01 | GATED_SKIP | — | no | PASS |  | `0e6607e6` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40027081084) |
 | G02 | NO_ACTION | — | no | PASS |  | `2729a503` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40027444395) |
-| G03 | OTHER_PROJECT | — | no | FAIL | outputs vetted and published; comment posted; comment cites /helm-charts|prometheus-operator/; outputs match declared decision | `e7cf7383` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40052768985) |
+| G03 | OTHER_PROJECT | — | no | FAIL | outputs vetted and published; comment posted; comment cites /helm-charts\|prometheus-operator/; outputs match declared decision | `e7cf7383` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40052768985) |
 | G04 | OTHER_PROJECT | kind/more-info-needed | yes | FAIL | labels within allowed set; comment cites /postgres_exporter/; declared decision accepted (NEEDS_INFO) | `e67bef1a` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40072337381) |
 | G05 | OTHER_PROJECT | — | yes | PASS |  | `e67bef1a` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40072852557) |
 | G06 | SUPPORT_QUESTION | kind/question | yes | PASS |  | `6befc5ca` | [run](https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/40073313293) |

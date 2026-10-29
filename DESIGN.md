@@ -45,9 +45,9 @@ while retaining the original-time cutoff. Golden expectations have not changed.
 |---------|---------------------------|
 | Identity | Tested: `safe_outputs` writes as `github-actions[bot]`; comments link to their run |
 | Least privilege | Tested: read-only agent; isolated publisher has issue/PR write scope but only configured handlers |
-| Safe outputs | Caps/allowlist tested by negative dispatches; new decision guard passes local and real-artifact tests; full replay pending |
-| Human approval | Owner reviews PR/CODEOWNERS (advisory on this private plan). No per-comment approval: small, reversible suggestions |
-| Budgets | 10-minute agent step, 20 turns, 200 AIC/run, 2000 AIC/day; detection 100 AIC; 3 runs/hour per reporter; one active agent job; stop date |
+| Safe outputs | Caps/allowlist tested by negative dispatches; live decision guard rejects G03's invalid noop; all 20 run8 cases pass HARD checks |
+| Human approval | Sole-owner sandbox: PR/CODEOWNERS review is advisory, with no branch protection at the 2026-10-29 check. CI passes but is not required. Enforced independent review proposed; no per-comment approval for reversible suggestions |
+| Budgets | 10-minute agent step, 20 turns, 200 AI credits (AIC)/run, 2000 AIC/day; detection 100 AIC; 3 runs/hour per reporter; one active agent job; stop date |
 | Audit trail | Tested archive to `audit-log`: trigger, configuration, model/CLI, tools, outputs, firewall and AIC; failed archive exits before commit |
 | Kill switch | Disable and cancel queued/running workflows; tested cancellation 39952339286 posted nothing; stop-after 2026-12-31 |
 | Drift detection | Model/CLI comparison tested (#72). Owner reruns after changes/alerts and monthly, reviews scores, failures and feedback; automation proposed |
@@ -77,7 +77,9 @@ A pass requires expected outputs, accepted decision, matching actions, skill evi
 **Historical full baseline:** `run4-final` 9/19; two infrastructure retries pass, but 11/19 mixes attempts.
 **Later adversarial run:** `run5-adversarial` 3/4. **Recovered interrupted run:** `run6-interrupted` 4/10
 completed cases on `087bc648`, plus two quota attempts; it is not a completed 20-case evaluation.
-The first hardened run failed CLI installation (run7: 0/1); CLI 1.0.101 is now pinned. Full replay is pending.
+Run7 failed CLI installation (0/1). **Run8: 14/20 (70%)** on frozen `beff445a`, with CLI 1.0.101 pinned.
+All 20 pass HARD checks; all 19 model runs load the skill and read checks. Four quota attempts are separate.
+Failures: A03, G03, G08, G09, G10, G16. One complete replay does not establish a statistically reliable gain.
 `evals/golden/FAILURES.md` explains failures; results link exact runs and configurations.
 
 - Early prompts allowed skipped skills; requiring the skill first fixed the observed omission.
@@ -89,7 +91,7 @@ The first hardened run failed CLI installation (run7: 0/1); CLI 1.0.101 is now p
 - Missing audits and empty ROUTE outputs once passed; fail-closed regressions prevent that.
 - All recorded HARD checks held. A02 in run1 still echoed injected text: caps are not correctness.
 
-Validation: 9 skill + 20 evaluation tests, strict compilation of both workflows, syntax/diff checks,
+Validation: 9 skill + 21 evaluation tests, strict compilation of both workflows, syntax/diff checks,
 real archived valid/rejected proposals, and preserved sandbox runs. Archive fault tests cover failed
 download/identity stages. Replay tags now bind one commit and runs identify their exact issue number.
 
@@ -129,14 +131,14 @@ correction. Phone-browser steps are documented, not tested on physical phone har
 | Tools/MCP | `safeoutputs` MCP, Copilot skill/view, allowlisted triage shell command and read defaults; no GitHub MCP/web/edit |
 | Permissions | Agent contents/issues read; publisher contents read + issues/PRs write; archive actions read + contents/issues write |
 | Data/secrets | Trigger issue, 494 upstream issues + two marked canaries, references; Copilot PAT outside agent environment |
-| Logs/evaluations | Actions/audit-log; 16 historical + 4 adversarial cases, label-limit tests, 29 unit tests, need metric |
+| Logs/evaluations | Actions/audit-log; 16 historical + 4 adversarial cases, label-limit tests, 30 unit tests, need metric |
 | Responsible human | Loh Kai Zhe (@WyattLeoz), configuration owner and accountable maintainer |
 
 ## 8. Remaining limitations
 
-Judgement errors and quotas remain; suggestions need review. Repeated trials are limited.
-The frozen candidate replay is pending; prompt changes do not prove improvement. The served model snapshot
-is monitored rather than pinned, and branch protection remains proposed. No upstream deployment is claimed.
+Six run8 cases still fail: wrong routing, missing redirect, missed duplicates and public-CVE classification.
+Suggestions need review; quotas limit throughput and repeated trials. The served model snapshot is monitored
+rather than pinned; independent enforced review remains proposed. No upstream deployment is claimed.
 
 ## 9. AI-use statement
 
