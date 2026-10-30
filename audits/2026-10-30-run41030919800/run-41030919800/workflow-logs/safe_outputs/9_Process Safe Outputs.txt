@@ -1,0 +1,99 @@
+﻿2026-10-30T09:09:18.7062012Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-30T09:09:18.7062499Z with:
+2026-10-30T09:09:18.7066135Z   github-token: ***
+2026-10-30T09:09:18.7067914Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit, process.env.GH_AW_GITHUB_TOKEN_SOURCE);
+const { main } = require(path.join(actionsDir, 'process_safe_outputs.cjs'));
+await main();
+
+2026-10-30T09:09:18.7069431Z   debug: false
+2026-10-30T09:09:18.7069674Z   user-agent: actions/github-script
+2026-10-30T09:09:18.7069962Z   result-encoding: json
+2026-10-30T09:09:18.7070208Z   retries: 0
+2026-10-30T09:09:18.7070460Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-30T09:09:18.7070975Z env:
+2026-10-30T09:09:18.7071195Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-30T09:09:18.7071474Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-30T09:09:18.7072379Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=41030919800,github.run_id=41030919800,gh-aw.engine.id=copilot
+2026-10-30T09:09:18.7073246Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-30T09:09:18.7073543Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-30T09:09:18.7073857Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-30T09:09:18.7074122Z   GH_AW_AGENT_AIC: 5.9962
+2026-10-30T09:09:18.7074362Z   GH_AW_AIC: 5.9962
+2026-10-30T09:09:18.7074596Z   GH_AW_AMBIENT_CONTEXT: 11498
+2026-10-30T09:09:18.7074978Z   GH_AW_CALLER_WORKFLOW_ID: WyattLeoz/cs467-a3-prometheus-triage/issue-triage
+2026-10-30T09:09:18.7075628Z   GH_AW_DETECTION_CONCLUSION: success
+2026-10-30T09:09:18.7075994Z   GH_AW_DETECTION_REASON: 
+2026-10-30T09:09:18.7076249Z   GH_AW_ENGINE_ID: copilot
+2026-10-30T09:09:18.7076510Z   GH_AW_ENGINE_MODEL: gpt-4.1
+2026-10-30T09:09:18.7076770Z   GH_AW_ENGINE_VERSION: 1.0.101
+2026-10-30T09:09:18.7077038Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-30T09:09:18.7077307Z   GH_AW_RUN_DETECTION: true
+2026-10-30T09:09:18.7077568Z   GH_AW_THREAT_DETECTION_AIC: 5.0624
+2026-10-30T09:09:18.7077861Z   GH_AW_WORKFLOW_ID: issue-triage
+2026-10-30T09:09:18.7078176Z   GH_AW_WORKFLOW_NAME: Prometheus Issue Triage
+2026-10-30T09:09:18.7078826Z   GH_AW_WORKFLOW_SOURCE_URL: https://github.com/WyattLeoz/cs467-a3-prometheus-triage/blob/main/.github/workflows/issue-triage.md
+2026-10-30T09:09:18.7079486Z   GITHUB_AW_OTEL_TRACE_ID: 4e076a66418a25cc4566b04e0b2ea6a3
+2026-10-30T09:09:18.7079858Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: d38834cfeabebc8d
+2026-10-30T09:09:18.7080187Z   GITHUB_AW_OTEL_JOB_START_MS: 1793351357031
+2026-10-30T09:09:18.7080488Z   GH_HOST: github.com
+2026-10-30T09:09:18.7080728Z   GH_AW_JOB_CHECK_RUN_ID: 123981492116
+2026-10-30T09:09:18.7081051Z   GH_AW_AGENT_OUTPUT: /tmp/gh-aw/agent_output.json
+2026-10-30T09:09:18.7081367Z   GH_AW_COMMENT_ID: 
+2026-10-30T09:09:18.7084261Z   GH_AW_MENTIONS_GITHUB_TOKEN: ***
+2026-10-30T09:09:18.7084692Z   GH_AW_ALLOWED_DOMAINS: github.com,groups.google.com,localhost,prometheus.io
+2026-10-30T09:09:18.7085163Z   GITHUB_SERVER_URL: https://github.com
+2026-10-30T09:09:18.7085750Z   GITHUB_API_URL: https://api.github.com
+2026-10-30T09:09:18.7088870Z   GH_AW_SAFE_OUTPUTS_HANDLER_CONFIG: {"add_comment":{"max":1,"target":"triggering"},"add_labels":{"allowed":["component/agent","component/api","component/config","component/documentation","component/mixin","component/notify","component/otlp","component/promql","component/promtool","component/remote storage","component/rules","component/scraping","component/service discovery","component/service discovery/kubernetes","component/tests","component/tsdb","component/ui","component/wal","component/web","kind/enhancement","kind/feature","kind/more-info-needed","kind/question"],"blocked":["kind/bug","kind/breaking","kind/cleanup","kind/change","priority/*","won't fix","invalid","duplicate","stale"],"max":1,"max_labels":2,"target":"triggering"},"create_report_incomplete_issue":{},"mentions":{"enabled":false},"noop":{"max":2,"report-as-issue":"false"},"report_incomplete":{},"report_missing_data":{},"report_missing_tool":{}}
+2026-10-30T09:09:18.7092178Z   GH_AW_GITHUB_TOKEN_SOURCE: github_actions
+2026-10-30T09:09:18.7092479Z ##[endgroup]
+2026-10-30T09:09:18.8743741Z Safe Output Handler Manager starting...
+2026-10-30T09:09:18.8757596Z Loaded config from GH_AW_SAFE_OUTPUTS_HANDLER_CONFIG: {"add_comment":{"max":1,"target":"triggering"},"add_labels":{"allowed":["component/agent","component/api","component/config","component/documentation","component/mixin","component/notify","component/otlp","component/promql","component/promtool","component/remote storage","component/rules","component/scraping","component/service discovery","component/service discovery/kubernetes","component/tests","component/tsdb","component/ui","component/wal","component/web","kind/enhancement","kind/feature","kind/more-info-needed","kind/question"],"blocked":["kind/bug","kind/breaking","kind/cleanup","kind/change","priority/*","won't fix","invalid","duplicate","stale"],"max":1,"max_labels":2,"target":"triggering"},"create_report_incomplete_issue":{},"mentions":{"enabled":false},"noop":{"max":2,"report-as-issue":"false"},"report_incomplete":{},"report_missing_data":{},"report_missing_tool":{}}
+2026-10-30T09:09:18.8765184Z Agent output content length: 439
+2026-10-30T09:09:18.8766005Z Found 1 message(s) in agent output
+2026-10-30T09:09:18.8777206Z Loading and initializing safe output handlers based on configuration...
+2026-10-30T09:09:18.8805949Z [MENTIONS] Mentions explicitly disabled - all mentions will be escaped
+2026-10-30T09:09:18.8809272Z Add comment configuration: max=1, target=triggering
+2026-10-30T09:09:18.8810238Z Default target repo: WyattLeoz/cs467-a3-prometheus-triage
+2026-10-30T09:09:18.8811281Z ✓ Loaded and initialized handler for: add_comment
+2026-10-30T09:09:18.8831441Z Add labels configuration: max=1, max-labels=2
+2026-10-30T09:09:18.8834807Z Allowed labels: component/agent, component/api, component/config, component/documentation, component/mixin, component/notify, component/otlp, component/promql, component/promtool, component/remote storage, component/rules, component/scraping, component/service discovery, component/service discovery/kubernetes, component/tests, component/tsdb, component/ui, component/wal, component/web, kind/enhancement, kind/feature, kind/more-info-needed, kind/question
+2026-10-30T09:09:18.8838747Z Blocked patterns: kind/bug, kind/breaking, kind/cleanup, kind/change, priority/*, won't fix, invalid, duplicate, stale
+2026-10-30T09:09:18.8839793Z Create missing labels: false
+2026-10-30T09:09:18.8840380Z Default target repo: WyattLeoz/cs467-a3-prometheus-triage
+2026-10-30T09:09:18.8841225Z ✓ Loaded and initialized handler for: add_labels
+2026-10-30T09:09:18.8850823Z Max count: unlimited
+2026-10-30T09:09:18.8851456Z ✓ Loaded and initialized handler for: report_missing_tool
+2026-10-30T09:09:18.8852346Z Max count: unlimited
+2026-10-30T09:09:18.8852931Z ✓ Loaded and initialized handler for: report_missing_data
+2026-10-30T09:09:18.8854309Z Max count: 2
+2026-10-30T09:09:18.8854746Z ✓ Loaded and initialized handler for: noop
+2026-10-30T09:09:18.8855070Z Max count: unlimited
+2026-10-30T09:09:18.8855672Z ✓ Loaded and initialized handler for: report_incomplete
+2026-10-30T09:09:18.8879708Z Title prefix: [incomplete]
+2026-10-30T09:09:18.8880249Z Default labels: agentic-workflows
+2026-10-30T09:09:18.8880722Z Max count: 1
+2026-10-30T09:09:18.8881441Z ✓ Loaded and initialized handler for: create_report_incomplete_issue
+2026-10-30T09:09:18.8885236Z Loaded 7 handler(s)
+2026-10-30T09:09:19.1621452Z ℹ️ Rate-limit headroom: 4948/5000 requests remaining (98%) [safe_outputs_pre_check]
+2026-10-30T09:09:19.1639033Z Collected 0 missing tool(s), 0 missing data item(s), 1 noop message(s), and 0 incomplete signal(s)
+2026-10-30T09:09:19.1640395Z Processing 1 message(s) in order of appearance...
+2026-10-30T09:09:19.1641652Z Processing message 1/1: noop
+2026-10-30T09:09:19.1643950Z ✓ Recorded noop message: Decision: NO_ACTION
+2026-10-30T09:09:19.1644808Z 
+2026-10-30T09:09:19.1647320Z Precheck: The issue is not maintainer-authored, does not use the bug template, and contains strong signals of promotion/advertising ("bounty", "crypto", "platform fee", "usdc"). No other project is mentioned. Duplicate search found no candidates. No labels are needed or permitted for NO_ACTION. This is classified as spam/advertising per the triage table.
+2026-10-30T09:09:19.1650314Z ✓ Message 1 (noop) completed successfully
+2026-10-30T09:09:19.1651743Z Stored 0 missing tool(s), 0 missing data item(s), 1 noop message(s), and 0 incomplete signal(s) for footer generation
+2026-10-30T09:09:19.1690024Z 📝 Safe output summaries written to step summary
+2026-10-30T09:09:19.1712646Z 
+2026-10-30T09:09:19.1713196Z === Processing Summary ===
+2026-10-30T09:09:19.1713808Z Total messages: 1
+2026-10-30T09:09:19.1714855Z Status: success
+2026-10-30T09:09:19.1715962Z Successful: 1
+2026-10-30T09:09:19.1717083Z Failed: 0
+2026-10-30T09:09:19.1717866Z Temporary IDs registered: 0
+2026-10-30T09:09:19.1718312Z Synthetic updates: 0
+2026-10-30T09:09:19.1718748Z Wrote temporary ID map to file for artifact upload
+2026-10-30T09:09:19.1719392Z Safe Output Handler Manager completed
