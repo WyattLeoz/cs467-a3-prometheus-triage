@@ -1,0 +1,84 @@
+﻿2026-10-30T08:57:03.5846916Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-30T08:57:03.5847864Z with:
+2026-10-30T08:57:03.5852330Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+
+const substitutePlaceholders = require(path.join(actionsDir, 'substitute_placeholders.cjs'));
+
+// Call the substitution function
+return await substitutePlaceholders({
+  file: process.env.GH_AW_PROMPT,
+  substitutions: {
+    GH_AW_GITHUB_EVENT_ISSUE_NUMBER: process.env.GH_AW_GITHUB_EVENT_ISSUE_NUMBER,
+    GH_AW_MCP_CLI_SERVERS_LIST: process.env.GH_AW_MCP_CLI_SERVERS_LIST,
+    GH_AW_NEEDS_PRE_ACTIVATION_OUTPUTS_ACTIVATED: process.env.GH_AW_NEEDS_PRE_ACTIVATION_OUTPUTS_ACTIVATED,
+    GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT: process.env.GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT
+  }
+});
+
+2026-10-30T08:57:03.5862182Z   github-token: ***
+2026-10-30T08:57:03.5862910Z   debug: false
+2026-10-30T08:57:03.5863467Z   user-agent: actions/github-script
+2026-10-30T08:57:03.5864233Z   result-encoding: json
+2026-10-30T08:57:03.5864877Z   retries: 0
+2026-10-30T08:57:03.5865443Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-30T08:57:03.5866139Z env:
+2026-10-30T08:57:03.5866652Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-30T08:57:03.5867350Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-30T08:57:03.5868686Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=41029821470,github.run_id=41029821470,gh-aw.engine.id=copilot
+2026-10-30T08:57:03.5869770Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-30T08:57:03.5870263Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-30T08:57:03.5870667Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-30T08:57:03.5870972Z   GH_AW_MAX_DAILY_AI_CREDITS: 2000
+2026-10-30T08:57:03.5871232Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-30T08:57:03.5871532Z   GITHUB_AW_OTEL_TRACE_ID: bf42580077d79f26aa5a7fdf55a17d0c
+2026-10-30T08:57:03.5871897Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: 2c89069106b401ca
+2026-10-30T08:57:03.5872206Z   GITHUB_AW_OTEL_JOB_START_MS: 1793350612052
+2026-10-30T08:57:03.5872592Z   GH_AW_PROMPT: /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt
+2026-10-30T08:57:03.5872974Z   GH_AW_GITHUB_EVENT_ISSUE_NUMBER: 145
+2026-10-30T08:57:03.5873479Z   GH_AW_MCP_CLI_SERVERS_LIST: - `safeoutputs` — run `safeoutputs --help` to see available tools
+2026-10-30T08:57:03.5874262Z   GH_AW_NEEDS_PRE_ACTIVATION_OUTPUTS_ACTIVATED: true
+2026-10-30T08:57:03.5876827Z   GH_AW_STEPS_SANITIZED_OUTPUTS_TEXT: promtool test rules panics when an alerting rule has empty annotations
+
+### What did you do?
+
+Ran `promtool test rules tests.yml` against a rule file whose alerting rule has an empty `annotations:` map.
+
+### What did you expect to see?
+
+The unit tests run and pass or fail normally.
+
+### What did you see instead? Under which circumstances?
+
+promtool panics before running any test.
+
+### System information
+
+Linux 6.8
+
+### Prometheus version
+
+```text
+promtool, version 3.13.4
+```
+
+### Prometheus configuration file
+
+```yaml
+groups:
+  - name: example
+    rules:
+      - alert: HighLatency
+        expr: job:request_latency_seconds:mean5m > 0.5
+        annotations: {}
+```
+
+### Logs
+
+```text
+panic: assignment to entry in nil map
+```
+2026-10-30T08:57:03.5881412Z ##[endgroup]
+2026-10-30T08:57:03.6888169Z [substitutePlaceholders] /home/runner/work/_temp/gh-aw/aw-prompts/prompt.txt (4 substitution(s))
