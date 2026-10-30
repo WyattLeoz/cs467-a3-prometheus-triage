@@ -9,7 +9,7 @@ public sandbox that mirrors the issue intake of
 historical issues.
 
 The agent can post **at most one comment and two allow-listed labels** on the issue that triggered
-it. It cannot close, edit or delete anything, merge, push, use the network or call the GitHub API.
+it. It cannot close, edit or delete anything, merge, push, browse freely or call the GitHub API. The firewall permits provider inference.
 Those limits are enforced by workflow permissions and gh-aw safe outputs, not by the prompt.
 
 ## Motivation
@@ -30,7 +30,7 @@ flowchart TD
   A[Issue opened] --> B{Gate: maintainer-authored?}
   B -- yes --> S[Skipped, no model call]
   B -- no --> C["Deterministic checks (triage.py):<br/>template, other-project hints,<br/>duplicate search before the issue's date"]
-  C --> D["Agent job (gpt-4.1, read-only token,<br/>no network, triage skill)"]
+  C --> D["Agent job (gpt-4.1, read-only token,<br/>provider-only network, triage skill)"]
   D --> E{Threat detection}
   E -- "flagged or no verdict" --> N[Nothing published]
   E -- clean --> V{Decision matches proposed outputs?}
@@ -63,7 +63,7 @@ flowchart TD
 |---------|-----|--------|
 | Least privilege | Agent job has `contents: read`, `issues: read`, no GitHub tools, no file-edit tool, `network: {}` firewall; writes happen only in gh-aw's `safe_outputs` job | Implemented, tested |
 | Safe outputs | `add-comment.max: 1`; `add-labels` = 1 call × 2 labels from an exact list of 23 existing labels; `kind/bug`, `priority/*`, `duplicate`, `stale` blocked; `mentions: false`; link domains allow-listed | Implemented; [negative test](evals/golden/safe-output-limits-test.md) |
-| Isolation | The agent's workspace holds only the skill, [`AGENTS.md`](AGENTS.md) and `data/`; expected outcomes and result documents are removed before it starts, and the file list is logged | Implemented, verified in a run log |
+| Isolation | Trusted checks prepare earlier-issue candidates, then remove raw data and original Git objects; the model gets skill/facts and prepared checks | Implemented; Git-object removal regression tested |
 | Fail closed | Detection with `continue-on-error: false`: a flagged or undecided run publishes nothing | Implemented, tested |
 | Budgets | 10-minute agent step, 20 turns, AI-credit caps per run and per day, 3 runs/hour per reporter, one agent job at a time, `stop-after` date | Implemented |
 | Identity | Comments and labels come from `github-actions[bot]` with an attribution footer linking the run | Implemented |
@@ -90,8 +90,9 @@ loaded. A green workflow run alone never counts.
   safety checks; all 19 model runs load the skill and read the deterministic checks. G01 skips inference.
   Four quota attempts are archived separately. The six failures (A03, G03, G08, G09, G10, G16) remain
   documented in [`FAILURES.md`](evals/golden/FAILURES.md); a single replay does not establish a reliable accuracy gain.
-  All 30 local tests and strict workflow compilation pass. The evidence PR adds records, governance-status
-  documentation and deterministic CI; the triage workflow, skill and fixed expectations remain as evaluated.
+  This is a historical published-output score. Final hardening removes raw corpus/Git-history access
+  and rejects mixed noop/action proposals; run8 is not evidence for those new controls.
+  Final-configuration verification is recorded separately; the fixed expectations remain unchanged.
 - **Recovered Claude run ([`run6-interrupted`](evals/golden/results/run6-interrupted/summary.md)): 4/10 completed cases pass**,
   plus two preserved quota attempts, all on `087bc648`. No outcome was discarded or expectation changed.
 - **Historical full run on all 19 original cases ([`run4-final`](evals/golden/results/run4-final/summary.md)): 9/19 pass.**

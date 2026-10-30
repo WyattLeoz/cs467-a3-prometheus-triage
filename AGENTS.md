@@ -55,9 +55,10 @@ data/upstream-issues.jsonl          frozen corpus of upstream issues (2025-07-01
 upstream/                           upstream files at commit 22c287a (README, MAINTAINERS, SECURITY, CONTRIBUTING, TREE.txt, wiki label page)
 evals/golden/                       golden cases, expected outcomes, results and logs (not visible to the agent)
 
-Before the agent starts, its workspace is narrowed to `.claude/`, `AGENTS.md` and `data/` (gh-aw adds its
-installed copy of the skill under `.github/skills/`); every other path above exists only for humans and
-the evaluation.
+Before the agent starts, trusted checks prepare timestamp-filtered candidates, then remove `data/`
+and the original Git object database. Only `.claude/` and `AGENTS.md` remain, with a new empty Git
+baseline for framework bookkeeping; gh-aw installs its skill copy under `.github/skills/`.
+All evaluation paths above exist only for humans and the evaluation.
 ```
 
 Upstream code layout → component label (full table in the skill's `references/component-map.md`):

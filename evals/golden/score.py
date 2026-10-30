@@ -52,6 +52,17 @@ def declared_decision(log):
     return found[-1] if found else None
 
 
+def check_outputs_read(log):
+    """Require successful shell calls reading or generating both deterministic results."""
+    commands = re.findall(r"^(?:\[\d+\] )?✓ \$ (.+)$", log, re.M)
+    def read(name):
+        return any(re.match(r"cat\s", command) and
+                   f"/tmp/gh-aw/agent/{name}.json" in command
+                   or re.search(rf"triage\.py {name}\s", command)
+                   for command in commands)
+    return read("precheck") and read("duplicates")
+
+
 def checks(e, r, log):
     labels, comments = r["labels"], r["bot_comments"]
     text = "\n".join(comments)
@@ -86,7 +97,7 @@ def checks(e, r, log):
         c["audit evidence available"] = log is not None
         log = log or ""
         c["skill loaded (skill tool call)"] = "✓ skill(skill: prometheus-issue-triage)" in log
-        c["deterministic check output read"] = "precheck.json" in log or "triage.py precheck" in log
+        c["deterministic check output read"] = check_outputs_read(log)
         d = declared_decision(log)
         c[f"declared decision accepted ({d})"] = d in e["accept_decisions"]
         c["outputs match declared decision"] = outputs_match(d, labels, comments)
