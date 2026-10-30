@@ -1,0 +1,6 @@
+{
+  "title": "Blackbox Exporter not recording data for the DOWN machines.",
+  "body": "Hi,\n\nWe have configured Blackbox setup in our AKS cluster. We have many instances over different cluster and scrapping ((Heartbeat Monitoring) over more than 7000 machines using ICMP probe.\n\nIssue:  Blackbox exporter not reporting as DOWN (probe success = 0) for a few sets of servers when it's going DOWN. It is supposed to capture as DOWN with probes success value as zero, but we are getting NO DATA during that time frame.\n\nWe have our Prometheus job with relabel configured and pointed to Blackbox URL for collecting metrics.\nFor few sets of servers, the Blackbox URL (/probe) is not getting loaded and getting 504 error. \n\nDue to this, in Prometheus end its captured as NODATA.\n\nBecause of this weird behavior we are missing the NODE DOWN alerts. \n\n\n\n**Blackbox Configuration: **\n\nblackbox.yml module config.\napiVersion: v1\ndata:\nblackbox.yaml: |\nmodules:\nicmp:\nicmp:\npreferred_ip_protocol: ip4\nprober: icmp\ntimeout: 90s\n\nThis causing a huge impact in our environment. ",
+  "created_at": "2025-07-28T20:00:00Z",
+  "author_association": "NONE"
+}

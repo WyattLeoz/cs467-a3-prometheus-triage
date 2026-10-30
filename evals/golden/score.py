@@ -30,8 +30,8 @@ LIVE_MENTION = re.compile(r"(?<![`\w])@[A-Za-z0-9][\w-]*(?:/[\w-]+)?(?![\w`])")
 
 
 def expectations():
-    exp = {c["id"]: c["expected"] for c in json.loads((HERE / "cases.json").read_text())}
-    exp.update({a["id"]: a["expected"] for a in json.loads((HERE / "adversarial.json").read_text())})
+    exp = {c["id"]: c["expected"] for c in json.loads((HERE / "cases.json").read_text(encoding="utf-8"))}
+    exp.update({a["id"]: a["expected"] for a in json.loads((HERE / "adversarial.json").read_text(encoding="utf-8"))})
     return exp
 
 
@@ -40,8 +40,8 @@ def audit_log(tag, case, run_id):
     None means no evidence, which fails the case (it is never treated as a pass)."""
     local = HERE / "logs" / tag / f"{case}-run{run_id}" / "log.md"
     if local.exists():
-        return local.read_text()
-    git = lambda *a: subprocess.run(["git", *a], capture_output=True, text=True, cwd=HERE.parents[1]).stdout
+        return local.read_text(encoding="utf-8")
+    git = lambda *a: subprocess.run(["git", *a], capture_output=True, text=True, encoding="utf-8", cwd=HERE.parents[1]).stdout
     dirs = [d for d in git("ls-tree", "-d", "--name-only", "origin/audit-log", "audits/").split() if d.endswith(f"run{run_id}")]
     return git("show", f"origin/audit-log:{dirs[0]}/run-{run_id}/log.md") or None if dirs else None
 
@@ -109,7 +109,7 @@ def main(result_dir):
     exp = expectations()
     rows, scores = [], {}
     for f in sorted((f for f in rdir.glob("[AG]*.json") if "ratelimited" not in f.name)):
-        r = json.loads(f.read_text())
+        r = json.loads(f.read_text(encoding="utf-8"))
         cs = checks(exp[r["case"]], r, audit_log(rdir.name, r["case"], r["run_id"]))
         ok = all(cs.values())
         scores[r["case"]] = {"pass": ok, "checks": cs, "run_url": r["run_url"], "issue_url": r["issue_url"]}
@@ -118,7 +118,7 @@ def main(result_dir):
                     f"{'yes' if r['bot_comments'] else 'no'} | {'PASS' if ok else 'FAIL'} | {'; '.join(failed) or ''} | "
                     f"`{r.get('config_sha', '')[:8]}` | [run]({r['run_url']}) |")
     closed_file = rdir / "_closed_issues.json"
-    closed = json.loads(closed_file.read_text()) if closed_file.exists() else []
+    closed = json.loads(closed_file.read_text(encoding="utf-8")) if closed_file.exists() else []
     # Older runs stored bare numbers (all closures); newer ones record who closed each issue.
     by_bot = [c for c in closed if not isinstance(c, dict) or (c["closed_by"] or "").endswith("[bot]")]
     n_pass = sum(s["pass"] for s in scores.values())
@@ -129,8 +129,8 @@ def main(result_dir):
           f"**{n_pass}/{len(scores)} cases pass.** {closure_summary}", "",
           "| Case | Expected | Labels applied | Comment | Result | Failed checks | Config commit | Run |",
           "|------|----------|----------------|---------|--------|---------------|---------------|-----|", *rows]
-    (rdir / "summary.md").write_text("\n".join(md) + "\n")
-    (rdir / "scores.json").write_text(json.dumps(scores, indent=2))
+    (rdir / "summary.md").write_text("\n".join(md) + "\n", encoding="utf-8")
+    (rdir / "scores.json").write_text(json.dumps(scores, indent=2), encoding="utf-8")
     print("\n".join(md))
 
 

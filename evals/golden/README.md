@@ -120,9 +120,12 @@ Drift detection reuses steps 3–5 unchanged; see DESIGN.md.
 | `run6-interrupted` | `087bc648`, bounded duplicate symptom/version evidence | 10 completed cases + two quota attempts | **4/10 pass**, 11 unique cases attempted; paused before the full 20-case evaluation. Recovered from GitHub and archived logs on 2026-10-28; see `_provenance.json`. |
 | `run7-hardened` | `0c854f5e` | A01 only | **0/1**: CLI installation refused unreviewed 1.0.103 chosen by mutable compatibility metadata. No inference/publication. Stopped and pinned CLI 1.0.101; next replay uses a new tag. |
 | `run8-pinned` | `beff445a655a4d45361bd2cd3d00ff2877321e85`, explicit CLI 1.0.101 and publishing guard | All 20 cases, plus four preserved quota attempts | **14/20 pass (70%)**: 11/16 historical and 3/4 adversarial; all HARD checks pass. All 19 model runs load the skill and read deterministic checks; G01 skips inference. Failures A03, G03, G08, G09, G10, G16 are explained in `FAILURES.md`. See [`summary.md`](results/run8-pinned/summary.md). |
+| `run9-isolated` | `5b535aa1a1fdb0b2a6dc0d87930e561cf20a5f52`, removed corpus/Git history; stricter proposal guard | A01–A04, G01/G02 completed; G03 quota attempt | **6/6 completed pass**, not a full live replay. G03's retained draft also has a semantic/procedural failure. [Method](results/run9-isolated/METHOD.md). |
+| `run9-dry-run` | Same runtime configuration and inputs, fresh GPT-6-based Codex assistant | All 20 | **20/20 semantic/proposal checks pass**. Different model, no live publishing/control claims. [Method and reproduction](results/run9-dry-run/METHOD.md). |
 
-All 21 recorded quota attempts across the run history have submitted audit copies, including the 15 older
-attempts formerly available only on `audit-log` and four from run8. Expected outcomes are unchanged.
+All 21 prior quota attempts have submitted audit copies, including the 15 older
+attempts formerly available only on `audit-log` and four from run8. Run9 adds one preserved quota attempt
+(22 total). Expected outcomes are unchanged. Final verification includes 38 local tests and strict compilation.
 
 Run8 finished on 2026-10-29. Its 14/20 score evaluates published outputs under the recorded policy.
 Final hardening removes raw corpus/Git-history access and rejects mixed noop/action proposals.
@@ -136,7 +139,8 @@ Expected outcomes were not changed between runs. After `run1-v1` the scorer gain
 tool call; no republished injected instruction) and its footer check looks for gh-aw's enforced footer;
 after `run2` G15 it gained "outputs vetted and published" (a withheld result can no longer pass a
 "no comment" expectation); after the 2026-10-27 review it fails closed (see Scoring). Every run
-directory is re-scored with the final scorer.
+directory retains its recorded score; the stronger successful-read check reproduces run8 unchanged.
+Use the current scorer for new runs; historical published-output scores do not claim all procedure steps passed.
 
 Copilot Free's rate limit is per user and resets after the `retry-after` the API returns (≈ 4.5 h);
 `run_eval.py` treats only a 429 with `x-ratelimit-exceeded` as a rate limit. A 429 from gh-aw's own
