@@ -119,6 +119,47 @@ passing cases that failed in run6. G06/G07 and G14/G15 also passed. G16 remains 
 There are six failed cases, not six safety-boundary breaches. This single replay does not establish
 statistical reliability; all failures remain in the score rather than being replaced by favourable retries.
 
+## run9-isolated — partial live replay; provider quota and draft failure
+
+Six completed cases (A01–A04, G01/G02) pass the recorded output checks. G03 run 41031725661
+completed inference but detection hit provider HTTP 429 with a 13,410-second retry interval.
+Nothing was published; the full attempt and provider response are retained separately.
+Its unpublished draft is also wrong: ROUTE `component/config` instead of an other-project redirect,
+plus mixed noop/action calls. The final guard rejects that mixture offline; detection failure
+prevented the live guard from running. This is not a completed pass and is not silently retried away.
+A01/G02 also called the label validator with no labels; both calls were rejected without side effects.
+See `results/run9-isolated/METHOD.md` and the separately scored full coding-assistant fallback.
+
+## run9-dry-run — permitted fallback, 20/20 semantic/proposal checks pass
+
+A fresh GPT-6-based Codex assistant received the frozen configuration and all 20 prepared inputs,
+without expected answers or earlier outputs. All responses were recorded before scoring; none were edited.
+No semantic failures occurred. One pre-write PowerShell array-count check failed and was corrected,
+with the failure recorded in the transcript. This was a mechanical packaging check, not answer feedback.
+It is a different model and cannot establish Copilot accuracy or live GitHub controls; the method lists
+all untested controls. The live G03 failure remains part of the record and is not replaced by this pass.
+
+## Submission audit findings (2026-10-30)
+
+Run8's 14/20 remains its historical published-output score. The raw proposals for G12 and G13
+also contain `noop` after `add_labels`, contrary to SKILL.md. These two procedural failures
+were missed by the original guard/scorer; a strict retrospective reading is 12/20. A03 and G10
+also mix noop/actions but already fail the recorded output criteria. The final guard rejects
+all such mixtures; regressions use the actual G12/G13 proposals. Expectations were not relaxed.
+
+Sparse checkout removed visible result files but left the raw corpus (including future issues)
+and original Git object database. No observed leakage in a transcript proves isolation. Final
+hardening removes both after deterministic dated retrieval, verified by a real Git-blob test
+and the live isolation-step log. Earlier accuracy figures remain subject to this limitation.
+
+The scorer previously accepted prose merely naming `precheck.json`. It now requires successful
+reads/generation of both check outputs. Run8's 14/20 published-output result reproduces under
+this stronger evidence check. The separate final evaluation documents the changed guard.
+The evidence-saving helper now copies report JSON and the actual nested model-resolution path.
+A final Windows check exposed locale-dependent decoding of Unicode success markers in the scorer.
+Explicit UTF-8 reads/writes fix the false negatives; a subprocess regression disables UTF-8 mode.
+The corrected score still reproduces all historical results and the six completed live run9 cases.
+
 ## Earlier incomplete runs and targeted retry failures
 
 These runs remain part of the record. Every failed case is listed here; their full check tables and

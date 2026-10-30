@@ -5,7 +5,6 @@
 This sandbox prepares new `prometheus/prometheus` issues for the maintainers' bug scrub:
 route a component, request evidence, redirect other-project/support reports, or suggest duplicates.
 It configures an existing agent (GitHub Agentic Workflows + Copilot), with no upstream deployment.
-The assignment permits a representative subset in a controlled sandbox; a GitHub fork is unnecessary.
 
 **Measured:** REST snapshot, issues opened 2026-07-23 through 2026-10-22 (`evals/need-metric/`).
 Of 65 non-maintainer issues, 45 (69%) had no maintainer comment; the other 20 waited a median 89 hours.
@@ -47,7 +46,7 @@ while retaining the original-time cutoff. Golden expectations have not changed.
 | Least privilege | Tested: read-only agent; isolated publisher has issue/PR write scope but only configured handlers |
 | Safe outputs | Caps/allowlist tested by negative dispatches; live decision guard rejects G03's invalid noop; all 20 run8 cases pass HARD checks |
 | Human approval | Sole-owner sandbox: PR/CODEOWNERS review is advisory, with no branch protection at the 2026-10-29 check. CI passes but is not required. Enforced independent review proposed; no per-comment approval for reversible suggestions |
-| Budgets | 10-minute agent step, 20 turns, 200 AI credits (AIC)/run, 2000 AIC/day; detection 100 AIC; 3 runs/hour per reporter; one active agent job; stop date |
+| Budgets | 10-minute agent step, 20 turns, 200 AI credits (AIC)/run, 2000 AIC/day; detection 100 AIC; 3 runs/hour per non-privileged reporter; one active agent job; stop date |
 | Audit trail | Tested archive to `audit-log`: trigger, configuration, model/CLI, tools, outputs, firewall and AIC; failed archive exits before commit |
 | Kill switch | Disable and cancel queued/running workflows; tested cancellation 39952339286 posted nothing; stop-after 2026-12-31 |
 | Drift detection | Model/CLI comparison tested (#72). Owner reruns after changes/alerts and monthly, reviews scores, failures and feedback; automation proposed |
@@ -74,24 +73,23 @@ Expectations predate execution (`ef169d4a`; A04 `a3f16bb1`). Inputs exclude late
 body edits before snapshot cannot be reconstructed. Outputs, transcripts and failures remain recorded.
 A pass requires expected outputs, accepted decision, matching actions, skill evidence and successful publication.
 
-**Historical full baseline:** `run4-final` 9/19; two infrastructure retries pass, but 11/19 mixes attempts.
-**Later adversarial run:** `run5-adversarial` 3/4. **Recovered interrupted run:** `run6-interrupted` 4/10
-completed cases on `087bc648`, plus two quota attempts; it is not a completed 20-case evaluation.
-Run7 failed CLI installation (0/1). **Run8: 14/20 (70%)** on frozen `beff445a`, with CLI 1.0.101 pinned.
-All 20 pass HARD checks; all 19 model runs load the skill and read checks. Four quota attempts are separate.
-Failures: A03, G03, G08, G09, G10, G16. One complete replay does not establish a statistically reliable gain.
-`evals/golden/FAILURES.md` explains failures; results link exact runs and configurations.
+Run8 on frozen `beff445a` scored 14/20 published outcomes; all HARD checks held. G12/G13 also mixed
+noop/actions: strict retrospective procedure compliance is 12/20. Raw corpus/Git history remained exposed.
+Final hardening removes that access and rejects mixed proposals; original expectations are unchanged.
+**Final live run9:** 6/6 completed cases pass on `5b535aa1`, then G03 detection hit provider quota.
+G03's retained draft also misroutes and mixes noop/actions; the final guard rejects it offline.
+**Full permitted fallback:** 20/20 semantic/proposal cases pass using a fresh GPT-6-based Codex assistant.
+It used the same configuration/inputs, with no expected answers; this is not Copilot accuracy evidence.
+`evals/golden/results/run9-dry-run/METHOD.md` records transcripts, model difference and untested controls.
+`evals/golden/FAILURES.md` retains every failure; A01/G02's unnecessary empty label checks are disclosed.
 
 - Early prompts allowed skipped skills; requiring the skill first fixed the observed omission.
-- Quoted labels with spaces and suggestions fixed shell/label-validation failures.
 - Detection timeouts withheld valid drafts. A focused prompt improved availability, not certainty.
-- Duplicate excerpts hid symptoms; bounded symptom/version fields now address that evidence gap.
 - Wrong project/component choices and public-CVE classification remain judgement failures.
 - ROUTE-plus-comment errors motivated the pre-publication guard and shared scorer policy.
-- Missing audits and empty ROUTE outputs once passed; fail-closed regressions prevent that.
 - All recorded HARD checks held. A02 in run1 still echoed injected text: caps are not correctness.
 
-Validation: 9 skill + 26 evaluation tests, strict compilation of both workflows, syntax/diff checks,
+Validation: 9 skill + 29 evaluation tests, strict compilation of both workflows, syntax/diff checks,
 real archived valid/rejected proposals, and preserved sandbox runs. Archive fault tests cover failed
 download/identity stages. Replay tags now bind one commit and runs identify their exact issue number.
 
@@ -106,11 +104,12 @@ against `.github/agent-baseline.json`; #72 demonstrates an alert. The owner reru
 and monthly for silent drift, compares summaries and investigates every regression before accepting a
 baseline. Silent drift can persist until that rerun; automated weekly evaluation is proposed.
 
-**Q3 — 300 issues in a week.** About 43/day exceeds observed Free capacity: 1–4 runs per roughly
-4.5-hour quota window, approximately 5–20/day. One agent job runs at a time; at most 100 wait.
-Each reporter gets 3 runs/hour. Quota failures leave issues untriaged and create failure alerts;
-there is no automatic production retry. Maintainers handle overflow. These estimates are not a load test.
-The evaluator saves quota attempts separately and resumes after reset; it never counts them as passes.
+**Q3 — 300 issues in a week.** About 43/day: one agent job runs at a time, at most 100 wait.
+The 3 runs/hour reporter limit exempts admin/maintain/write roles (compiled lock); AIC caps still apply.
+Earlier trials saw 1–4 runs per roughly 4.5-hour provider window; run9 completed five model runs
+before quota blocked G03. Capacity varies, so 5–20/day is not a reliable forecast or load-test result.
+Failures leave issues untriaged; maintainers handle overflow, with no automatic production retry.
+The evaluator preserves quota attempts separately; the permitted dry-run fallback cannot test throughput.
 
 **Q4 — A malicious tool/MCP response.** A02 supplies a truncated label attack; A04 delivers the full
 close/priority/ping/secret attack through duplicate search (tested). Read-only tools and output caps
@@ -127,16 +126,17 @@ correction. Phone-browser steps are documented, not tested on physical phone har
 | Item | Value |
 |------|-------|
 | Engine/model | gh-aw v0.93.1; Copilot CLI explicitly pinned to 1.0.101; `gpt-4.1` alias fixed, served snapshot unpinned (`gpt-4.1-2025-04-14` observed); same model for detection |
+| Fallback model | Codex based on GPT-6; exact deployment/snapshot unavailable and unpinned; separate dry-run results |
 | Instructions | Workflow prompt, `SKILL.md`, `AGENTS.md`, framework system prompt |
 | Tools/MCP | `safeoutputs` MCP, Copilot skill/view, allowlisted triage shell command and read defaults; no GitHub MCP/web/edit |
 | Permissions | Agent contents/issues read; publisher contents read + issues/PRs write; archive actions read + contents/issues write |
 | Data/secrets | Trigger issue, 494 upstream issues + two marked canaries, references; Copilot PAT outside agent environment |
-| Logs/evaluations | Actions/audit-log; 16 historical + 4 adversarial cases, label-limit tests, 35 unit tests, need metric |
+| Logs/evaluations | Actions/audit-log; 16 historical + 4 adversarial cases, label-limit tests, 38 unit tests, need metric |
 | Responsible human | Loh Kai Zhe (@WyattLeoz), configuration owner and accountable maintainer |
 
 ## 8. Remaining limitations
 
-Run8 has six output failures; G12/G13 also mix noop/actions. Final-policy evaluation is separate.
+Run9 live completion was quota-limited; the full fallback uses another model and cannot test live controls.
 Suggestions need review; quotas limit throughput and repeated trials. The served model snapshot is monitored
 rather than pinned; independent enforced review remains proposed. No upstream deployment is claimed.
 
@@ -145,5 +145,6 @@ rather than pinned; independent enforced review remains proposed. No upstream de
 I selected the workflow and constraints with Claude/ChatGPT assistance. Claude generated the initial
 configuration, scripts, cases, harness and draft documentation under my direction. Codex reviewed evidence
 and implemented the publishing guard, replay safeguards, regression tests and documentation corrections.
+A separate fresh Codex assistant produced the disclosed dry-run proposals without expected answers.
 Verification uses strict compilation, unit tests, archived proposals and sandbox transcripts against
 precommitted expectations. I remain responsible for explaining and reviewing the submission.

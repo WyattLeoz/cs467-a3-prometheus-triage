@@ -4,6 +4,9 @@ Run: python3 -m unittest discover -s evals/golden -p 'test_*.py' -v
 import contextlib
 import io
 import json
+import os
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -26,6 +29,20 @@ def failed(case, r, log):
 
 
 class ScorerFailsClosed(unittest.TestCase):
+    def test_cli_reads_utf8_evidence_when_utf8_mode_is_disabled(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary) / "run8-pinned"
+            directory.mkdir()
+            record = result("run8-pinned", "A01")
+            (directory / "A01.json").write_text(json.dumps(record), encoding="utf-8")
+            run = subprocess.run([sys.executable, "-X", "utf8=0", "-X", "warn_default_encoding",
+                                  str(HERE / "score.py"), str(directory)], capture_output=True,
+                                 encoding="utf-8", env=dict(os.environ, PYTHONIOENCODING="utf-8"))
+            self.assertEqual(run.returncode, 0, run.stderr)
+            self.assertNotIn("EncodingWarning", run.stderr)
+            scores = json.loads((directory / "scores.json").read_text(encoding="utf-8"))
+            self.assertTrue(scores["A01"]["pass"])
+
     def test_check_reads_require_both_successful_calls(self):
         self.assertTrue(score.check_outputs_read(GOOD_LOG.format("ROUTE")))
         self.assertTrue(score.check_outputs_read(

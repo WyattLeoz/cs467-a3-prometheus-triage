@@ -65,7 +65,7 @@ flowchart TD
 | Safe outputs | `add-comment.max: 1`; `add-labels` = 1 call × 2 labels from an exact list of 23 existing labels; `kind/bug`, `priority/*`, `duplicate`, `stale` blocked; `mentions: false`; link domains allow-listed | Implemented; [negative test](evals/golden/safe-output-limits-test.md) |
 | Isolation | Trusted checks prepare earlier-issue candidates, then remove raw data and original Git objects; the model gets skill/facts and prepared checks | Implemented; Git-object removal regression tested |
 | Fail closed | Detection with `continue-on-error: false`: a flagged or undecided run publishes nothing | Implemented, tested |
-| Budgets | 10-minute agent step, 20 turns, AI-credit caps per run and per day, 3 runs/hour per reporter, one agent job at a time, `stop-after` date | Implemented |
+| Budgets | 10-minute agent step, 20 turns, AI-credit caps per run and per day, 3 runs/hour per non-privileged reporter, one agent job at a time, `stop-after` date | Implemented |
 | Identity | Comments and labels come from `github-actions[bot]` with an attribution footer linking the run | Implemented |
 | Audit trail | [`triage-audit-archive.yml`](.github/workflows/triage-audit-archive.yml) archives every run to the `audit-log` branch; archive jobs queue (up to 100 pending) and a missed run can be backfilled by ID | Implemented, tested |
 | Drift detection | Opens a `[drift]` issue when the served model snapshot or CLI differs from [`.github/agent-baseline.json`](.github/agent-baseline.json); behaviour drift is caught by a monthly golden rerun | Version check tested; rerun is a manual process |
@@ -85,15 +85,21 @@ context; capture-time body edits remain a limitation. Expected outcomes were com
 acceptable declared decision, outputs that decision allows, and audit evidence that the skill was
 loaded. A green workflow run alone never counts.
 
-- **Completed frozen evaluation:** [run8-pinned](evals/golden/results/run8-pinned/summary.md) passes **14/20 cases (70%)**
+- **Final configuration:** [live run9](evals/golden/results/run9-isolated/METHOD.md) passes 6/6 completed
+  cases, then provider quota blocks G03 detection. Its wrong unpublished draft is retained and explained.
+  The brief's [full coding-assistant fallback](evals/golden/results/run9-dry-run/METHOD.md) passes **20/20**
+  semantic/proposal cases using a fresh GPT-6-based Codex assistant and the same configuration/inputs.
+  This different-model result does not establish Copilot accuracy or test live controls. All 38 local
+  tests and strict compilation pass; [validation log](evals/golden/results/run9-validation/validation.txt).
+- **Historical completed frozen evaluation:** [run8-pinned](evals/golden/results/run8-pinned/summary.md) passes **14/20 cases (70%)**
   on `beff445a655a4d45361bd2cd3d00ff2877321e85`: 11/16 historical and 3/4 adversarial cases. All 20 pass HARD
   safety checks; all 19 model runs load the skill and read the deterministic checks. G01 skips inference.
   Four quota attempts are archived separately. The six failures (A03, G03, G08, G09, G10, G16) remain
   documented in [`FAILURES.md`](evals/golden/FAILURES.md); a single replay does not establish a reliable accuracy gain.
   This is a historical published-output score. Final hardening removes raw corpus/Git-history access
   and rejects mixed noop/action proposals; run8 is not evidence for those new controls.
-  Final-configuration verification is recorded separately; the fixed expectations remain unchanged.
-- **Recovered Claude run ([`run6-interrupted`](evals/golden/results/run6-interrupted/summary.md)): 4/10 completed cases pass**,
+  Final-configuration verification is recorded above; the fixed expectations remain unchanged.
+- **Recovered interrupted run ([`run6-interrupted`](evals/golden/results/run6-interrupted/summary.md)): 4/10 completed cases pass**,
   plus two preserved quota attempts, all on `087bc648`. No outcome was discarded or expectation changed.
 - **Historical full run on all 19 original cases ([`run4-final`](evals/golden/results/run4-final/summary.md)): 9/19 pass.**
   Two failures came from infrastructure (a runner download 404 and a detection timeout), and both
@@ -159,8 +165,8 @@ upstream/                                 upstream files used as context
 ## Limitations
 
 - Accuracy is not good enough to act without review. That is why the agent only suggests. The only
-  model this Copilot Free account can use is `gpt-4.1`, and its quota (about 1–4 runs per ~4.5 hours)
-  caps throughput at roughly 5–20 issues a day.
+  model used here is `gpt-4.1`. Provider quotas interrupted multiple replays; observed capacity varies
+  between windows, so earlier estimates of 5–20 issues/day are not a reliable throughput guarantee.
 - Duplicate candidates now include bounded symptom/version fields beyond the 300-character excerpt;
   this addresses missing evidence but does not guarantee the model recognizes duplicates.
 - Earlier full evaluations span commits; run6 is incomplete. Run8 completes all 20 cases on one frozen
