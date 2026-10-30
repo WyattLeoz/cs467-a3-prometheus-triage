@@ -1,0 +1,45 @@
+﻿2026-10-30T08:35:42.3628660Z ##[group]Run actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3
+2026-10-30T08:35:42.3629440Z with:
+2026-10-30T08:35:42.3634218Z   github-token: ***
+2026-10-30T08:35:42.3636794Z   script: const path = require('path');
+const actionsDir = path.join(process.env.RUNNER_TEMP, 'gh-aw', 'actions');
+const { setupGlobals } = require(path.join(actionsDir, 'setup_globals.cjs'));
+setupGlobals(core, github, context, exec, io, getOctokit);
+const { main } = require(path.join(actionsDir, 'check_daily_aic_workflow_guardrail.cjs'));
+await main();
+
+2026-10-30T08:35:42.3639255Z   debug: false
+2026-10-30T08:35:42.3639670Z   user-agent: actions/github-script
+2026-10-30T08:35:42.3640434Z   result-encoding: json
+2026-10-30T08:35:42.3640711Z   retries: 0
+2026-10-30T08:35:42.3640961Z   retry-exempt-status-codes: 400,401,403,404,422
+2026-10-30T08:35:42.3641268Z env:
+2026-10-30T08:35:42.3641472Z   OTEL_EXPORTER_OTLP_ENDPOINT: 
+2026-10-30T08:35:42.3641746Z   OTEL_SERVICE_NAME: gh-aw.issue-triage
+2026-10-30T08:35:42.3642627Z   OTEL_RESOURCE_ATTRIBUTES: gh-aw.workflow.name=Prometheus%20Issue%20Triage,gh-aw.repository=WyattLeoz/cs467-a3-prometheus-triage,gh-aw.run.id=41027448779,github.run_id=41027448779,gh-aw.engine.id=copilot
+2026-10-30T08:35:42.3643582Z   OTEL_EXPORTER_OTLP_HEADERS: 
+2026-10-30T08:35:42.3643866Z   GH_AW_OTLP_ENDPOINTS: [{"url":"","headers":""}]
+2026-10-30T08:35:42.3644172Z   GH_AW_OTLP_IF_MISSING: ignore
+2026-10-30T08:35:42.3644422Z   GH_AW_MAX_DAILY_AI_CREDITS: 2000
+2026-10-30T08:35:42.3644688Z   GH_AW_RUNTIME_FEATURES: 
+2026-10-30T08:35:42.3644977Z   GITHUB_AW_OTEL_TRACE_ID: 2de836cae805cc030306322164931cc9
+2026-10-30T08:35:42.3645349Z   GITHUB_AW_OTEL_PARENT_SPAN_ID: b6e754918f4c1e6a
+2026-10-30T08:35:42.3645664Z   GITHUB_AW_OTEL_JOB_START_MS: 1793349340859
+2026-10-30T08:35:42.3646399Z   GH_AW_WORKFLOW_NAME: Prometheus Issue Triage
+2026-10-30T08:35:42.3646725Z   GH_AW_WORKFLOW_ID: issue-triage
+2026-10-30T08:35:42.3647183Z   GH_AW_RUN_URL: https://github.com/WyattLeoz/cs467-a3-prometheus-triage/actions/runs/41027448779
+2026-10-30T08:35:42.3647724Z   GH_AW_WORKFLOW_DISPATCH_AW_CONTEXT: 
+2026-10-30T08:35:42.3648034Z   GH_AW_HAS_SLASH_COMMAND: false
+2026-10-30T08:35:42.3648599Z   GH_AW_HAS_LABEL_COMMAND: false
+2026-10-30T08:35:42.3651253Z   GH_AW_GITHUB_TOKEN: ***
+2026-10-30T08:35:42.3651510Z   GH_AW_MAX_AI_CREDITS: 200
+2026-10-30T08:35:42.3651741Z ##[endgroup]
+2026-10-30T08:35:42.5097546Z [daily-workflow-aic] Resolved daily AIC guardrail limits: {"dailyAICThreshold":2000,"perRunMaxAICredits":200,"perRunFallbackAvailable":true}
+2026-10-30T08:35:42.6878095Z [daily-workflow-aic] Started authoritative AIC scan: {"repository":"WyattLeoz/cs467-a3-prometheus-triage","currentRunId":41027448779,"workflowId":393698481,"fallbackAIC":200}
+2026-10-30T08:35:42.6903589Z [daily-workflow-aic] Loaded scan observations: {"workflowId":393698481,"cachedEntries":24}
+2026-10-30T08:35:45.0360134Z [daily-workflow-aic] Listed workflow run candidates: {"page":1,"lookupMode":"workflow_id","sourceRunCount":100,"returnedRunCount":100}
+2026-10-30T08:35:45.0362180Z [daily-workflow-aic] Persisted scan observations: {"cachePath":"/tmp/gh-aw/agentic-workflow-usage-scan-v2.jsonl","entries":24}
+2026-10-30T08:35:45.0363719Z [daily-workflow-aic] Completed authoritative AIC scan: {"candidateRuns":0,"countedRuns":0,"cacheHits":0}
+2026-10-30T08:35:45.0369347Z [daily-workflow-aic] Completed AIC inspection window: {"candidateRunsCount":0,"inspectedRunsCount":0,"countedRunIds":[],"currentAIC":0,"threshold":2000,"exceeded":false}
+2026-10-30T08:35:45.0371181Z [daily-workflow-aic] Daily AIC business API requests: {"requests":2,"cacheHits":0}
+2026-10-30T08:35:45.0439366Z Daily workflow AIC guardrail not exceeded (0/2000).
