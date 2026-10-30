@@ -36,6 +36,19 @@ class OutputPolicy(unittest.TestCase):
             with self.subTest(decision=decision, labels=labels):
                 self.assertFalse(outputs_match(decision, labels, comments))
 
+    def test_mixed_noop_action_regression(self):
+        root = Path(__file__).resolve().parent
+        for case in ("G12", "G13"):
+            path = next((root / "logs/run8-pinned").glob(f"{case}-*/agent_output.json"))
+            proposal = json.loads(path.read_text())
+            with self.subTest(case=case), self.assertRaisesRegex(ValueError, "noop"):
+                validate_proposal(proposal, "ROUTE")
+
+    def test_only_one_kind_and_optional_component(self):
+        self.assertFalse(outputs_match("ROUTE", ["kind/feature", "kind/enhancement"], []))
+        self.assertTrue(outputs_match("ROUTE", ["kind/feature"], []))
+        self.assertTrue(outputs_match("ROUTE", ["component/tsdb", "kind/enhancement"], []))
+
     def test_route_with_comment_regression(self):
         root = Path(__file__).resolve().parent
         proposal = json.loads((root / "logs/run6-interrupted/A02-run40462874671/agent_output.json").read_text())

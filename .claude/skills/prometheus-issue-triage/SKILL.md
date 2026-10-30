@@ -52,7 +52,7 @@ Run the steps in order. Read checks 1 and 2 for every issue; run check 4 only wh
 | 4 | `POSSIBLE_DUPLICATE` | A candidate from step 2 clearly reports the same problem | optional `component/*` | Yes: cite the earlier issue and say why |
 | 5 | `NEEDS_INFO` | A bug report that cannot be reproduced as written (no version, no config/steps, no logs) | optional `kind/more-info-needed` | Yes: list exactly what is missing |
 | 6 | `SUPPORT_QUESTION` | Asks how to use Prometheus/PromQL rather than reporting a defect or proposing a change | optional `kind/question` | Yes: point to community support |
-| 7 | `ROUTE` | A clear, reproducible bug report or feature proposal for this repository | one `component/*`, plus `kind/feature` for proposals | none |
+| 7 | `ROUTE` | A clear, reproducible bug report or feature proposal for this repository | at least one label: optional `component/*` and at most one of `kind/feature` / `kind/enhancement` | none |
 
 Rules for labels: only `component/*`, `kind/question`, `kind/more-info-needed`,
 `kind/enhancement`, `kind/feature`. Never `kind/bug` (upstream defines it as a

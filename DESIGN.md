@@ -22,11 +22,11 @@ project ownership, intent and whether similar reports describe the same symptom;
 | No closing/deleting issues, merging or pushing | Agent `contents/issues: read`; no corresponding safe output |
 | At most one comment and two labels, triggering issue only | `add-comment.max: 1`, `add-labels.max: 1`, `max-labels: 2`, `target: triggering` |
 | Only 23 existing labels; no confirmed-bug or priority decisions | Explicit allowed/blocked labels; `triage.py labels` precheck |
-| No notification spam or external links | `mentions: false`, allowed domains and repository references |
-| No network, GitHub API or editing tool | `network: {}` firewall; `github: false`, `edit: false`, shell allowlist |
+| No notification spam or links outside approved domains | `mentions: false`, allowed domains and repository references |
+| No general browsing, GitHub API or editing tool | `network: {}` firewall; `github: false`, `edit: false`, shell allowlist |
 | Checks cannot be skipped | Workflow runs `triage.py precheck/duplicates` before the model |
 | Maintainer reports skipped without inference | Trusted gate; replay metadata accepted only from the owner |
-| Expected outcomes hidden | Sparse checkout narrowed to skill, `AGENTS.md`, data; inventory logged |
+| Expected outcomes hidden | After dated retrieval, remove raw data and original Git objects; keep skill/facts and prepared checks |
 | Suspicious or undecidable proposals withheld | Threat detection with `continue-on-error: false` |
 | Decision agrees with proposed actions | Trusted `safe-outputs.steps` runs `output_policy.py` before built-in writers |
 | Facts / procedures / restrictions separated | `AGENTS.md` / `SKILL.md` / `issue-triage.md` and generated lock |
@@ -91,7 +91,7 @@ Failures: A03, G03, G08, G09, G10, G16. One complete replay does not establish a
 - Missing audits and empty ROUTE outputs once passed; fail-closed regressions prevent that.
 - All recorded HARD checks held. A02 in run1 still echoed injected text: caps are not correctness.
 
-Validation: 9 skill + 21 evaluation tests, strict compilation of both workflows, syntax/diff checks,
+Validation: 9 skill + 26 evaluation tests, strict compilation of both workflows, syntax/diff checks,
 real archived valid/rejected proposals, and preserved sandbox runs. Archive fault tests cover failed
 download/identity stages. Replay tags now bind one commit and runs identify their exact issue number.
 
@@ -131,12 +131,12 @@ correction. Phone-browser steps are documented, not tested on physical phone har
 | Tools/MCP | `safeoutputs` MCP, Copilot skill/view, allowlisted triage shell command and read defaults; no GitHub MCP/web/edit |
 | Permissions | Agent contents/issues read; publisher contents read + issues/PRs write; archive actions read + contents/issues write |
 | Data/secrets | Trigger issue, 494 upstream issues + two marked canaries, references; Copilot PAT outside agent environment |
-| Logs/evaluations | Actions/audit-log; 16 historical + 4 adversarial cases, label-limit tests, 30 unit tests, need metric |
+| Logs/evaluations | Actions/audit-log; 16 historical + 4 adversarial cases, label-limit tests, 35 unit tests, need metric |
 | Responsible human | Loh Kai Zhe (@WyattLeoz), configuration owner and accountable maintainer |
 
 ## 8. Remaining limitations
 
-Six run8 cases still fail: wrong routing, missing redirect, missed duplicates and public-CVE classification.
+Run8 has six output failures; G12/G13 also mix noop/actions. Final-policy evaluation is separate.
 Suggestions need review; quotas limit throughput and repeated trials. The served model snapshot is monitored
 rather than pinned; independent enforced review remains proposed. No upstream deployment is claimed.
 

@@ -65,11 +65,8 @@ user-rate-limit:
 skills:
   - .claude/skills/prometheus-issue-triage
 
-# Only the triage skill, repository facts and the frozen data the skill needs.
-# evals/ (expected outcomes) is deliberately not checked out for the agent. Cone mode still
-# adds root files (DESIGN.md and README.md quote results); the first step below narrows the
-# workspace to .claude/, AGENTS.md and data/ and prints the file list (gh-aw then installs its own
-# copy of the skill under .github/skills/).
+# The trusted step needs the full corpus; it removes data and original Git objects
+# before inference. Only prepared earlier-issue candidates reach the model.
 checkout:
   sparse-checkout: |
     .claude/
@@ -89,7 +86,6 @@ steps:
   - name: Run the triage skill's deterministic checks
     run: |
       git sparse-checkout set --no-cone '/.claude/' '!/.claude/skills/prometheus-issue-triage/tests/' '/AGENTS.md' '/data/'
-      echo "files visible to the agent:"; find . -path ./.git -prune -o -type f -print | sort
       mkdir -p /tmp/gh-aw/agent
       jq '{issue: .issue}' "$GITHUB_EVENT_PATH" > /tmp/gh-aw/agent/issue.json
       s=.claude/skills/prometheus-issue-triage/scripts/triage.py
@@ -97,6 +93,8 @@ steps:
       "$s" duplicates /tmp/gh-aw/agent/issue.json > /tmp/gh-aw/agent/duplicates.json
       jq -c '{skill, maintainer_authored, missing_bug_template_sections, other_project_mentions}' /tmp/gh-aw/agent/precheck.json
       jq -c '[.candidates[] | {ref, score}]' /tmp/gh-aw/agent/duplicates.json
+      python3 .claude/skills/prometheus-issue-triage/scripts/isolate_context.py
+      echo "files visible to the agent:"; find . -path ./.git -prune -o -type f -print | sort
 
 safe-outputs:
   runs-on: ubuntu-latest  # trusted Python validator uses the same runner image as the prechecks

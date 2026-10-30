@@ -12,7 +12,9 @@ import score
 
 HERE = Path(__file__).resolve().parent
 EXP = score.expectations()
-GOOD_LOG = "✓ skill(skill: prometheus-issue-triage)\n$ cat /tmp/gh-aw/agent/precheck.json\n◆ Decision: {}\n"
+GOOD_LOG = ("✓ skill(skill: prometheus-issue-triage)\n"
+            "[2] ✓ $ cat /tmp/gh-aw/agent/precheck.json /tmp/gh-aw/agent/duplicates.json\n"
+            "◆ Decision: {}\n")
 
 
 def result(tag, case):
@@ -24,6 +26,20 @@ def failed(case, r, log):
 
 
 class ScorerFailsClosed(unittest.TestCase):
+    def test_check_reads_require_both_successful_calls(self):
+        self.assertTrue(score.check_outputs_read(GOOD_LOG.format("ROUTE")))
+        self.assertTrue(score.check_outputs_read(
+            "[2] ✓ $ cat /tmp/gh-aw/agent/precheck.json\n"
+            "[3] ✓ $ cat /tmp/gh-aw/agent/duplicates.json\n"))
+        for log in [
+            "Did not read precheck.json or duplicates.json",
+            "[2] ✗ $ cat /tmp/gh-aw/agent/precheck.json /tmp/gh-aw/agent/duplicates.json",
+            "[2] ✓ $ cat /tmp/gh-aw/agent/precheck.json",
+            "triage.py precheck and triage.py duplicates are available",
+        ]:
+            with self.subTest(log=log):
+                self.assertFalse(score.check_outputs_read(log))
+
     def test_agent_that_never_started_fails_even_without_audit(self):
         # run4-final A01: Copilot CLI download 404, nothing published, no audit log.
         r = result("run4-final", "A01")

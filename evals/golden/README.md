@@ -28,12 +28,12 @@ inputs, replayed as real `issues: opened` events in this sandbox repository.
   only in the rationale, as evidence for the expected outcome.
 - The duplicate corpus (`data/upstream-issues.jsonl`) holds title + body only, and the
   skill's script drops every issue created at or after the case's original timestamp.
-- The agent's workspace holds only the skill, `AGENTS.md` and `data/` (plus gh-aw's installed copy
-  of the skill folder under `.github/skills/`): the sparse checkout leaves out `evals/`, and a
-  pre-agent step removes the root files that cone mode adds (`DESIGN.md`, `README.md`,
-  `CONTRIBUTING.md` quote results) and prints the remaining file list into the run log (verified in
-  run 40433100846). Tests that read the golden cases live in `evals/golden/`, not in the skill. Runs before that change (all runs up to `run4-retry`) could have read those
-  root files; their audit logs show no such read. The replay marker carries no case ID.
+- Before inference, trusted checks prepare timestamp-filtered candidates. `isolate_context.py`
+  removes the raw corpus and original Git objects, leaving runtime skill/facts and an empty Git
+  baseline for framework bookkeeping. Prepared check files live under `/tmp/gh-aw/agent/`.
+  Earlier runs through run8 hid result files with sparse checkout but retained raw future corpus
+  entries and Git objects: no observed read proves absence of leakage. Their scores remain historical
+  evidence, not a claim of complete isolation. The replay marker carries no case ID.
 - Limitation: bodies are as of capture time. GitHub's REST API does not expose edit history,
   so a reporter's later edit to the body cannot be ruled out.
 
@@ -124,11 +124,13 @@ Drift detection reuses steps 3–5 unchanged; see DESIGN.md.
 All 21 recorded quota attempts across the run history have submitted audit copies, including the 15 older
 attempts formerly available only on `audit-log` and four from run8. Expected outcomes are unchanged.
 
-Current hardening adds a trusted decision/output guard and generic procedure clarifications. Its completed
-20-case replay is the final evaluation; 30 local tests and archived-proposal checks provide separate evidence.
-Run8 finished on 2026-10-29. One replay per case cannot establish a statistically reliable improvement or
-eliminate model variance. The final evidence commit adds documentation and CI after the frozen replay;
-it does not change the evaluated triage workflow, skill, corpus or expectations.
+Run8 finished on 2026-10-29. Its 14/20 score evaluates published outputs under the recorded policy.
+Final hardening removes raw corpus/Git-history access and rejects mixed noop/action proposals.
+Run8 G12/G13 passed the published-output checks but violated the skill's no-mixed-noop procedure;
+they would now be blocked. A03/G10 also mixed noop with real actions and already failed.
+The historical score is preserved, not presented as a final-policy result. One replay per case
+cannot establish a statistically reliable improvement or eliminate model variance.
+Final-config evaluation is recorded separately without changing the expectations.
 
 Expected outcomes were not changed between runs. After `run1-v1` the scorer gained two checks (skill
 tool call; no republished injected instruction) and its footer check looks for gh-aw's enforced footer;

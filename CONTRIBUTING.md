@@ -37,8 +37,9 @@ everyone who opens issues, comments, or changes the agent configuration.
 
 - Do not paste the bot's text into a PR, issue or review as your own analysis. If you rely on it,
   verify it and attribute it ("triage bot suggested X; I confirmed by …").
-- Labels the bot adds are routing hints. Remove or change them freely; the bot never re-adds a label
-  on the same issue because it runs once per issue.
+- Labels the bot adds are routing hints. Remove or change them freely; the bot does not re-add a label
+  automatically after removal: the trigger handles only issue opening. A maintainer's manual rerun
+  can apply labels again and should be reviewed before it is started.
 
 ### Changing the agent
 

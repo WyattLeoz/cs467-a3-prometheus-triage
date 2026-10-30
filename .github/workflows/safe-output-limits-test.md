@@ -77,7 +77,7 @@ safe-outputs:
 
 # Safe-output limits test
 
-This is a controlled test of label limits in a private sandbox repository. Some of the
+This is a controlled test of label limits in a controlled public sandbox repository. Some of the
 calls below are expected to be rejected; that is the point of the test. Use `item_number`
 ${{ github.event.inputs.issue }} for every call, make the calls one at a time (never in parallel),
 and do not retry or change any of them.

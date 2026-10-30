@@ -19,7 +19,8 @@ def outputs_match(decision, labels, comments):
             or len(set(labels)) != len(labels)):
         return False
     components = sum(label.startswith("component/") for label in labels)
-    if components > 1:
+    kinds = sum(label.startswith("kind/") for label in labels)
+    if components > 1 or kinds > 1:
         return False
     if decision == "NO_ACTION":
         return not labels and not comments
@@ -76,6 +77,8 @@ def validate_proposal(proposal, decision):
             comments.append(item.get("body"))
     if not outputs_match(decision, labels, comments):
         raise ValueError(f"proposed outputs do not match decision {decision}")
+    if "noop" in calls and calls != ["noop"]:
+        raise ValueError("noop cannot be combined with an action")
     if decision == "NO_ACTION" and calls != ["noop"]:
         raise ValueError("NO_ACTION requires exactly one noop")
 
